@@ -116,6 +116,7 @@ unknown, eecxess green: #1d904e*/
 
 }
 
+
 .eexcess-isotope-grid-item.eexcess-unknown {
     width: 150px;
     height: 75px;
@@ -479,4 +480,12 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
 
 .eexcess-lightbox-without-image{
 
+}
+
+
+
+/*WIKI RECOMMENDER*/
+
+.eexcess-wiki-recommender-image{
+background-color: lightgrey;
 }

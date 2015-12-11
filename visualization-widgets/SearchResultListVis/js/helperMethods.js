@@ -62,6 +62,7 @@ function addIsotopeGrid(msg) {
 
         });
 
+
         //------Filtering------//
         // bind filter button click
         $('#eexcess-isotope-filters').on('click', 'button', function () {
