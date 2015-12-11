@@ -1,0 +1,11 @@
+.eexcess-tag_hover {
+    background-image:none !important;
+    background-color:yellow !important;
+}
+
+.eexcess_highlight {
+    background-color: yellow;
+}
+#eexcess-tabBar-jQueryTabsHeader > ul {
+    display: none;
+}
