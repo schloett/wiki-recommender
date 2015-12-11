@@ -78,6 +78,18 @@ unknown, eecxess green: #1d904e*/
     background-color: #ccebc5;
 }
 
+.eexcess-isotope-grid-item.eexcess-text-without-preview-with-description {
+    width: 200px;
+    height: 150px;
+    background-color: #ccebc5;
+}
+
+.eexcess-isotope-grid-item.eexcess-text-with-preview-with-description {
+    width: 300px;
+    height: 150px;
+    background-color: #ccebc5;
+}
+
 .eexcess-isotope-grid-item.eexcess-image {
     position: relative;
     float: left;
@@ -151,7 +163,7 @@ unknown, eecxess green: #1d904e*/
 }
 
 /*media type icons*/
-.eexcess-text-without-preview img, .eexcess-other-without-preview img, .eexcess-thumbnail img {
+.eexcess-text-without-preview img, .eexcess-text-without-preview-with-description img, .eexcess-other-without-preview img, .eexcess-thumbnail img {
     max-width: 28px;
     max-height: 30px;
     overflow: hidden;
@@ -279,58 +291,83 @@ button:focus {
 }
 
 /*------------------------------------------------*/
-/*Item Descriptions*/
+/*Item eexcess-titles*/
 
-div.description {
-    position: absolute; /* absolute position (so we can position it where we want)*/
-    bottom: 0px; /* position will be on bottom */
-    left: 0px;
+div.eexcess-title {
+    height: 100%;
     width: 100%;
-    /* styling bellow */
-    background-color: grey;
+    position: absolute; /* absolute position (so we can position it where we want)*/
     font-size: 12px;
     color: black;
-    text-overflow: ellipsis;
     overflow: hidden;
+    padding: 5px;
+    display: flex;
+    /*justify-content: center;*/
+}
+div.eexcess-title-content {
+    /*text-align: center;*/
+    align-self: center;
+    max-height: 90%;
+    width: 100%;
 }
 
-div.description-text {
-    max-height: 80%;
-    bottom: 5px;
+
+div.eexcess-title-with-description-text {
+    max-height: 30%;
+    top: 0;
     left: 0px;
     position: absolute; /* absolute position (so we can position it where we want)*/
-    width: 90%;
+    width: 100%;
     font-size: 12px;
     color: black;
     overflow: hidden;
     padding-left: 10px;
+    padding-right: 10px;
     margin: 0;
 }
 
-/*div.description-image {*/
-    /*!*display: table;*!*/
-    /*position: absolute;*/
-    /*bottom: 0;*/
-    /*width: 100%;*/
-    /*max-height: 28%;*/
-    /*min-height: 28%;*/
-    /*font-size: 12px;*/
-    /*background-color: rgba(230, 145, 51, 0.8);*/
-    /*overflow: hidden;*/
-    /*padding: 2px;*/
+.eexcess-description-text {
+    max-height: 70%;
+    bottom: 5px;
+    left: 0px;
+    opacity: 0.3;
+    position: absolute; /* absolute position (so we can position it where we want)*/
+    width: 100%;
+    font-size: 12px;
+    color: black;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    margin: 0;
+    text-align: justify;
+}
+
+/*div.eexcess-title-image {*/
+/*!*display: table;*!*/
+/*position: absolute;*/
+/*bottom: 0;*/
+/*width: 100%;*/
+/*max-height: 28%;*/
+/*min-height: 28%;*/
+/*font-size: 12px;*/
+/*background-color: rgba(230, 145, 51, 0.8);*/
+/*overflow: hidden;*/
+/*padding: 2px;*/
 /*}*/
 
-.description-image-content{
+.eexcess-title-image-content {
     height: 100%;
     width: 100%;
 }
-.description-image p {
+
+.eexcess-title-image p {
     /*display: table-cell;*/
     vertical-align: middle;
     text-align: center;
 }
 
-div.description-text-with-preview {
+div.eexcess-title-text-with-preview {
     position: absolute;
     max-height: 90%;
     width: 70%;
@@ -340,22 +377,9 @@ div.description-text-with-preview {
     padding: 10px;
 }
 
-div.description-other {
-    max-height: 80%;
-    max-width: 75%;
-    bottom: 5px;
-    left: 0px;
-    position: absolute; /* absolute position (so we can position it where we want)*/
-    width: 90%;
-    font-size: 12px;
-    color: black;
-    overflow: hidden;
-    padding-left: 10px;
-    margin: 0;
-}
 
-/*description for image,3d, audio, unknown and video*/
-div.description-other-with-preview-area {
+/*eexcess-title for image,3d, audio, unknown and video*/
+div.eexcess-title-other-with-preview-area {
     /*display: table;*/
     position: absolute;
     bottom: 0;
@@ -369,29 +393,30 @@ div.description-other-with-preview-area {
 
 }
 
-.description-other-with-preview-content {
+.eexcess-title-other-with-preview-content {
     text-align: center;
     align-self: center;
     max-height: 40px;
-    width:90%;
+    width: 90%;
 }
-div.description-other-with-preview-area.eexcess-image {
+
+div.eexcess-title-other-with-preview-area.eexcess-image {
     background-color: rgba(230, 145, 51, 0.8);
 }
 
-div.description-other-with-preview-area.eexcess-video {
+div.eexcess-title-other-with-preview-area.eexcess-video {
     background-color: rgba(249, 134, 123, 0.75);
 }
 
-div.description-other-with-preview-area.eexcess-3d {
+div.eexcess-title-other-with-preview-area.eexcess-3d {
     background-color: rgba(178, 134, 193, 0.75);
 }
 
-div.description-other-with-preview-area.eexcess-audio {
+div.eexcess-title-other-with-preview-area.eexcess-audio {
     background-color: rgba(121, 167, 205, 0.75);
 }
 
-div.description-other-with-preview-area.eexcess-unknown {
+div.eexcess-title-other-with-preview-area.eexcess-unknown {
     background-color: rgba(29, 140, 77, 0.75);
 }
 
@@ -399,7 +424,11 @@ div.description-other-with-preview-area.eexcess-unknown {
     color: white;
 }
 
-a {
+.eexcess-result-link{
     color: black;
+    text-decoration: none;
+    position: absolute;
+    right: 2px;
+    top: 3px;
+    opacity: 0;
 }
-
