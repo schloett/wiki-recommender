@@ -438,6 +438,10 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
     opacity: 0;
 }
 
+.eexcess-cite-link {
+    top: 20px;
+}
+
 .eexcess-result-link-lightbox {
     color: black;
     text-decoration: none;
