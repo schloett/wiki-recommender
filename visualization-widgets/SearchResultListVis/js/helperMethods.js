@@ -295,8 +295,12 @@ function addIsotopeGrid(msg) {
 
 function addCitationInserting() {
     $(".eexcess-cite-link").click(function () {
-        var citation = '<ref>[' + $(this).parent().attr("itemuri") + ' ' + $(this).parent().find(".eexcess-full-title").text() + ']</ref>';
-alert(citation);
+        var eventData = {
+            title: $(this).parent().find(".eexcess-full-title").text(),
+            uri: $(this).parent().attr("itemuri")
+        };
+        window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
+        //var citation = '<ref>[' + $(this).parent().attr("itemuri") + ' ' + $(this).parent().find(".eexcess-full-title").text() + ']</ref>';
     });
 }
 
