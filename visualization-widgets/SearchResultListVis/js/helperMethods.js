@@ -121,7 +121,7 @@ function addIsotopeGrid(msg) {
 
 
                 var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link"' +
-                    itemHrefAttr + '></a><div style="display:none" class="eexcess-full-title">' + itemTitle + '</div>';
+                    itemHrefAttr + '></a><div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
                 /*var lightBoxLinkImageWithPreviewWithoutDescription = '<a class=" eexcess-result-link' +
                     ' eexcess-lightbox-link' +
@@ -296,11 +296,10 @@ function addIsotopeGrid(msg) {
 function addCitationInserting() {
     $(".eexcess-cite-link").click(function () {
         var eventData = {
-            title: $(this).parent().find(".eexcess-full-title").text(),
-            uri: $(this).parent().attr("itemuri")
+            documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
         };
+
         window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
-        //var citation = '<ref>[' + $(this).parent().attr("itemuri") + ' ' + $(this).parent().find(".eexcess-full-title").text() + ']</ref>';
     });
 }
 
