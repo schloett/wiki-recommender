@@ -16,4 +16,5 @@ For inserting the citations in the markup used by wikipedia (wiki-code).
 The following message events are used to insert the citation at the current cursor position in the edited article:
 * `eexcess.insertMarkup.text`:  
    Inserts the title of a document followed by a reference  referenced at the end of the article in the references section.  
-* `eexcess.insertMarkup.image`
+* `eexcess.insertMarkup.image`  
+Each events' data has to contain the document information required by c4's markup module.

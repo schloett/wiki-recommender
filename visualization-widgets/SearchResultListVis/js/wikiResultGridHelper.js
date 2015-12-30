@@ -2,6 +2,17 @@
  * Created by lisa on 11/12/15.
  */
 var currentFilter;
+var origin;
+
+window.addEventListener('message', function(msg) {
+    if (msg.data.event == 'eexcess.getOrigin.response') {
+        origin = msg.data.origin;
+    }
+
+    window.removeEventListener('message', this);
+});
+
+window.top.postMessage({event: 'eexcess.getOrigin.request'}, '*');
 
 
 //----- Assemble the searchResultGrid -----//
@@ -18,6 +29,19 @@ function addWikiGrid(msg) {
     var $items = $(addWikiGridResultItems(msg));
     $('.eexcess_empty_result').hide();
 
+    // init add image citation links
+    $items.find('.eexcess-cite-link').click(function () {
+        var title = $(this).attr('data-title');
+
+        var eventData = {
+            documentInformation: {
+                mediaType: "image",
+                title: title
+            }
+        };
+
+        window.top.postMessage({event: 'eexcess.insertMarkup.image', data: eventData}, '*');
+    });
 
     //init isotope
     $('.eexcess-isotope-grid').isotope({
@@ -87,10 +111,9 @@ function addWikiGridResultItems(msg) {
 
     var items = '';
 
-
     $.each(msg.query.pages, function (idx, val) {
 
-        var itemTitle = val.title;
+        var itemTitle = val.title.split(/[:.]+/)[1];
 
         var itemDescription = val.description;
 
@@ -98,12 +121,14 @@ function addWikiGridResultItems(msg) {
         console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
+        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="' + origin + '/wiki/' + val.title + '" />';
+        var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-wiki-recommender-image eexcess-other-with-preview "'
             + ' data-category="eexcess-wiki-recommender-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-wiki-recommender-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" /></div>';
+            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + citeLink + '</div>';
 
         items += item;
     });

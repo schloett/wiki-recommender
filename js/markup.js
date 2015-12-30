@@ -2,19 +2,23 @@ require(['c4/cmsMarkup'], function (cms) {
     var markup = cms.detectMarkup();
 
     var insertMarkupHandler = function (msg) {
-        if (msg.data.event && msg.data.event.startsWith('eexcess.insertMarkup')) {
-            var markupText;
+        if (msg.data.event) {
+            if (msg.data.event.startsWith('eexcess.insertMarkup')) {
+                var markupText;
+                var documentInformation = msg.data.data.documentInformation;
 
-            switch (msg.data.event) {
-                case 'eexcess.insertMarkup.text':
-                    markupText = cms.createMarkup(msg.data.data.documentInformation, markup);
-                    break;
-                case 'eexcess.insertMarkup.image':
-                    break; // TODO
-            }
+                switch (msg.data.event) {
+                    case 'eexcess.insertMarkup.text':
+                        markupText = cms.createMarkup(documentInformation, markup);
+                        break;
+                    case 'eexcess.insertMarkup.image':
+                        markupText = cms.createMarkup(documentInformation, markup);
+                        break;
+                }
 
-            if (markupText) {
-                insertAtCaret($('textarea#wpTextbox1')[0], markupText);
+                if (markupText) {
+                    insertAtCaret($('textarea#wpTextbox1')[0], markupText);
+                }
             }
         }
     };
@@ -31,4 +35,18 @@ require(['c4/cmsMarkup'], function (cms) {
     };
 
     window.addEventListener('message', insertMarkupHandler)
+});
+
+require(['c4/iframes'], function (iframes) {
+    var getOriginHandler = function(msg) {
+        if (msg.data.event == 'eexcess.getOrigin.request') {
+            var eventData = {
+                origin: document.domain
+            };
+
+            iframes.sendMsgAll({event: 'eexcess.getOrigin.response', origin: document.location.origin});
+        }
+    };
+
+    window.addEventListener('message', getOriginHandler);
 });
