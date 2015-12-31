@@ -24,8 +24,8 @@ function getCommonsImages(input){
     var url = "https://commons.wikimedia.org/w/api.php?";
     $.ajax({
         url: url,
-        jsonp: "callback",
-        dataType: 'jsonp',
+        //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
+        //dataType: 'jsonp',
         data: {
             action: "query",
             generator: "search",
