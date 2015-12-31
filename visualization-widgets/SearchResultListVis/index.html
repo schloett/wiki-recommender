@@ -13,6 +13,10 @@ and open the template in the editor.
 </head>
 <body>
 
+<form id="wiki-form" style="padding: 5px;">
+    <input id="wiki-recommender-active-search" size="20" />
+    <input id="submit" type="submit" value="submit" />
+</form>
 
 <div id="eexcess_empty_result" class="eexcess_empty_result" style="display:none"><p>Sorry, there are no results.</p>
 </div>
@@ -33,7 +37,7 @@ and open the template in the editor.
     <div id="eexcess-isotope-sorts">
         <button class="eexcess-isotope-button is-checked" data-sort-value="original-order">original order</button>
         <button class="eexcess-isotope-button" data-sort-value="itemTitle">title</button>
-        <button class="eexcess-isotope-button" data-sort-value="date">date</button>
+        <!--<button class="eexcess-isotope-button" data-sort-value="date">date</button>-->
     </div>
 </div>
 
@@ -48,9 +52,13 @@ and open the template in the editor.
 <script src="js/lib/jquery-1.10.1.min.js"></script>
 <script src="js/lib/isotope.pkgd.min.js"></script>
 <script src="js/lib/jquery.dotdotdot.min.js"></script>
+<script src="js/inputListener.js"></script>
+<script src="js/wikiRecommenderApi.js"></script>
+<script src="js/wikiResultGridHelper.js"></script>
 <script src="js/msgListeners.js"></script>
 <script src="js/logging.js"></script>
 <script src="js/helperMethods.js"></script>
+
 <script src="js/lib/imagesloaded.pkgd.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <script type="text/javascript" src="js/lib/jquery.fancybox.js?v=2.1.5"></script>

@@ -36,6 +36,7 @@ function addIsotopeGrid(msg) {
             $(truncateTitles);
             $(bindDescriptionHover);
             $(bindLinkHover);
+            $(addCitationInserting);
             //$(".eexcess-lightbox-image").fancybox({
             //    close: [27], // escape key
             //    //type: "image",
@@ -62,6 +63,7 @@ function addIsotopeGrid(msg) {
 
         });
 
+
         //------Filtering------//
         // bind filter button click
         $('#eexcess-isotope-filters').on('click', 'button', function () {
@@ -79,6 +81,7 @@ function addIsotopeGrid(msg) {
 
 
     }
+
     function addGridResultItems(msg) {
 
         var items = '';
@@ -107,10 +110,9 @@ function addIsotopeGrid(msg) {
                 var itemCleanIdAttr = ' id = "' + cleanID + '" ';
 
 
-                var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '"/>';
+                var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
                 var itemLinkLightbox = '<a class="fa fa-external-link eexcess-result-link-lightbox" target="_blank"' +
                     ' href="' + val.documentBadge.uri + '"/>';
-
 
                 //var lightBoxLinkTextWithImage = '<a class=" eexcess-result-link eexcess-lightbox-link eexcess-lightbox-image fa fa-th-large"' +
                 //    itemHrefAttr + '></a><div style="display:none"><div' +
@@ -118,16 +120,14 @@ function addIsotopeGrid(msg) {
                 //    + itemTitle + itemLinkLightbox + '<img src="' + previewImage + '"/> </div></div>';
 
 
-                var lightBoxLinkTextWithoutPreviewAndWithDescription = '<a class=" eexcess-result-link' +
-                    ' eexcess-lightbox-link eexcess-lightbox-inline  fa fa-th-large"' +
-                    itemHrefAttr + '></a><div style="display:none"><div class="eexcess-lightbox eexcess-lightbox-without-image" ' + itemCleanIdAttr + '">'
-                    + itemTitle + '<br><br><br>' + itemDescription + itemLinkLightbox + '</div></div>';
+                var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link"' +
+                    itemHrefAttr + '></a><div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
-                var lightBoxLinkImageWithPreviewWithoutDescription = '<a class=" eexcess-result-link' +
+                /*var lightBoxLinkImageWithPreviewWithoutDescription = '<a class=" eexcess-result-link' +
                     ' eexcess-lightbox-link' +
                     ' eexcess-lightbox-image  fa fa-th-large"' +
                     itemHrefAttr + '></a><div style="display:none"><div class="eexcess-lightbox eexcess-lightbox-with-preview" ' + itemCleanIdAttr + '">'
-                    + '<img src="' + previewImage + '"/>' + '<p style="padding: 5px">' + itemTitle + '</p>' + itemLinkLightbox + ' </div></div>';
+                    + '<img src="' + previewImage + '"/>' + '<p style="padding: 5px">' + itemTitle + '</p>' + itemLinkLightbox + ' </div></div>';*/
 
                 //var lightBoxLinkWithoutImage = '<a class=" eexcess-result-link eexcess-lightbox-link eexcess-lightbox-inline  fa' +
                 //    ' fa-th-large"' +
@@ -153,14 +153,14 @@ function addIsotopeGrid(msg) {
                         item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-without-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">' +
                             ' <div class="eexcess-title eexcess-image itemTitle"><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div>' + itemLink + '</div>';
+                            itemTitle + '</div></div>' + itemLink + citeLink + '</div>';
                     } else {
 
                         item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">'
                             + ' <div class="eexcess-title-other-with-preview-area eexcess-image itemTitle"> ' +
                             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + lightBoxLinkImageWithPreviewWithoutDescription + '</div>';
+                            itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
                     }
                     items += item;
                 }
@@ -176,7 +176,7 @@ function addIsotopeGrid(msg) {
                             item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"'
                                 + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                                 ' <div class="eexcess-title eexcess-text itemTitle"><div class="eexcess-title-content">' +
-                                itemTitle + '</div></div>' + itemLink + '</div>';
+                                itemTitle + '</div></div>' + itemLink + citeLink + '</div>';
 
                         }
                         //text results without description and with preview
@@ -185,7 +185,7 @@ function addIsotopeGrid(msg) {
                                 + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                                 '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
                                 '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-                                itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + lightBoxLinkImageWithPreviewWithoutDescription + '</div>';
+                                itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
 
                         }
                     }
@@ -200,7 +200,7 @@ function addIsotopeGrid(msg) {
                                 + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                                 ' <div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
                                 itemTitle + '</div>' + ' <div class=" eexcess-description-text eexcess-text-with-preview-hover ">' + itemDescription + '</div>' +
-                                itemLink + lightBoxLinkTextWithoutPreviewAndWithDescription + '</div>';
+                                itemLink + citeLink + '</div>';
 
                         }
                         //text results with description and with preview
@@ -210,7 +210,7 @@ function addIsotopeGrid(msg) {
                                 + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                                 ' <div class="eexcess-title-with-description-text eexcess-text itemTitle"><b></b>' +
                                 itemTitle + "<b></div>" + ' <div class="eexcess-description-text">' + itemDescription + "</div>" +
-                                '<img src="' + previewImage + '" />' + itemLink + '</div>';
+                                '<img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
                         }
                     }
                     items += item
@@ -223,14 +223,14 @@ function addIsotopeGrid(msg) {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-audio eexcess-other-without-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-audio">' +
                             ' <div class="eexcess-title eexcess-audio itemTitle"><div class="eexcess-title-content">'
-                            + itemTitle + '</div>' + itemLink + '</div>';
+                            + itemTitle + '</div>' + itemLink + citeLink + '</div>';
 
                     } else {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-audio eexcess-other-with-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-audio">' +
                             ' <div' + ' class="eexcess-title-other-with-preview-area eexcess-audio itemTitle">' +
                             '<div class="eexcess-title-other-with-preview-content">' + itemTitle +
-                            '</div></div><img src="' + previewImage + '" />' + itemLink + '</div>';
+                            '</div></div><img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
                     }
                     items += item;
                 }
@@ -247,7 +247,7 @@ function addIsotopeGrid(msg) {
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-video">' +
                             ' <div class="eexcess-title-other-with-preview-area eexcess-video itemTitle"> ' +
                             '<div class="eexcess-title-other-with-preview-content">' +
-                            itemTitle + '</div> </div>' + '  <img src="' + previewImage + '" /> ' + itemLink + '</div>';
+                            itemTitle + '</div> </div>' + '  <img src="' + previewImage + '" /> ' + itemLink + citeLink + '</div>';
                     }
                     items += item;
                 }
@@ -258,13 +258,13 @@ function addIsotopeGrid(msg) {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-3d eexcess-other-without-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-3d"> ' +
                             ' <div class="eexcess-title-other itemTitle"><div class="eexcess-title-content">'
-                            + itemTitle + '</div>' + itemLink + '</div>';
+                            + itemTitle + '</div>' + itemLink + citeLink + '</div>';
                     } else {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-3d eexcess-other-with-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-3d"> ' +
                             ' <div class="eexcess-title-other-with-preview-area eexcess-3d itemTitle">' +
                             '<div class="eexcess-title-other-with-preview-content">' +
-                            ' <' + itemTitle + '</div></div><img src=""' + previewImage + '"/>' + itemLink + '</div>';
+                            ' <' + itemTitle + '</div></div><img src=""' + previewImage + '"/>' + itemLink + citeLink + '</div>';
                     }
                     items += item;
                 }
@@ -275,13 +275,13 @@ function addIsotopeGrid(msg) {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-unknown eexcess-other-without-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-unknown"->' +
                             '<div class="eexcess-title eexcess-unknown itemTitle"><div class="eexcess-title-content">'
-                            + itemTitle + '</div></div>' + itemLink + '</div>';
+                            + itemTitle + '</div></div>' + itemLink + citeLink + '</div>';
                     } else {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-unknown eexcess-other-with-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-unknown"->' +
                             '<div class="eexcess-title-other-with-preview-area eexcess-unknown itemTitle"> ' +
                             '<div class="eexcess-title-other-with-preview-content">' + itemTitle +
-                            '</div></div> <img src="' + previewImage + '" />' + itemLink + '</div>';
+                            '</div></div> <img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
                     }
                     items += item;
 
@@ -293,6 +293,15 @@ function addIsotopeGrid(msg) {
     }
 }
 
+function addCitationInserting() {
+    $(".eexcess-cite-link").click(function () {
+        var eventData = {
+            documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
+        };
+
+        window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
+    });
+}
 
 //-----Interface, shorten Titles, assemble Buttons, Filters, LoadingBar, Errors etc.-----//
 function truncateTitles() {
