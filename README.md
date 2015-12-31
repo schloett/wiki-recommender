@@ -12,9 +12,22 @@ This chrome extension is based on the EEXCESS [chrome-extension](https://github.
 
 ## events
 
-For inserting the citations in the markup used by wikipedia (wiki-code).  
+For inserting the citations the markup used by wikipedia is used (wiki-code).  
+Each events' data has to contain the document information required by c4's markup module.  
 The following message events are used to insert the citation at the current cursor position in the edited article:
+
 * `eexcess.insertMarkup.text`:  
-   Inserts the title of a document followed by a reference  referenced at the end of the article in the references section.  
+   Inserts the title of a document followed by a reference referenced at the end of the article in the references section.  
 * `eexcess.insertMarkup.image`  
-Each events' data has to contain the document information required by c4's markup module.
+   Inserts the image with a thumbnail on the right side labeled with its title.
+
+For getting the displayed page's origin these events are used:
+
+* `eexcess.getOrigin.request`:  
+   Requests origin from the content script.
+* `eexcess.getOrigin.response`:  
+   Returns the origin.  
+   The origin is contained in the event's data:
+    ```
+    origin: "https://en.wikipedia.org"
+    ```

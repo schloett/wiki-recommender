@@ -40,10 +40,6 @@ require(['c4/cmsMarkup'], function (cms) {
 require(['c4/iframes'], function (iframes) {
     var getOriginHandler = function(msg) {
         if (msg.data.event == 'eexcess.getOrigin.request') {
-            var eventData = {
-                origin: document.domain
-            };
-
             iframes.sendMsgAll({event: 'eexcess.getOrigin.response', origin: document.location.origin});
         }
     };
