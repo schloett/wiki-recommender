@@ -1,4 +1,4 @@
-require(['c4/cmsMarkup'], function (cms) {
+require(['c4/cmsMarkup', 'c4/iframes'], function (cms, iframes) {
     var markup = cms.detectMarkup();
 
     var insertMarkupHandler = function (msg) {
@@ -34,15 +34,13 @@ require(['c4/cmsMarkup'], function (cms) {
         textarea.scrollTop = scrollTop;
     };
 
-    window.addEventListener('message', insertMarkupHandler)
-});
+    window.addEventListener('message', insertMarkupHandler);
 
-require(['c4/iframes'], function (iframes) {
-    var getOriginHandler = function(msg) {
-        if (msg.data.event == 'eexcess.getOrigin.request') {
-            iframes.sendMsgAll({event: 'eexcess.getOrigin.response', origin: document.location.origin});
+    var detectLanguageHandler = function(msg) {
+        if (msg.data.event == 'eexcess.detectLang.request') {
+            iframes.sendMsgAll({event: 'eexcess.detectLang.response', language: cms.detectLang(markup)});
         }
     };
 
-    window.addEventListener('message', getOriginHandler);
+    window.addEventListener('message', detectLanguageHandler);
 });

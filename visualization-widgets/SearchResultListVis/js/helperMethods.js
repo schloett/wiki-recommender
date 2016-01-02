@@ -110,7 +110,7 @@ function addIsotopeGrid(msg) {
                 var itemCleanIdAttr = ' id = "' + cleanID + '" ';
 
 
-                var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
+                var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
                 var itemLinkLightbox = '<a class="fa fa-external-link eexcess-result-link-lightbox" target="_blank"' +
                     ' href="' + val.documentBadge.uri + '"/>';
 
@@ -120,7 +120,7 @@ function addIsotopeGrid(msg) {
                 //    + itemTitle + itemLinkLightbox + '<img src="' + previewImage + '"/> </div></div>';
 
 
-                var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link"' +
+                var citeLink = '<a title="insert reference" class="eexcess-result-link eexcess-cite-link fa fa-link"' +
                     itemHrefAttr + '></a><div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
                 /*var lightBoxLinkImageWithPreviewWithoutDescription = '<a class=" eexcess-result-link' +
