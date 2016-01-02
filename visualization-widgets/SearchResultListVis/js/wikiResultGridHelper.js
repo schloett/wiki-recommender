@@ -121,7 +121,7 @@ function addWikiGridResultItems(msg) {
         console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
-        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title + '" />';
+        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
         var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-wiki-recommender-image eexcess-other-with-preview "'
