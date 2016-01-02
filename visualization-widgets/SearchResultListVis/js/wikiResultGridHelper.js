@@ -2,17 +2,17 @@
  * Created by lisa on 11/12/15.
  */
 var currentFilter;
-var origin;
+var language;
 
 window.addEventListener('message', function(msg) {
-    if (msg.data.event == 'eexcess.getOrigin.response') {
-        origin = msg.data.origin;
+    if (msg.data.event == 'eexcess.detectLang.response') {
+        language = msg.data.language;
     }
 
     window.removeEventListener('message', this);
 });
 
-window.top.postMessage({event: 'eexcess.getOrigin.request'}, '*');
+window.top.postMessage({event: 'eexcess.detectLang.request'}, '*');
 
 
 //----- Assemble the searchResultGrid -----//
@@ -58,33 +58,33 @@ function addWikiGrid(msg) {
 
     //check if all items are loaded to avoid overlap, then add items to container TODO images too large
     //$items.imagesLoaded(function () {
-        $('.eexcess-isotope-grid').isotope('insert', $items);
-        $(addFilterCounter);
-        $(truncateTitles);
-        $(bindDescriptionHover);
-        $(bindLinkHover);
-        //$(".eexcess-lightbox-image").fancybox({
-        //    close: [27], // escape key
-        //    //type: "image",
-        //    helpers: {
-        //        overlay: {
-        //            css: {
-        //                'background': 'rgba(89, 89, 89, 0.6)'
-        //            }
-        //        }
-        //    }
-        //});
-        //$(".eexcess-lightbox-inline").fancybox({
-        //    close: [27], // escape key
-        //    type: "inline",
-        //    helpers: {
-        //        overlay: {
-        //            css: {
-        //                'background': 'rgba(89, 89, 89, 0.6)'
-        //            }
-        //        }
-        //    }
-        //});
+    $('.eexcess-isotope-grid').isotope('insert', $items);
+    $(addFilterCounter);
+    $(truncateTitles);
+    $(bindDescriptionHover);
+    $(bindLinkHover);
+    //$(".eexcess-lightbox-image").fancybox({
+    //    close: [27], // escape key
+    //    //type: "image",
+    //    helpers: {
+    //        overlay: {
+    //            css: {
+    //                'background': 'rgba(89, 89, 89, 0.6)'
+    //            }
+    //        }
+    //    }
+    //});
+    //$(".eexcess-lightbox-inline").fancybox({
+    //    close: [27], // escape key
+    //    type: "inline",
+    //    helpers: {
+    //        overlay: {
+    //            css: {
+    //                'background': 'rgba(89, 89, 89, 0.6)'
+    //            }
+    //        }
+    //    }
+    //});
 
 
     //});
@@ -121,7 +121,7 @@ function addWikiGridResultItems(msg) {
         console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
-        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="' + origin + '/wiki/' + val.title + '" />';
+        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title + '" />';
         var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-wiki-recommender-image eexcess-other-with-preview "'
@@ -335,5 +335,3 @@ function logResultItemClicks(msg) {
         LOGGING.itemOpened(origin, documentBadge, msg.data.data.queryID);
     });
 }
-
-
