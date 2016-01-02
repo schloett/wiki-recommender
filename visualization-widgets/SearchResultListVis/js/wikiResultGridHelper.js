@@ -121,14 +121,14 @@ function addWikiGridResultItems(msg) {
         console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
-        var itemLink = '<a class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
-        var citeLink = '<a class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
+        var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
+        var insertink = '<a title="insert" class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-wiki-recommender-image eexcess-other-with-preview "'
             + ' data-category="eexcess-wiki-recommender-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-wiki-recommender-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + citeLink + '</div>';
+            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertink + '</div>';
 
         items += item;
     });
