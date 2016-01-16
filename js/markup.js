@@ -1,4 +1,4 @@
-require(['c4/cmsMarkup', 'c4/iframes'], function (cms, iframes) {
+require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, iframes, paragraphDetection) {
     var markup = cms.detectMarkup();
 
     var insertMarkupHandler = function (msg) {
@@ -43,4 +43,43 @@ require(['c4/cmsMarkup', 'c4/iframes'], function (cms, iframes) {
     };
 
     window.addEventListener('message', detectLanguageHandler);
+
+    // passive search
+    $('#wpTextbox1')[0].onkeyup = function(e) {
+        if (e.keyCode == 13) { // enter
+            // detect active paragraph
+            var cursorPosition = this.selectionStart;
+
+            // find paragraph start
+            var delimiter = "==";
+            var text = this.value;
+            var start = 0;
+            var pos = this.value.indexOf(delimiter);
+
+            while (pos != -1 && pos < cursorPosition) {
+                start = pos + delimiter.length;
+                pos = this.value.indexOf(delimiter, start);
+            }
+
+            // find paragraph end
+            var end = this.value.indexOf(delimiter, cursorPosition) - 1;
+
+            if (end < 0) {
+                end = text.length;
+            }
+
+            var paragraph = text.substring(start, end);
+
+            // extract keywords & generate query
+            paragraphDetection.paragraphToQuery(paragraph, function (res) {
+                if (typeof res.query !== 'undefined') {
+                    alert(1);
+                }
+
+                alert(2);
+            });
+
+            // submit query
+        }
+    }
 });
