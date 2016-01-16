@@ -1,4 +1,4 @@
-require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, iframes, paragraphDetection) {
+require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/searchBar/searchBar'], function (cms, iframes, paragraphDetection, searchBar) {
     var markup = cms.detectMarkup();
 
     var insertMarkupHandler = function (msg) {
@@ -72,14 +72,10 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
 
             // extract keywords & generate query
             paragraphDetection.paragraphToQuery(paragraph, function (res) {
-                if (typeof res.query !== 'undefined') {
-                    alert(1);
+                if (typeof res.query !== 'undefined') { // submit query
+                    searchBar.setQuery(res.query.contextKeywords, 0);
                 }
-
-                alert(2);
             });
-
-            // submit query
         }
     }
 });
