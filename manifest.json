@@ -1,5 +1,5 @@
 {
-    "name": "EEXCESS-Wiki-Recommender",
+    "name": "EEXCESS Wiki-Recommender",
     "version": "1.4.2",
     "background": {
         "page": "html/background.html"
@@ -34,7 +34,8 @@
          "chrome_style":true
     },
     "browser_action":{
-        "default_icon":"media/icons/19.png"
+        "default_icon":"media/icons/19.png",
+        "default_popup":"html/popup.html"
     }
 }
 
