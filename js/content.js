@@ -113,38 +113,38 @@ require(['c4/searchBar/searchBar', 'c4/APIconnector', 'util', 'c4/iframes', 'up/
                     "url": chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html'),
                     "icon": chrome.extension.getURL('visualization-widgets/SearchResultListVis/icon.png')
                 }];
-                searchBar.init(tabs, {
-                    storage: chrome.storage.local,
-                    imgPATH: chrome.extension.getURL('js/lib/c4/searchBar/img/'),
-                    profile: {
-                        addCategories: function (categories) {
-                            // do nothing
-                        }
-                    },
-                    queryFn: function (queryProfile, callback) {
-                        chrome.runtime.sendMessage({method: 'triggerQuery', data: queryProfile}, function (response) {
-                            if (response.status === 'success') {
-                                lastQuery = response.data;
-                            }
-                            callback(response);
-                        });
-                    },
-                    origin: origin,
-                    queryCrumbs: {
-                        active: true,
-                        storage: {
-                            getHistory: function (callback) {
-                                chrome.runtime.sendMessage({method: 'qcGetHistory'}, callback);
-                            },
-                            setHistory: function (history) {
-                                chrome.runtime.sendMessage({method: 'qcSetHistory', data: history});
-                            }
-                        },
-                        updateTrigger: function () {
-                            chrome.runtime.sendMessage(({method: 'updateQueryCrumbs'}));
-                        }
-                    }
-                });
+                //searchBar.init(tabs, {
+                //    storage: chrome.storage.local,
+                //    imgPATH: chrome.extension.getURL('js/lib/c4/searchBar/img/'),
+                //    profile: {
+                //        addCategories: function (categories) {
+                //            // do nothing
+                //        }
+                //    },
+                //    queryFn: function (queryProfile, callback) {
+                //        chrome.runtime.sendMessage({method: 'triggerQuery', data: queryProfile}, function (response) {
+                //            if (response.status === 'success') {
+                //                lastQuery = response.data;
+                //            }
+                //            callback(response);
+                //        });
+                //    },
+                //    origin: origin,
+                //    queryCrumbs: {
+                //        active: true,
+                //        storage: {
+                //            getHistory: function (callback) {
+                //                chrome.runtime.sendMessage({method: 'qcGetHistory'}, callback);
+                //            },
+                //            setHistory: function (history) {
+                //                chrome.runtime.sendMessage({method: 'qcSetHistory', data: history});
+                //            }
+                //        },
+                //        updateTrigger: function () {
+                //            chrome.runtime.sendMessage(({method: 'updateQueryCrumbs'}));
+                //        }
+                //    }
+                //});
                 chrome.runtime.onMessage.addListener(qcRefresh);
                 // detect paragraphs
                 var p = paragraphDetection.getParagraphs();
