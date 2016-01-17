@@ -93,8 +93,8 @@ unknown, eecxess green: #1d904e*/
 .eexcess-isotope-grid-item.eexcess-image {
     position: relative;
     float: left;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
 
 }
 
@@ -150,13 +150,14 @@ unknown, eecxess green: #1d904e*/
 .eexcess-isotope-grid-item.eexcess-other-with-preview {
     position: relative;
     float: left;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
+
 }
 
 .eexcess-other-with-preview img {
     max-height: 90%;
-    max-width: 80%;
+    max-width: 90%;
     display: block;
     margin: auto;
     margin-top: 5px;
@@ -440,12 +441,12 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
     text-decoration: none;
     position: absolute;
     right: 2px;
-    top: 3px;
+    bottom: 3px;
     opacity: 0;
 }
 
 .eexcess-cite-link {
-    top: 20px;
+    bottom: 20px;
 }
 
 .eexcess-result-link-lightbox {

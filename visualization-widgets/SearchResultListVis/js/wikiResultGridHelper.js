@@ -48,7 +48,7 @@ function addWikiGrid(msg) {
         itemSelector: '.eexcess-isotope-grid-item',
         layoutMode: 'masonry',
         masonry: {
-            columnWidth: 50
+            columnWidth: 25
         }
         //SORTING DISABLED,
         //getSortData: {
