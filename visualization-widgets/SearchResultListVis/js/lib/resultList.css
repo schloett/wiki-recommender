@@ -129,6 +129,12 @@ unknown, eecxess green: #1d904e*/
     background-color: #b3cde3;
 }
 
+/*.eexcess-isotope-grid-item.eexcess-wiki-recommender-image {*/
+    /*max-width: 350px;*/
+    /*max-height: 705px;*/
+    /*background-color: #b3cde3;*/
+/*}*/
+
 .eexcess-isotope-grid-item.eexcess-3d {
     width: 150px;
     height: 75px;
@@ -150,7 +156,7 @@ unknown, eecxess green: #1d904e*/
 
 .eexcess-other-with-preview img {
     max-height: 90%;
-    max-width: 90%;
+    max-width: 80%;
     display: block;
     margin: auto;
     margin-top: 5px;
@@ -490,6 +496,6 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
 
 /*WIKI RECOMMENDER*/
 
-.eexcess-wiki-recommender-image{
-background-color: lightgrey;
-}
+/*.eexcess-wiki-recommender-image{*/
+/*background-color: lightgrey;*/
+/*}*/

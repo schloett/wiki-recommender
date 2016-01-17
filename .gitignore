@@ -3,3 +3,4 @@ js/lib/*
 .idea/
 *~
 *.iml
+*.orig
