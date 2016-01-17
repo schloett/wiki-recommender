@@ -49,11 +49,12 @@ function addWikiGrid(msg) {
         layoutMode: 'masonry',
         masonry: {
             columnWidth: 50
-        },
-        getSortData: {
-            itemTitle: '.itemTitle',
-            date: '[itemDate]'
         }
+        //SORTING DISABLED,
+        //getSortData: {
+        //    itemTitle: '.itemTitle',
+        //    date: '[itemDate]'
+        //}
     });
 
     //check if all items are loaded to avoid overlap, then add items to container TODO images too large
@@ -98,12 +99,12 @@ function addWikiGrid(msg) {
         $('.eexcess-isotope-grid').isotope({filter: filterValue});
     });
 
-    //------Sorting------//
+    //------Sorting DISABLED------//
     // bind sort button click
-    $('#eexcess-isotope-sorts').on('click', 'button', function () {
-        var sortValue = $(this).attr('data-sort-value');
-        $('.eexcess-isotope-grid').isotope({sortBy: sortValue});
-    });
+    //$('#eexcess-isotope-sorts').on('click', 'button', function () {
+    //    var sortValue = $(this).attr('data-sort-value');
+    //    $('.eexcess-isotope-grid').isotope({sortBy: sortValue});
+    //});
 
 
 }
@@ -210,13 +211,14 @@ $(document).ready(function () {
             $(this).addClass('is-checked');
         });
     });
-    $('#eexcess-isotope-sorts').each(function (i, buttonGroup) {
-        var $buttonGroup = $(buttonGroup);
-        $buttonGroup.on('click', 'button', function () {
-            $buttonGroup.find('.is-checked').removeClass('is-checked');
-            $(this).addClass('is-checked');
-        });
-    });
+    //SORTING DISABLED
+    //$('#eexcess-isotope-sorts').each(function (i, buttonGroup) {
+    //    var $buttonGroup = $(buttonGroup);
+    //    $buttonGroup.on('click', 'button', function () {
+    //        $buttonGroup.find('.is-checked').removeClass('is-checked');
+    //        $(this).addClass('is-checked');
+    //    });
+    //});
 
 
 });
