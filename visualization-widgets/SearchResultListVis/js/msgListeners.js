@@ -2,6 +2,7 @@ var lastProcessedQueryID;
 
 window.onmessage = function (msg) {
     if (msg.data.event) {
+
         if (msg.data.event === 'eexcess.queryTriggered') {
             // new search has been triggered somewhere, show loading bar or similar
             $(showLoadingBar());
@@ -14,6 +15,10 @@ window.onmessage = function (msg) {
             } else {
                 $(addIsotopeGrid(msg));
                 $(logResultItemClicks(msg));
+                //console.log(msg.data);
+                //console.log(msg.data.data.result[0].generatingQuery);
+                //$(getCommonsImages(msg.data.data.result.val.generatingQuery));
+
 
                 //make sure elements exist
                 var checkExist = setInterval(function () {
