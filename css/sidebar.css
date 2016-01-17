@@ -2,31 +2,42 @@
 visited webpage and the sidebar is an iframe element, added to the dom of the 
 particular page */
 
-#eexcess_sidebar{
- display:none;
- position:fixed;
- top:0px;
- margin:0;
- padding:0;
- right:0px;
- width:364px;
- height:100%;
- border:0px; 
- z-index:999;
- background-color:white;
- font-size:11pt;
- font-family:Helvetica;
+#eexcess_sidebar {
+    /*display:none;*/
+    position: absolute;
+    top: 0px;
+    margin: 0;
+    padding: 0;
+    right: 0px;
+    width: 18%;
+    height: 100%;
+    border: 0px;
+    z-index: 999;
+    background-color: white;
+    font-size: 11pt;
+}
+
+
+#eexcess_sidebar iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+
 }
 
 #eexcess_toggler {
+
     position: fixed;
     display: none;
-    top:0px;
-    right:0px;
-    height:100%;
-    width:16px;
-    z-index:99999;
-    cursor:pointer;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 16px;
+    z-index: 99999;
+    cursor: pointer;
     background-repeat: no-repeat;
     background-position: center;
 }

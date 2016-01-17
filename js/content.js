@@ -1,37 +1,5 @@
 require(['c4/searchBar/searchBar', 'c4/APIconnector', 'util', 'c4/iframes', 'up/constants'], function (searchBar, api, util, iframes, up_constants) {
-
-
-    chrome.runtime.onMessage.addListener(
-        function (request, sender, sendResponse) {
-            if (request.method == "visibility")
-
-
-                if (request.data == true) {
-                //add toggler (which changes size and sets visible AND restores size and hide)
-
-                    $(".mediawiki").hide();
-
-                    
-                    $('<div id="eexcess_toggler"></div>').appendTo('body').click(function () {
-                        if ($('#eexcess_sidebar').is(':visible')) {
-                            $('#eexcess_sidebar').hide('slow');
-                            $('#eexcess_toggler').css('background-image', 'url(chrome-extension://media/icons/show.png)');
-                        } else {
-                            $('#eexcess_sidebar').show('fast');
-                            $('#eexcess_toggler').css('background-image', 'url(chrome-extension://media/icons/hide.png)');
-                        }
-                    });
-
-                }
-            //remove toggler
-            if (request.data == false) {
-                $(".mediawiki").show();
-            }
-
-        });
-
-
-    var logLevel = up_constants.STORAGE_PREFIX + up_constants.LOGGING_LEVEL;
+  var logLevel = up_constants.STORAGE_PREFIX + up_constants.LOGGING_LEVEL;
     chrome.storage.sync.get(['uuid', logLevel], function (result) {
         var uuid;
         if (result.uuid) {
