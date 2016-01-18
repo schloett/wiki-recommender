@@ -54,7 +54,9 @@ chrome.runtime.onMessage.addListener(
                 $(document).ready(function () {
                     var sidebarTop = editor.offset();
                     editor.css("width", "80%");
-                    $("#bodyContent").after("<div id='eexcess_sidebar' display='none'></div>");
+                    var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
+
+                    $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
                     var sidebar = $("#eexcess_sidebar");
 
                     //adjust sidebar position and size according to the wiki editor
@@ -65,10 +67,11 @@ chrome.runtime.onMessage.addListener(
                     });
 
                     sidebar.css("top", sidebarTop.top);
-                    var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
-                    sidebar.append("<iframe src='" + iframeUrl + "' />");
-                    sidebar.show();
-                })
+                    //sidebar.show();
+                    sidebar.slideToggle({direction: "left"});
+
+                });
+
             }
             //remove sidebar
             if (request.data == false) {

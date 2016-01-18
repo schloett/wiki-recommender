@@ -111,33 +111,21 @@ chrome.browserAction.onClicked.addListener(function (tab) {
         if (badgeText === '') {
             visible = true;
             chrome.browserAction.setBadgeText({text: 'on', tabId: tab.id});
-            toggleVisibility(tab.id, tab.url)
-            console.log(visible);
+            notifyVisibilityChange(tab.id, tab.url)
         }
         //if widget is visible, hide it
         else {
             visible = false;
             chrome.browserAction.setBadgeText({text: '', tabId: tab.id});
-            toggleVisibility(tab.id, tab.url)
-            console.log(visible);
+            notifyVisibilityChange(tab.id, tab.url)
         }
-        //chrome.browserAction.setBadgeText({text: ""});
-        //if (!params.visible) {
-        //    EEXCESS.model.toggleVisibility(tab.id, tab.url);
-        //}
     })
 });
 
-function toggleVisibility(tabID, url) {
-
-    //toggle visibility
-    //visible = !visible;
-
-    //send new visibility state to content.js
+//send new visibility state to content.js
+function notifyVisibilityChange(tabID, url) {
     chrome.tabs.sendMessage(tabID, {method: "visibility", data: visible}, function (response) {
-        console.log(response.farewell);
     });
-
 };
 
 
