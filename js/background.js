@@ -101,19 +101,23 @@ require(['./common'], function (common) {
     });
 });
 
+//add visibility toggle to browser action
+
 var visible = false;
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.browserAction.getBadgeText({}, function (badgeText) {
+    chrome.browserAction.getBadgeText({tabId: tab.id}, function (badgeText) {
         //if widget is off/hidden
         if (badgeText === '') {
-            chrome.browserAction.setBadgeText({text: 'on'});
+            visible = true;
+            chrome.browserAction.setBadgeText({text: 'on', tabId: tab.id});
             toggleVisibility(tab.id, tab.url)
             console.log(visible);
         }
         //if widget is visible, hide it
         else {
-            chrome.browserAction.setBadgeText({text: ''});
+            visible = false;
+            chrome.browserAction.setBadgeText({text: '', tabId: tab.id});
             toggleVisibility(tab.id, tab.url)
             console.log(visible);
         }
@@ -127,7 +131,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 function toggleVisibility(tabID, url) {
 
     //toggle visibility
-    visible = !visible;
+    //visible = !visible;
 
     //send new visibility state to content.js
     chrome.tabs.sendMessage(tabID, {method: "visibility", data: visible}, function (response) {

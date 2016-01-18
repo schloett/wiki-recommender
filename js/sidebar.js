@@ -1,5 +1,4 @@
 //TODO: add listener for editform pos.change
-//TODO: manage multiple tabs
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
