@@ -27,6 +27,7 @@ function addWikiGrid(msg) {
     ////}
     //else {
     var $items = $(addWikiGridResultItems(msg));
+
     $('.eexcess_empty_result').hide();
 
     // init add image citation links
@@ -121,7 +122,7 @@ function addWikiGridResultItems(msg) {
         var itemDescription = val.description;
 
         var pageID = val.pageid;
-        console.log(val.imageinfo[0].url);
+        //console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
         var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';

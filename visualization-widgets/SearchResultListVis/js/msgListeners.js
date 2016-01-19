@@ -13,7 +13,8 @@ window.onmessage = function (msg) {
             if (lastProcessedQueryID && lastProcessedQueryID === msg.data.data.queryID) {
                 // data already processed, do nothing
             } else {
-                $(addIsotopeGrid(msg));
+                console.log(msg)
+                $(addWikiGrid(msg.data.data.data));
                 $(logResultItemClicks(msg));
                 //console.log(msg.data);
                 //console.log(msg.data.data.result[0].generatingQuery);

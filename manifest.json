@@ -16,7 +16,7 @@
         "js/requireContent.js",
         "js/common.js",
         "js/content.js",
-        "js/sidebar.js",
+        "js/searchSidebar.js",
         "js/markup.js"
       ],
       "css": [
