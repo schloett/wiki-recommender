@@ -163,7 +163,6 @@ function queryCommons(profile, callback) {
         },
         xhrFields: {withCredentials: true},
         success: function (response) {
-            console.log(response);
             if (typeof callback !== 'undefined') {
                 callback({status: 'success', data: response});
             }

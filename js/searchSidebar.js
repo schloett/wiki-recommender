@@ -103,8 +103,13 @@ require(['c4/iframes'], function (iframes) {
     )
     ;
 
-
+// a new search has been triggered. send call to wiki commons as well as mendeley and zwb via the api TODO only one msg
     function handleSearch(msg) {
+
+        var responseWiki;
+        var responseElse;
+
+
         chrome.runtime.sendMessage({
             method: 'triggerQueryCommons',
             data: {
@@ -114,11 +119,39 @@ require(['c4/iframes'], function (iframes) {
                 ]
             }
         }, function (response) {
-            //console.log(response)
-            iframes.sendMsgAll({event: 'eexcess.newResults', data: response});
+            responseWiki = response;
 
-        })
-    }
+        });
+
+        chrome.runtime.sendMessage({
+            method: 'triggerQuery',
+            data: {
+                origin: {module: "wikiRecommender"},
+                contextKeywords: [
+                    {text: msg.data.data}
+                ]
+            }
+        }, function (response) {
+            responseElse = response;
+        });
+        //TODO break point
+        checkResponses();
+
+        //timer to ensure both calls have returned responses
+        function checkResponses() {
+            if (responseElse === undefined || responseWiki === undefined) {
+                setTimeout(checkResponses, 50);
+                //console.log("still undefined")
+
+            }
+            else {
+                iframes.sendMsgAll({event: 'eexcess.newResultsElse', data: responseElse});
+                iframes.sendMsgAll({event: 'eexcess.newResultsWiki', data: responseWiki});
+            }
+        }
+
+
+    };
 
 });
 

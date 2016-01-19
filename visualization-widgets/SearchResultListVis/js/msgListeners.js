@@ -8,18 +8,14 @@ window.onmessage = function (msg) {
             $(showLoadingBar());
         }
 
-        if (msg.data.event && msg.data.event === 'eexcess.newResults') {
+        if (msg.data.event && msg.data.event === 'eexcess.newResultsElse') {
             // new results are available in msg.data.data
             if (lastProcessedQueryID && lastProcessedQueryID === msg.data.data.queryID) {
                 // data already processed, do nothing
             } else {
-                console.log(msg)
-                $(addWikiGrid(msg.data.data.data));
+                //$(addWikiGrid(msg.data.data.data));
+                $(addIsotopeGrid(msg.data.data));
                 $(logResultItemClicks(msg));
-                //console.log(msg.data);
-                //console.log(msg.data.data.result[0].generatingQuery);
-                //$(getCommonsImages(msg.data.data.result.val.generatingQuery));
-
 
                 //make sure elements exist
                 var checkExist = setInterval(function () {
@@ -32,8 +28,13 @@ window.onmessage = function (msg) {
 
                 lastProcessedQueryID = msg.data.data.queryID;
             }
+        }
 
-        } else if (msg.data.event === 'eexcess.error') {
+        if (msg.data.event && msg.data.event === 'eexcess.newResultsWiki') {
+            $(addWikiGrid(msg.data.data.data));
+        }
+
+        else if (msg.data.event === 'eexcess.error') {
             $(showError(msg.data.data));
         }
 

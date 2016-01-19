@@ -8,7 +8,7 @@ function addIsotopeGrid(msg) {
     $('#eexcess-loading').hide();
 
 
-    if (msg.data.data.result.length == 0) {
+    if (msg.data.result.length == 0) {
         $('.eexcess_empty_result').show();
     }
     else {
@@ -87,7 +87,7 @@ function addIsotopeGrid(msg) {
         var items = '';
 
 
-        $.each(msg.data.data.result, function (idx, val) {
+        $.each(msg.data.result, function (idx, val) {
 
                 var mediaType = val.mediaType;
                 var itemTitle = val.title;
@@ -498,7 +498,7 @@ function logResultItemClicks(msg) {
         };
         //console.log("queryID: " + msg.data.data.queryID);
         //console.log("Type of documentBadge: " + typeof documentBadge);
-        LOGGING.itemOpened(origin, documentBadge, msg.data.data.queryID);
+        LOGGING.itemOpened(origin, documentBadge, msg.data.queryID);
     });
 }
 
