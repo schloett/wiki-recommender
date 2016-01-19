@@ -21,12 +21,12 @@ function addIsotopeGrid(msg) {
             itemSelector: '.eexcess-isotope-grid-item',
             layoutMode: 'masonry',
             masonry: {
-                columnWidth: 50
-            },
-            getSortData: {
-                itemTitle: '.itemTitle',
-                date: '[itemDate]'
+                columnWidth: 60
             }
+            //getSortData: {
+            //    itemTitle: '.itemTitle',
+            //    date: '[itemDate]'
+            //}
         });
 
         //check if all items are loaded to avoid overlap, then add items to container
