@@ -395,10 +395,10 @@ function addFilterCounter() {
 
     //if no filter was selected, show all will be selected
     if (currentFilter == undefined) {
-        buttonGroup.append(' <button class="eexcess-isotope-button show-all is-checked" data-filter="*">show all' +
+        buttonGroup.append(' <button class="eexcess-isotope-button show-all is-checked" data-filter="*">all' +
             ' </button>');
     } else {
-        buttonGroup.append(' <button class="eexcess-isotope-button show-all " data-filter="*">show all </button>');
+        buttonGroup.append(' <button class="eexcess-isotope-button show-all " data-filter="*">all </button>');
     }
 
 
@@ -411,7 +411,7 @@ function addFilterCounter() {
 
     if (numberOfImages > 0) {
         var imageFilterButton = '<button class="eexcess-isotope-button eexcess-image"' +
-            ' data-filter=".eexcess-image">images (' + numberOfImages + ')</button>';
+            ' data-filter=".eexcess-image">img (' + numberOfImages + ')</button>';
         buttonGroup.append(imageFilterButton);
         if (currentFilter != undefined && currentFilter.indexOf("eexcess-image") > -1) {
             $('.eexcess-isotope-button.eexcess-image').addClass('is-checked');
@@ -420,7 +420,7 @@ function addFilterCounter() {
 
     if (numberOfTexts > 0) {
         var textFilterButton = '<button class="eexcess-isotope-button eexcess-text"' +
-            ' data-filter=".eexcess-text">text (' + numberOfTexts + ')</button>';
+            ' data-filter=".eexcess-text">txt (' + numberOfTexts + ')</button>';
         buttonGroup.append(textFilterButton);
         if (currentFilter != undefined && currentFilter.indexOf("eexcess-text") > -1) {
             $('.eexcess-isotope-button.eexcess-text').addClass('is-checked');
