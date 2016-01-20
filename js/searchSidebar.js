@@ -107,7 +107,7 @@ require(['c4/iframes'], function (iframes) {
     function handleSearch(msg) {
 
         var responseWiki;
-        var responseElse;
+        var responseEEXCESS;
 
 
         chrome.runtime.sendMessage({
@@ -132,21 +132,20 @@ require(['c4/iframes'], function (iframes) {
                 ]
             }
         }, function (response) {
-            responseElse = response;
+            responseEEXCESS = response;
         });
         //TODO break point
         checkResponses();
 
         //timer to ensure both calls have returned responses
         function checkResponses() {
-            if (responseElse === undefined || responseWiki === undefined) {
+            if (responseEEXCESS === undefined || responseWiki === undefined) {
                 setTimeout(checkResponses, 50);
                 //console.log("still undefined")
 
             }
             else {
-                iframes.sendMsgAll({event: 'eexcess.newResultsElse', data: responseElse});
-                iframes.sendMsgAll({event: 'eexcess.newResultsWiki', data: responseWiki});
+                iframes.sendMsgAll({event: 'eexcess.newResults', dataWiki: responseWiki, dataEEXCESS: responseEEXCESS});
             }
         }
 

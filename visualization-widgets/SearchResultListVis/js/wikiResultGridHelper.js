@@ -1,18 +1,18 @@
-/**
- * Created by lisa on 11/12/15.
- */
-var currentFilter;
-var language;
-
-window.addEventListener('message', function(msg) {
-    if (msg.data.event == 'eexcess.detectLang.response') {
-        language = msg.data.language;
-    }
-
-    window.removeEventListener('message', this);
-});
-
-window.top.postMessage({event: 'eexcess.detectLang.request'}, '*');
+///**
+// * Created by lisa on 11/12/15.
+// */
+//var currentFilter;
+//var language;
+//
+//window.addEventListener('message', function(msg) {
+//    if (msg.data.event == 'eexcess.detectLang.response') {
+//        language = msg.data.language;
+//    }
+//
+//    window.removeEventListener('message', this);
+//});
+//
+//window.top.postMessage({event: 'eexcess.detectLang.request'}, '*');
 
 
 //----- Assemble the searchResultGrid -----//
@@ -125,14 +125,15 @@ function addWikiGridResultItems(msg) {
         //console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
-        var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
-        var insertink = '<a title="insert" class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
+        var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
+        var insertLink = '<a title="insert" class="eexcess-result-link eexcess-cite-link fa fa-link"' +
+            ' href="javascript:void(0)" data-title="' + val.title + '" ></a>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "'
             + ' data-category="eexcess-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertink + '</div>';
+            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertLink + '</div>';
 
         items += item;
     });
@@ -152,9 +153,6 @@ function truncateTitles() {
 
 
 //----- -----//
-//hover(function() {
-//    $( this ).fadeOut( 100 );
-//    $( this ).fadeIn( 500 );
 function bindDescriptionHover() {
     $(".eexcess-with-preview-hover").hover(function () {
         $(this).find('.eexcess-text-with-preview-hover').css({'opacity': '1'}, 100)
