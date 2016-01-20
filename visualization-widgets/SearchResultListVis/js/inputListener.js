@@ -1,4 +1,4 @@
-// Prevent form submission
+// Listens for active search input
 $("form").submit(function (event) {
     $("div").remove(".eexcess-isotope-grid-item");
     event.preventDefault();
