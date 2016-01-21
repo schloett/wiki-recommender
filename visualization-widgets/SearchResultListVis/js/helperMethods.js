@@ -19,31 +19,22 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
     $('.eexcess_error_timeout').hide();
     $('#eexcess-loading').hide();
 
-// if any result is empty, error messages are shown
-
-
-    console.log(msgWiki)
-    console.log(msgEEXCESS)
-
     var $items;
 
     //nothing to show
     if (msgWiki.query === undefined && msgEEXCESS.data.totalResults === 0) {
         showEmptyResult("both");
-        console.log("nothing to show");
         return;
 
         //show only the eexcess results
     } else if (msgWiki.query === undefined && msgEEXCESS.data.totalResults !== 0) {
         showEmptyResult("wiki");
         $items = $(addGridEEXCESSResultItems(msgEEXCESS));
-        console.log("no wiki to show")
 
         //show only the wiki results
     } else if (msgEEXCESS.data.totalResults === 0) {
         showEmptyResult("eecxess");
         $items = $(addGridWikiResultItems(msgWiki));
-        console.log("no eecxess to show")
 
     } else {
         $('.eexcess_empty_result').hide();
@@ -107,8 +98,6 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
         var sortValue = $(this).attr('data-sort-value');
         $('.eexcess-isotope-grid').isotope({sortBy: sortValue});
     });
-
-
 }
 
 
@@ -208,7 +197,6 @@ function addGridEEXCESSResultItems(msg) {
                     }
                     //text results with description and with preview
                     else {
-                        //console.log("i have both!")
                         item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-with-preview eexcess-with-preview-hover"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                             ' <div class="eexcess-title-with-description-text eexcess-text itemTitle"><b></b>' +
@@ -235,7 +223,6 @@ function addGridWikiResultItems(msg) {
         var itemDescription = val.description;
 
         var pageID = val.pageid;
-        //console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
         //result link

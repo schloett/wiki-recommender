@@ -155,8 +155,8 @@ function queryCommons(profile, callback) {
             gsroffset: "20",
             prop: "imageinfo",
             iiprop: "url",
-            format: "json",
-            thumbwidth: "120"
+            format: "json"
+            //thumbwidth: "120"
 
         },
         xhrFields: {withCredentials: true},
