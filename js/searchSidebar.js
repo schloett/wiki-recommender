@@ -42,66 +42,86 @@ require(['c4/iframes'], function (iframes) {
                     $("#eexcess_sidebar").css({
                         "height": $(".wikiEditor-ui").height(),
                         "width": sidebarWidth,
-                        "top": $("#editform").offset().top
+                        "top": $("#editform").offset().top,
+                        "margin-right": "8px"
                     });
                 });
 
+
                 //adding the sidebar
 
-                var editor = $("#editform");
+                $(document).ready(function () {
 
-                if (request.data == true) {
-                    //add sidebar
-                    var sidebarWidth = '18%';
 
-                    $(document).ready(function () {
-                        var sidebarTop = editor.offset();
-                        editor.css("width", "80%");
-                        var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
+                    if (request.data == true) {
 
-                        $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
-                        var sidebar = $("#eexcess_sidebar");
+                        //add sidebar
+                        addSidebar();
 
-                        //adjust sidebar position and size according to the wiki editor
-                        sidebar.css({
-                            "height": $(".wikiEditor-ui").height(),
-                            "width": sidebarWidth,
-                            "top": sidebarTop.top
-                        });
 
-                        sidebar.css("top", sidebarTop.top);
-                        //sidebar.show();
-                        sidebar.slideToggle({direction: "left"});
+                        //window.addEventListener('message', newTrigger);
+                        window.onmessage = function (msg) {
+                            if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
+                                iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
+                                handleSearch(msg);
+                            }
 
-                    });
 
-                    //window.addEventListener('message', newTrigger);
-                    window.onmessage = function (msg) {
-                        if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
-                            iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
-                            handleSearch(msg);
-                            //if (msg.data.event && msg.data.event === 'newTrigger') {
-                            //lastQuery = msg.data.data;
-                            //iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
-                            //result_indicator.hide();
-                            //loader.show();
-                            //settings.queryFn(lastQuery, function(response) {
-                            //}
                         }
-
-
                     }
+
                     //remove sidebar
-                }
-                if (request.data == false) {
-                    editor.css("width", "100%");
-                    $("#eexcess_sidebar").remove();
-                }
+                    if (request.data == false) {
+                        $("#editform").css("width", "100%");
+                        $("#eexcess_sidebar").remove();
+                    }
+                });
 
             }
+        });
+
+
+    function addSidebar() {
+
+        if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
+
+            var editor = $("#editform");
+            var sidebarWidth = '18%';
+
+
+            var sidebarTop = editor.offset();
+            editor.css("width", "80%");
+            var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
+
+            //var checkExist = setInterval(function () {
+            //    if ($('#bodyContent').length) {
+            $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
+            //}
+            //}, 10);
+
+
+            var sidebar = $("#eexcess_sidebar");
+            console.log($("#editform .wikiEditor-ui ").height())
+            if ($(".wikiEditor-ui")[0]) {
+                console.log("im here")
+            }
+
+            //adjust sidebar position and size according to the wiki editor
+            sidebar.css({
+                "height": $(".wikiEditor-ui").height(),
+                "width": sidebarWidth,
+                "top": sidebarTop.top,
+                "margin-right": "8px"
+            });
+
+            sidebar.css("top", sidebarTop.top);
+            //sidebar.show();
+            sidebar.slideToggle({direction: "left"});
+        } else {
+            setTimeout(addSidebar, 10);
         }
-    )
-    ;
+    }
+
 
 // a new search has been triggered. send call to wiki commons as well as mendeley and zwb via the api TODO only one msg
     function handleSearch(msg) {
@@ -152,7 +172,8 @@ require(['c4/iframes'], function (iframes) {
 
     };
 
-});
+})
+;
 
 
 
