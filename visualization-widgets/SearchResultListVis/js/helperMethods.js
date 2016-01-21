@@ -27,19 +27,30 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
     var itemsEEXCESS = $(addGridEEXCESSResultItems(msgEEXCESS));
     var itemsWiki = $(addGridWikiResultItems(msgWiki));
 
-    //var $itemsArray =$.map(itemsEEXCESS, function (v, i) {
-    //    return [v, itemsWiki[i]];
-    //}).toString();
-    //
-    //$items = $itemsArray + "";
-    //console.log( itemsEEXCESS)
-    //console.log(typeof itemsWiki)
-    //
-    //console.log($items)
+
+
+    // merge result grid objects in a zipping fashion, ignore undefined values which occur when result sets are of
+    // different length
+    var $items = itemsEEXCESS.map(function (v, i) {
+        if (itemsWiki[v] !== undefined) {
+            return [i,  itemsWiki[v]];
+        }
+        else return i;
+    });
+
+
+
+    var $itemsObject = '';
+    $.each($items, function (idx, val) {
+        $itemsObject += $items[idx];
+    });
+
+
 
     $('.eexcess_empty_result').hide();
 
-var $items = itemsEEXCESS.add(itemsWiki)
+
+
     // init add image citation links
     $items.find('.eexcess-cite-link').click(function () {
         var title = $(this).attr('data-title');
@@ -70,7 +81,10 @@ var $items = itemsEEXCESS.add(itemsWiki)
     //check if all items are loaded to avoid overlap, then add items to container TODO has to be deactivated because
     // of wikis image sizes
     //$items.imagesLoaded(function () {
-        $('.eexcess-isotope-grid').isotope('insert', $items);
+
+    // for eacht eexcess : insert item, each wiki : insert item
+    $('.eexcess-isotope-grid').isotope('insert', $items);
+
 
     $(manageInterface);
     //});
@@ -97,6 +111,7 @@ var $items = itemsEEXCESS.add(itemsWiki)
     function addGridEEXCESSResultItems(msg) {
 
         var items = '';
+        //var items = [];
 
 
         $.each(msg.data.result, function (idx, val) {
@@ -201,7 +216,8 @@ var $items = itemsEEXCESS.add(itemsWiki)
                                 '<img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
                         }
                     }
-                    items+=item;
+                    items += item;
+                    //items.push(item);
                 }
             }
         );
@@ -213,6 +229,7 @@ var $items = itemsEEXCESS.add(itemsWiki)
 function addGridWikiResultItems(msg) {
 
     var items = '';
+    //var items = [];
 
     $.each(msg.query.pages, function (idx, val) {
 
@@ -238,7 +255,8 @@ function addGridWikiResultItems(msg) {
             itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertLink + '</div>';
 
 
-        items+=item;
+        //items.push(item);
+        items += item;
     });
 
     return items;

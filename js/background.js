@@ -65,11 +65,9 @@ require(['./common'], function (common) {
 
                             return true;
                             break;
-
-
+                        //search for images on wikipedia commons
                         case 'triggerQueryCommons':
                             queryCommons(msg.data, sendResponse);
-
                             return true;
                             break;
 
