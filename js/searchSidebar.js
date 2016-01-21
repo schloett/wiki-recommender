@@ -47,17 +47,11 @@ require(['c4/iframes'], function (iframes) {
                     });
                 });
 
-
                 //adding the sidebar
-
                 $(document).ready(function () {
-
-
                     if (request.data == true) {
-
                         //add sidebar
                         addSidebar();
-
 
                         //window.addEventListener('message', newTrigger);
                         window.onmessage = function (msg) {
@@ -65,8 +59,6 @@ require(['c4/iframes'], function (iframes) {
                                 iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
                                 handleSearch(msg);
                             }
-
-
                         }
                     }
 
@@ -76,33 +68,22 @@ require(['c4/iframes'], function (iframes) {
                         $("#eexcess_sidebar").remove();
                     }
                 });
-
             }
         });
 
 
     function addSidebar() {
-
         if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
-
             var editor = $("#editform");
             var sidebarWidth = '18%';
-
 
             var sidebarTop = editor.offset();
             editor.css("width", "80%");
             var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
 
-            //var checkExist = setInterval(function () {
-            //    if ($('#bodyContent').length) {
             $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
-            //}
-            //}, 10);
-
 
             var sidebar = $("#eexcess_sidebar");
-            if ($(".wikiEditor-ui")[0]) {
-            }
 
             //adjust sidebar position and size according to the wiki editor
             sidebar.css({
@@ -123,10 +104,8 @@ require(['c4/iframes'], function (iframes) {
 
 // a new search has been triggered. send call to wiki commons as well as mendeley and zwb via the api TODO only one msg
     function handleSearch(msg) {
-
         var responseWiki;
         var responseEEXCESS;
-
 
         chrome.runtime.sendMessage({
             method: 'triggerQueryCommons',
@@ -160,18 +139,13 @@ require(['c4/iframes'], function (iframes) {
             if (responseEEXCESS === undefined || responseWiki === undefined) {
                 setTimeout(checkResponses, 50);
                 //console.log("still undefined")
-
-            }
-            else {
+            } else {
                 iframes.sendMsgAll({event: 'eexcess.newResults', dataWiki: responseWiki, dataEEXCESS: responseEEXCESS});
             }
         }
+    }
 
-
-    };
-
-})
-;
+});
 
 
 
