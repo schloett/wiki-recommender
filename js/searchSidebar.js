@@ -101,9 +101,7 @@ require(['c4/iframes'], function (iframes) {
 
 
             var sidebar = $("#eexcess_sidebar");
-            console.log($("#editform .wikiEditor-ui ").height())
             if ($(".wikiEditor-ui")[0]) {
-                console.log("im here")
             }
 
             //adjust sidebar position and size according to the wiki editor
