@@ -106,14 +106,19 @@ require(['c4/iframes'], function (iframes) {
     function handleSearch(msg) {
         var responseWiki;
         var responseEEXCESS;
+        var contextKeywords;
 
+
+        if (msg.data.contextKeywords !== undefined) {
+            contextKeywords = msg.data.contextKeywords;
+        } else {
+            contextKeywords = [{text: msg.data.data}];
+        }
         chrome.runtime.sendMessage({
             method: 'triggerQueryCommons',
             data: {
                 origin: {module: "wikiRecommender"},
-                contextKeywords: [
-                    {text: msg.data.data}
-                ]
+                contextKeywords: contextKeywords
             }
         }, function (response) {
             responseWiki = response;
@@ -124,9 +129,7 @@ require(['c4/iframes'], function (iframes) {
             method: 'triggerQuery',
             data: {
                 origin: {module: "wikiRecommender"},
-                contextKeywords: [
-                    {text: msg.data.data}
-                ]
+                contextKeywords: contextKeywords
             }
         }, function (response) {
             responseEEXCESS = response;
