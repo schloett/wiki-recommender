@@ -65,6 +65,12 @@ require(['./common'], function (common) {
 
                             return true;
                             break;
+                        //search for images on wikipedia commons
+                        case 'triggerQueryCommons':
+                            queryCommons(msg.data, sendResponse);
+                            return true;
+                            break;
+
                         case 'optionsUpdate':
                             chrome.storage.sync.get(['numResults', 'selectedSources'], function (result) {
                                 if (result.numResults) {
@@ -126,7 +132,43 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 function notifyVisibilityChange(tabID, url) {
     chrome.tabs.sendMessage(tabID, {method: "visibility", data: visible}, function (response) {
     });
-};
+}
+
+
+//call to wiki commons TODO add to APIconnector?
+/**
+ * Function to query the wikipedia commons database.
+ * @param {APIconnector~onResponse} callback Callback function called on success or error.
+ */
+function queryCommons(profile, callback) {
+    var wikiUrl = "https://commons.wikimedia.org/w/api.php?";
+    $.ajax({
+        url: wikiUrl,
+        //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
+        //dataType: 'jsonp',
+        data: {
+            action: "query",
+            generator: "search",
+            gsrnamespace: "6",
+            gsrsearch: profile.contextKeywords[0].text,
+            gsrlimit: "20",
+            gsroffset: "20",
+            prop: "imageinfo",
+            iiprop: "url",
+            format: "json"
+            //thumbwidth: "120"
+
+        },
+        xhrFields: {withCredentials: true},
+        success: function (response) {
+            if (typeof callback !== 'undefined') {
+                callback({status: 'success', data: response});
+            }
+        }
+
+    });
+}
+
 
 
 

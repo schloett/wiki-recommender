@@ -8,31 +8,35 @@ window.onmessage = function (msg) {
             $(showLoadingBar());
         }
 
+        // listens for the arrival of two result sets, EEXCESS and Wiki
         if (msg.data.event && msg.data.event === 'eexcess.newResults') {
             // new results are available in msg.data.data
             if (lastProcessedQueryID && lastProcessedQueryID === msg.data.data.queryID) {
                 // data already processed, do nothing
             } else {
-                $(addIsotopeGrid(msg));
-                $(logResultItemClicks(msg));
-                //console.log(msg.data);
-                //console.log(msg.data.data.result[0].generatingQuery);
-                //$(getCommonsImages(msg.data.data.result.val.generatingQuery));
 
+                console.log(msg);
+                var msgWiki = msg.data.dataWiki.data;
+                var msgEEXCESS = msg.data.dataEEXCESS;
+                //$(addWikiGrid(msg.data.data.data));
+                $(addIsotopeGrid(msgWiki, msgEEXCESS));
+
+                $(logResultItemClicks(msg));
 
                 //make sure elements exist
                 var checkExist = setInterval(function () {
                     if ($('.eexcess-isotope-grid-item').length) {
                         clearInterval(checkExist);
                         $(addFilterCounter);
-                        $(truncateTitles);
+                        $(manageInterface);
                     }
                 }, 10);
 
-                lastProcessedQueryID = msg.data.data.queryID;
+                lastProcessedQueryID = msg.data.dataEEXCESS.queryID;
             }
+        }
 
-        } else if (msg.data.event === 'eexcess.error') {
+        else if (msg.data.event === 'eexcess.error') {
             $(showError(msg.data.data));
         }
 

@@ -16,7 +16,8 @@
         "js/requireContent.js",
         "js/common.js",
         "js/content.js",
-        "js/sidebar.js"
+        "js/searchSidebar.js",
+        "js/markup.js"
       ],
       "css": [
         "js/lib/jquery-ui/themes/smoothness/jquery-ui.css",
