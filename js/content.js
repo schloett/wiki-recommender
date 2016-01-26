@@ -44,8 +44,6 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
 
     window.addEventListener('message', detectLanguageHandler);
 
-    var lastQuery = {};
-
     // search on enter
     var searchResultsForParagraphOnEnter = function (e) {
         if (e.keyCode == 13) { // enter
@@ -75,11 +73,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
             // extract keywords & generate query
             paragraphDetection.paragraphToQuery(paragraph, function (res) {
                 if (typeof res.query !== 'undefined') { // submit query
-                    lastQuery = {contextKeywords: res.query.contextKeywords};
-
-                    if ($('#eexcess_sidebar').length > 0) {
-                        iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: lastQuery});
-                    }
+                    window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: res.query.contextKeywords}}, '*');
                 }
             });
         }

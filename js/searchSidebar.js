@@ -56,8 +56,21 @@ require(['c4/iframes'], function (iframes) {
                         //window.addEventListener('message', newTrigger);
                         window.onmessage = function (msg) {
                             if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
-                                iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
-                                handleSearch(msg);
+                                var contextKeywords;
+
+                                if (msg.data.data.contextKeywords !== undefined) {
+                                    contextKeywords = msg.data.data.contextKeywords;
+                                    iframes.sendMsgAll({event: 'eexcess.passiveQueryTriggered', contextKeywords: contextKeywords});
+                                } else {
+                                    contextKeywords = [{text: msg.data.data}];
+                                }
+
+                                if (!queriesEqual(lastQuery, contextKeywords)) {
+                                    lastQuery = contextKeywords;
+
+                                    iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
+                                    handleSearch(contextKeywords);
+                                }
                             }
                         }
                     }
@@ -71,6 +84,30 @@ require(['c4/iframes'], function (iframes) {
             }
         });
 
+    /**
+     * Compares the text of two queries' context keyword arrays.
+     *
+     * @param a array 1
+     * @param b array 2
+     */
+    function queriesEqual(a, b) {
+        if (a === b)
+            return true;
+
+        if (a == null || b == null)
+            return false;
+
+        if (a.length != b.length)
+            return false;
+
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i].text !== b[i].text) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     function addSidebar() {
         if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
@@ -102,18 +139,12 @@ require(['c4/iframes'], function (iframes) {
     }
 
 
+    var lastQuery;
 // a new search has been triggered. send call to wiki commons as well as mendeley and zwb via the api TODO only one msg
-    function handleSearch(msg) {
+    function handleSearch(contextKeywords) {
         var responseWiki;
         var responseEEXCESS;
-        var contextKeywords;
 
-
-        if (msg.data.contextKeywords !== undefined) {
-            contextKeywords = msg.data.contextKeywords;
-        } else {
-            contextKeywords = [{text: msg.data.data}];
-        }
         chrome.runtime.sendMessage({
             method: 'triggerQueryCommons',
             data: {

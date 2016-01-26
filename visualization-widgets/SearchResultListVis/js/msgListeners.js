@@ -8,6 +8,24 @@ window.onmessage = function (msg) {
             $(showLoadingBar());
         }
 
+        if (msg.data.event === 'eexcess.passiveQueryTriggered') {
+            var contextKeywords = msg.data.contextKeywords;
+
+            if (contextKeywords) {
+                var query = "";
+
+                for (var i = 0; i < contextKeywords.length; i++) {
+                    if (i > 0)
+                        query += ' ';
+
+                    query += '"' + contextKeywords[i].text + '"';
+                }
+
+                // set query to search bar
+                $("#wiki-recommender-active-search").val(query);
+            }
+        }
+
         // listens for the arrival of two result sets, EEXCESS and Wiki
         if (msg.data.event && msg.data.event === 'eexcess.newResults') {
             // new results are available in msg.data.data
