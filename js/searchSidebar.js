@@ -40,7 +40,7 @@ require(['c4/iframes'], function (iframes) {
 
                 $("#bodyContent").onPositionChanged(function () {
                     $("#eexcess_sidebar").css({
-                        "height": $(".wikiEditor-ui").height(),
+                        "height": $(".wikiEditor-ui").height() + $("#editpage-specialchars").height()+14,
                         "width": sidebarWidth,
                         "top": $("#editform").offset().top,
                         "margin-right": "8px"
@@ -124,7 +124,7 @@ require(['c4/iframes'], function (iframes) {
 
             //adjust sidebar position and size according to the wiki editor
             sidebar.css({
-                "height": $(".wikiEditor-ui").height(),
+                "height": $(".wikiEditor-ui").height() + $("#editpage-specialchars").height()+14,
                 "width": sidebarWidth,
                 "top": sidebarTop.top,
                 "margin-right": "8px"

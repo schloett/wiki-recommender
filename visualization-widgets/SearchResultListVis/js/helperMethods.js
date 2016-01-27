@@ -371,7 +371,7 @@ function addFilterCounter() {
 
     if (numberOfImages > 0) {
         var imageFilterButton = '<button class="eexcess-isotope-button eexcess-image"' +
-            ' data-filter=".eexcess-image">img (' + numberOfImages + ')</button>';
+            ' data-filter=".eexcess-image">images (' + numberOfImages + ')</button>';
         buttonGroup.append(imageFilterButton);
         if (currentFilter != undefined && currentFilter.indexOf("eexcess-image") > -1) {
             $('.eexcess-isotope-button.eexcess-image').addClass('is-checked');
@@ -380,7 +380,7 @@ function addFilterCounter() {
 
     if (numberOfTexts > 0) {
         var textFilterButton = '<button class="eexcess-isotope-button eexcess-text"' +
-            ' data-filter=".eexcess-text">txt (' + numberOfTexts + ')</button>';
+            ' data-filter=".eexcess-text">texts (' + numberOfTexts + ')</button>';
         buttonGroup.append(textFilterButton);
         if (currentFilter != undefined && currentFilter.indexOf("eexcess-text") > -1) {
             $('.eexcess-isotope-button.eexcess-text').addClass('is-checked');
