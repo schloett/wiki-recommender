@@ -43,9 +43,15 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
 
         // merge result grid objects in a zipping fashion, ignore undefined values which occur when result sets are of
         // different length
-        $items = itemsEEXCESS.map(function (v, i) {
-            if (itemsWiki[v] !== undefined) {
-                return [i, itemsWiki[v]];
+        var itemsLonger = itemsEEXCESS;
+        var itemsShorter = itemsWiki;
+        if (itemsEEXCESS.length < itemsWiki.length) {
+            itemsLonger = itemsWiki;
+            itemsShorter = itemsEEXCESS;
+        }
+        $items = itemsLonger.map(function (v, i) {
+            if (itemsShorter[v] !== undefined) {
+                return [i, itemsShorter[v]];
             }
             else return i;
         });
