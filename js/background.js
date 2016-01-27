@@ -142,6 +142,8 @@ function notifyVisibilityChange(tabID, url) {
  */
 function queryCommons(profile, callback) {
     var wikiUrl = "https://commons.wikimedia.org/w/api.php?";
+
+    var keywords = buildWikiQuery(profile);
     $.ajax({
         url: wikiUrl,
         //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
@@ -150,7 +152,7 @@ function queryCommons(profile, callback) {
             action: "query",
             generator: "search",
             gsrnamespace: "6",
-            gsrsearch: profile.contextKeywords[0].text,
+            gsrsearch: keywords,
             gsrlimit: "20",
             gsroffset: "20",
             prop: "imageinfo",
@@ -167,6 +169,16 @@ function queryCommons(profile, callback) {
         }
 
     });
+    function buildWikiQuery(profile) {
+        var keywords = ' ';
+        for (i = 0; i < 3; i++) {
+            if (profile.contextKeywords[i] !== undefined) {
+                keywords.concat(' ', profile.contextKeywords[i].text);
+            }
+        }
+
+    }
+
 }
 
 
