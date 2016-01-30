@@ -79,8 +79,45 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         }
     };
 
+
+
+    var initAugmentationComponents = function() {
+        var augmentationComponents = {
+            img: null,
+            selection: null
+        };
+
+        augmentationComponents.img = $('<div id="search-ex-aug" title="Search with the (automatically recognised) Named Entities in this selection"></div>') // TODO replace text
+            .css('position', 'absolute')
+            .css('width', '30px')
+            .css('height', '30px')
+            .css('cursor', 'pointer')
+            .css('title', '"button2"')
+            .css('background-image', 'url("' + chrome.extension.getURL('media/img/search.png') + '")')
+            .css('background-size', 'contain').hide();
+        augmentationComponents.img.click(function(e) {
+            window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: {text: activateAugmentationComponents.selection}}}, '*');
+        });
+        $('body').append(augmentationComponents.img);
+
+        var activateAugmentationComponents = function (e) {
+            if (window.getSelection().toString() !== '') {
+                augmentationComponents.selection = window.getSelection();
+                augmentationComponents.selection = augmentationComponents.selection.toString();
+
+                var topPos = e.pageY + 10;
+                augmentationComponents.img.css('top', topPos).css('left', e.pageX).fadeIn('fast');
+            } else {
+                augmentationComponents.img.fadeOut('fast');
+            }
+        };
+
+        $('#wpTextbox1').bind('mouseup', activateAugmentationComponents);
+    };
+
     var run = function() {
         $('#wpTextbox1').keyup(searchResultsForParagraphOnEnter);
+        initAugmentationComponents();
     };
     var kill = function () {
         $('#wpTextbox1').unbind("keyup", searchResultsForParagraphOnEnter);
