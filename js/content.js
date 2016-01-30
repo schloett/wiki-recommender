@@ -79,15 +79,13 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         }
     };
 
+    var augmentationComponents = {
+        img: null,
+        selection: null
+    };
 
-
-    var initAugmentationComponents = function() {
-        var augmentationComponents = {
-            img: null,
-            selection: null
-        };
-
-        augmentationComponents.img = $('<div id="search-ex-aug" title="Search with the (automatically recognised) Named Entities in this selection"></div>') // TODO replace text
+    var initAugmentationComponents = function () {
+        augmentationComponents.img = $('<div id="search-ex-aug" title="Search with the (automatically recognised) Named Entities in this selection"></div>')
             .css('position', 'absolute')
             .css('width', '30px')
             .css('height', '30px')
@@ -95,32 +93,45 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
             .css('title', '"button2"')
             .css('background-image', 'url("' + chrome.extension.getURL('media/img/search.png') + '")')
             .css('background-size', 'contain').hide();
+
         augmentationComponents.img.click(function(e) {
-            window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: {text: activateAugmentationComponents.selection}}}, '*');
+            paragraphDetection.paragraphToQuery(augmentationComponents.selection, function (res) {
+                if (typeof res.query !== 'undefined') { // submit query
+                    window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: res.query.contextKeywords}}, '*');
+                }
+            });
         });
+
         $('body').append(augmentationComponents.img);
+    };
 
-        var activateAugmentationComponents = function (e) {
-            if (window.getSelection().toString() !== '') {
-                augmentationComponents.selection = window.getSelection();
-                augmentationComponents.selection = augmentationComponents.selection.toString();
+    var removeAugmentationComponents = function () {
+        augmentationComponents.img.remove();
+    };
 
-                var topPos = e.pageY + 10;
-                augmentationComponents.img.css('top', topPos).css('left', e.pageX).fadeIn('fast');
-            } else {
-                augmentationComponents.img.fadeOut('fast');
-            }
-        };
+    var queryFromSelection = function(e) {
+        if (window.getSelection().toString() !== '') {
+            augmentationComponents.selection = window.getSelection();
+            augmentationComponents.selection = augmentationComponents.selection.toString();
 
-        $('#wpTextbox1').bind('mouseup', activateAugmentationComponents);
+            var topPos = e.pageY + 10;
+            augmentationComponents.img.css('top', topPos).css('left', e.pageX).fadeIn('fast');
+        } else {
+            augmentationComponents.img.fadeOut('fast');
+        }
     };
 
     var run = function() {
-        $('#wpTextbox1').keyup(searchResultsForParagraphOnEnter);
+        $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter);
+
         initAugmentationComponents();
+        $('#wpTextbox1').bind('mouseup', queryFromSelection);
     };
     var kill = function () {
-        $('#wpTextbox1').unbind("keyup", searchResultsForParagraphOnEnter);
+        $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter);
+
+        $('#wpTextbox1').unbind('mouseup', queryFromSelection);
+        removeAugmentationComponents();
     };
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
