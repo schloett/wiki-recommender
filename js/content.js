@@ -100,6 +100,8 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
                     window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: res.query.contextKeywords}}, '*');
                 }
             });
+
+            $(this).fadeOut('fast');
         });
 
         $('body').append(augmentationComponents.img);
@@ -122,15 +124,13 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
     };
 
     var run = function() {
-        $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter);
-
+        $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter)
+            .bind('mouseup', queryFromSelection);
         initAugmentationComponents();
-        $('#wpTextbox1').bind('mouseup', queryFromSelection);
     };
     var kill = function () {
-        $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter);
-
-        $('#wpTextbox1').unbind('mouseup', queryFromSelection);
+        $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter)
+            .unbind('mouseup', queryFromSelection);
         removeAugmentationComponents();
     };
 
