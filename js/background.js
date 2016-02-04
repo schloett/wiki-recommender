@@ -170,39 +170,57 @@ function queryCommons(profile, callback) {
     });
     //concatenates the first three keywords using the wikipedia supported OR logic search parameter
     function buildWikiQuery(profile) {
-        var mainTopics;
-        var sideTopics;
+        var MAX_QUERY_SIZE = 300;
+        var mainTopics = [];
+        var sideTopics = [];
 
         $(profile.contextKeywords).each(function() {
             var text = this.text;
             var bracket = text.indexOf(' (');
 
-            if (bracket > -1) {
+            if (bracket > -1) { // remove text appended to keyword in brackets
                 text = text.substring(0, bracket);
             }
 
             if (this.isMainTopic) {
-                if (mainTopics) {
-                    mainTopics += ' AND "' + text + '"';
-                } else {
-                    mainTopics = '"' + text + '"';
-                }
+                mainTopics.push(text);
             } else {
-                if (sideTopics) {
-                    sideTopics += ' OR "' + text + '"';
-                } else {
-                    sideTopics = '"' + text + '"';
-                }
+                sideTopics.push(text);
             }
         });
 
-        var keywords = mainTopics;
+        var keywords = "";
 
-        if (keywords && sideTopics) {
-            keywords += ' AND (' + sideTopics + ')';
-        } else if (sideTopics) {
-            keywords = sideTopics;
+        for (var i = 0; i < mainTopics.length; i++) {
+            if (i > 0)
+                keywords += ' AND ';
+
+            keywords += '"' + mainTopics[i] + '"';
         }
+
+        for (var i = 0; i < sideTopics.length; i++) {
+            var topic = '';
+
+            if (i === 0) {
+                if (keywords.length > 0)
+                    topic += ' AND ';
+
+                topic += '(';
+            } else {
+                topic += ' OR ';
+            }
+
+            topic += '"' + sideTopics[i] + '"';
+
+            if (keywords.length + topic.length < MAX_QUERY_SIZE) {
+                keywords += topic;
+            } else {
+                break;
+            }
+        }
+
+        if (sideTopics.length > 0)
+            keywords += ')';
 
         return keywords;
     }
