@@ -143,7 +143,6 @@ function notifyVisibilityChange(tabID, url) {
 function queryCommons(profile, callback) {
     var wikiUrl = "https://commons.wikimedia.org/w/api.php?";
     var keywords = buildWikiQuery(profile);
-    console.log(keywords)
     $.ajax({
         url: wikiUrl,
         //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
@@ -171,17 +170,40 @@ function queryCommons(profile, callback) {
     });
     //concatenates the first three keywords using the wikipedia supported OR logic search parameter
     function buildWikiQuery(profile) {
-        var keywords = ' ';
-        for (var i = 0; i < 3; i++) {
-            if (profile.contextKeywords[i] !== undefined) {
-                if (i !== 2) {
-                    keywords = keywords.concat(profile.contextKeywords[i].text, ' OR ');
+        var mainTopics;
+        var sideTopics;
+
+        $(profile.contextKeywords).each(function() {
+            var text = this.text;
+            var bracket = text.indexOf(' (');
+
+            if (bracket > -1) {
+                text = text.substring(0, bracket);
+            }
+
+            if (this.isMainTopic) {
+                if (mainTopics) {
+                    mainTopics += ' AND "' + text + '"';
+                } else {
+                    mainTopics = '"' + text + '"';
                 }
-                else {
-                    keywords = keywords.concat(profile.contextKeywords[i].text);
+            } else {
+                if (sideTopics) {
+                    sideTopics += ' OR "' + text + '"';
+                } else {
+                    sideTopics = '"' + text + '"';
                 }
             }
+        });
+
+        var keywords = mainTopics;
+
+        if (keywords && sideTopics) {
+            keywords += ' AND (' + sideTopics + ')';
+        } else if (sideTopics) {
+            keywords = sideTopics;
         }
+
         return keywords;
     }
 
