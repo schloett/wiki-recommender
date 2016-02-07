@@ -140,9 +140,9 @@ function notifyVisibilityChange(tabID, url) {
  * Function to query the wikipedia commons database.
  * @param {APIconnector~onResponse} callback Callback function called on success or error.
  */
-function queryCommons(profile, callback) {
+function queryCommons(data, callback) {
     var wikiUrl = "https://commons.wikimedia.org/w/api.php?";
-    var keywords = buildWikiQuery(profile);
+
     $.ajax({
         url: wikiUrl,
         //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
@@ -151,7 +151,7 @@ function queryCommons(profile, callback) {
             action: "query",
             generator: "search",
             gsrnamespace: "6",
-            gsrsearch: keywords,
+            gsrsearch: data.query,
             gsrlimit: "20",
             gsroffset: "20",
             prop: "imageinfo",
@@ -168,63 +168,6 @@ function queryCommons(profile, callback) {
         }
 
     });
-    //concatenates the first three keywords using the wikipedia supported OR logic search parameter
-    function buildWikiQuery(profile) {
-        var MAX_QUERY_SIZE = 300;
-        var mainTopics = [];
-        var sideTopics = [];
-
-        $(profile.contextKeywords).each(function() {
-            var text = this.text;
-            var bracket = text.indexOf(' (');
-
-            if (bracket > -1) { // remove text appended to keyword in brackets
-                text = text.substring(0, bracket);
-            }
-
-            if (this.isMainTopic) {
-                mainTopics.push(text);
-            } else {
-                sideTopics.push(text);
-            }
-        });
-
-        var keywords = "";
-
-        for (var i = 0; i < mainTopics.length; i++) {
-            if (i > 0)
-                keywords += ' AND ';
-
-            keywords += '"' + mainTopics[i] + '"';
-        }
-
-        for (var i = 0; i < sideTopics.length; i++) {
-            var topic = '';
-
-            if (i === 0) {
-                if (keywords.length > 0)
-                    topic += ' AND ';
-
-                topic += '(';
-            } else {
-                topic += ' OR ';
-            }
-
-            topic += '"' + sideTopics[i] + '"';
-
-            if (keywords.length + topic.length < MAX_QUERY_SIZE) {
-                keywords += topic;
-            } else {
-                break;
-            }
-        }
-
-        if (sideTopics.length > 0)
-            keywords += ')';
-
-        return keywords;
-    }
-
 }
 
 

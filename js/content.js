@@ -47,6 +47,9 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
     // search on enter
     var searchResultsForParagraphOnEnter = function (e) {
         if (e.keyCode == 13) { // enter
+            // show loading bar
+            iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
+
             // detect active paragraph
             var cursorPosition = this.selectionStart;
 
@@ -73,7 +76,12 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
             // extract keywords & generate query
             paragraphDetection.paragraphToQuery(paragraph, function (res) {
                 if (typeof res.query !== 'undefined') { // submit query
-                    window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: res.query.contextKeywords}}, '*');
+                    window.postMessage({event: 'eexcess.queryTriggered',
+                        data: {
+                            contextKeywords: res.query.contextKeywords,
+                            module: 'passive-search'
+                        }
+                    }, '*');
                 }
             });
         }
