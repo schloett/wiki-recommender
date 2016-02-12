@@ -58,19 +58,15 @@ require(['c4/iframes'], function (iframes) {
                             if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
                                 var contextKeywords;
 
-                                if (msg.data.data.contextKeywords !== undefined) {
+                                var module = msg.data.data.module;
+
+                                if (module === 'passive-search') {
                                     contextKeywords = msg.data.data.contextKeywords;
-                                    iframes.sendMsgAll({event: 'eexcess.passiveQueryTriggered', contextKeywords: contextKeywords});
                                 } else {
                                     contextKeywords = [{text: msg.data.data}];
                                 }
 
-                                if (!queriesEqual(lastQuery, contextKeywords)) {
-                                    lastQuery = contextKeywords;
-
-                                    iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
-                                    handleSearch(contextKeywords);
-                                }
+                                handleSearch(contextKeywords, module);
                             }
                         }
                     }
@@ -84,29 +80,66 @@ require(['c4/iframes'], function (iframes) {
             }
         });
 
-    /**
-     * Compares the text of two queries' context keyword arrays.
-     *
-     * @param a array 1
-     * @param b array 2
-     */
-    function queriesEqual(a, b) {
-        if (a === b)
-            return true;
+    function buildWikiQuery(contextKeywords) {
+        var MAX_QUERY_SIZE = 300;
+        var mainTopics = [];
+        var sideTopics = [];
 
-        if (a == null || b == null)
-            return false;
+        $(contextKeywords).each(function () {
+            var text = this.text.replace(/ *\([^)]*\)*/g, ""); // rm text appended to keyword in brackets
 
-        if (a.length != b.length)
-            return false;
+            if (this.isMainTopic) {
+                mainTopics.push(text);
+            } else {
+                sideTopics.push(text);
+            }
+        });
 
-        for (var i = 0; i < a.length; ++i) {
-            if (a[i].text !== b[i].text) {
-                return false;
+        var query = "";
+
+        for (var i = 0; i < mainTopics.length; i++) {
+            if (i > 0)
+                query += ' AND ';
+
+            if (mainTopics.length > 1 || sideTopics.length > 1) {
+                query += '"' + mainTopics[i] + '"';
+            } else {
+                query += mainTopics[i];
+            }
+
+        }
+
+        for (var i = 0; i < sideTopics.length; i++) {
+            var topic = '';
+
+            if (i === 0) {
+                if (mainTopics.length > 0) {
+                    topic += ' AND ';
+
+                    if (sideTopics.length > 1)
+                        topic += '(';
+                }
+            } else {
+                topic += ' OR ';
+            }
+
+            if (mainTopics.length > 1 || sideTopics.length > 1) {
+                topic += '"' + sideTopics[i] + '"';
+            } else {
+                topic += sideTopics[i];
+            }
+
+            if (query.length + topic.length < MAX_QUERY_SIZE) {
+                query += topic;
+            } else {
+                break;
             }
         }
 
-        return true;
+        if (mainTopics.length > 0 && sideTopics.length > 1)
+            query += ')';
+
+        return query;
     }
 
     function addSidebar() {
@@ -139,9 +172,24 @@ require(['c4/iframes'], function (iframes) {
     }
 
 
-    var lastQuery;
 // a new search has been triggered. send call to wiki commons as well as mendeley and zwb via the api TODO only one msg
-    function handleSearch(contextKeywords) {
+    function handleSearch(contextKeywords, module) {
+        var wikiQuery;
+        var data;
+
+        if (module === 'passive-search') {
+            wikiQuery = buildWikiQuery(contextKeywords);
+            data = {query: wikiQuery};
+        } else {
+            wikiQuery = contextKeywords[0].text;
+            data = "msg";
+        }
+
+        iframes.sendMsgAll({
+            event: 'eexcess.queryTriggered',
+            data: data
+        });
+
         var responseWiki;
         var responseEEXCESS;
 
@@ -149,7 +197,7 @@ require(['c4/iframes'], function (iframes) {
             method: 'triggerQueryCommons',
             data: {
                 origin: {module: "wikiRecommender"},
-                contextKeywords: contextKeywords
+                query: wikiQuery
             }
         }, function (response) {
             responseWiki = response;

@@ -2,28 +2,15 @@ var lastProcessedQueryID;
 
 window.onmessage = function (msg) {
     if (msg.data.event) {
-
         if (msg.data.event === 'eexcess.queryTriggered') {
             // new search has been triggered somewhere, show loading bar or similar
             $(showLoadingBar());
-        }
 
-        if (msg.data.event === 'eexcess.passiveQueryTriggered') {
-            var contextKeywords = msg.data.contextKeywords;
+            // set query to search bar
+            var query = msg.data.data.query;
 
-            if (contextKeywords) {
-                var query = "";
-
-                for (var i = 0; i < contextKeywords.length; i++) {
-                    if (i > 0)
-                        query += ' ';
-
-                    query += '"' + contextKeywords[i].text + '"';
-                }
-
-                // set query to search bar
+            if (query)
                 $("#wiki-recommender-active-search").val(query);
-            }
         }
 
         // listens for the arrival of two result sets, EEXCESS and Wiki
@@ -59,7 +46,4 @@ window.onmessage = function (msg) {
         }
 
     }
-
-
 }
-

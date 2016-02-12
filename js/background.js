@@ -140,8 +140,9 @@ function notifyVisibilityChange(tabID, url) {
  * Function to query the wikipedia commons database.
  * @param {APIconnector~onResponse} callback Callback function called on success or error.
  */
-function queryCommons(profile, callback) {
+function queryCommons(data, callback) {
     var wikiUrl = "https://commons.wikimedia.org/w/api.php?";
+
     $.ajax({
         url: wikiUrl,
         //jsonp: "false", -> removed to fix security policy issue (jsonp not allowed in chrome-extension)
@@ -150,15 +151,15 @@ function queryCommons(profile, callback) {
             action: "query",
             generator: "search",
             gsrnamespace: "6",
-            gsrsearch: profile.contextKeywords[0].text,
+            gsrsearch: data.query,
             gsrlimit: "20",
             gsroffset: "20",
             prop: "imageinfo",
             iiprop: "url",
             format: "json"
             //thumbwidth: "120"
-
         },
+
         xhrFields: {withCredentials: true},
         success: function (response) {
             if (typeof callback !== 'undefined') {
