@@ -103,9 +103,17 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
             .css('background-size', 'contain').hide();
 
         augmentationComponents.img.click(function(e) {
+            // show loading bar
+            iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: "msg"});
+
             paragraphDetection.paragraphToQuery(augmentationComponents.selection, function (res) {
                 if (typeof res.query !== 'undefined') { // submit query
-                    window.postMessage({event: 'eexcess.queryTriggered', data: {contextKeywords: res.query.contextKeywords}}, '*');
+                    window.postMessage({event: 'eexcess.queryTriggered',
+                        data: {
+                            contextKeywords: res.query.contextKeywords,
+                            module: 'passive-search'
+                        }
+                    }, '*');
                 }
             });
 
