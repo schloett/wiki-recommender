@@ -63,7 +63,6 @@ function addWikiGrid(msg) {
     $(addFilterCounter);
     $(truncateTitles);
     $(bindDescriptionHover);
-    $(bindLinkHover);
     //$(".eexcess-lightbox-image").fancybox({
     //    close: [27], // escape key
     //    //type: "image",
@@ -122,14 +121,15 @@ function addWikiGridResultItems(msg) {
         console.log(val.imageinfo[0].url);
         var itemImageUrl = val.imageinfo.url;
 
-        var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
-        var insertink = '<a title="insert" class="eexcess-result-link eexcess-cite-link fa fa-link" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
+        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g,"_") + '" />';
+        var insertink = '<a title="insert" class="fa fa-arrow-right" href="javascript:void(0)" data-title="' + val.title +  '" ></a>';
+        var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertink + '</li></ul>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "'
             + ' data-category="eexcess-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertink + '</div>';
+            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + resultLinks + '</div>';
 
         items += item;
     });
@@ -160,16 +160,7 @@ function bindDescriptionHover() {
     })
 }
 
-function bindLinkHover() {
-    $(".eexcess-isotope-grid-item").hover(function () {
-        $(this).find('.eexcess-result-link').css({'opacity': '1'}, 100)
-    }, function () {
-        $(this).find('.eexcess-result-link').css({'opacity': '0'}, 100)
-    })
-}
-
 function showLoadingBar() {
-
     $('.eexcess_empty_result').hide();
     $('#eexcess-isotope-filtering-and-sorting').hide();
     $('#eexcess-isotope-filters').each(function (i, buttonGroup) {
