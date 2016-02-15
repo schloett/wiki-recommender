@@ -129,14 +129,15 @@ function addGridEEXCESSResultItems(msg) {
 
 
             //links result page
-            var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
+            var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
             var itemLinkLightbox = '<a class="fa fa-external-link eexcess-result-link-lightbox" target="_blank"' +
                 ' href="' + val.documentBadge.uri + '"/>';
 
             //citation
-            var citeLink = '<a title="insert reference" class="eexcess-result-link eexcess-cite-link fa fa-link"' +
+            var citeLink = '<a title="insert reference" class="fa fa-arrow-right"' +
                 itemHrefAttr + '></a><div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
+            var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + citeLink + '</li></ul>';
 
             //assemble documentBadge for logging
             var documentBadge = 'itemId = "' + val.documentBadge.id + '" itemURI = "' + val.documentBadge.uri + '" provider =' +
@@ -151,14 +152,14 @@ function addGridEEXCESSResultItems(msg) {
                     item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-without-preview"'
                         + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">' +
                         ' <div class="eexcess-title eexcess-image itemTitle"><div class="eexcess-title-content">' +
-                        itemTitle + '</div></div>' + itemLink + citeLink + '</div>';
+                        itemTitle + '</div></div>' + resultLinks + '</div>';
                 } else {
 
                     item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview"'
                         + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">'
                         + ' <div class="eexcess-title-other-with-preview-area eexcess-image itemTitle"> ' +
                         '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-                        itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
+                        itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
                 }
                 items += item;
             }
@@ -174,7 +175,7 @@ function addGridEEXCESSResultItems(msg) {
                         item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"'
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                             ' <div class="eexcess-title eexcess-text itemTitle"><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div>' + itemLink + citeLink + '</div>';
+                            itemTitle + '</div></div>' + resultLinks + '</div>';
 
                     }
                     //text results without description and with preview
@@ -183,7 +184,7 @@ function addGridEEXCESSResultItems(msg) {
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                             '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
                             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div></div><img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
+                            itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
 
                     }
                 }
@@ -198,7 +199,7 @@ function addGridEEXCESSResultItems(msg) {
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                             ' <div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
                             itemTitle + '</div>' + ' <div class=" eexcess-description-text eexcess-text-with-preview-hover ">' + itemDescription + '</div>' +
-                            itemLink + citeLink + '</div>';
+                            resultLinks + '</div>';
 
                     }
                     //text results with description and with preview
@@ -207,7 +208,7 @@ function addGridEEXCESSResultItems(msg) {
                             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
                             ' <div class="eexcess-title-with-description-text eexcess-text itemTitle"><b></b>' +
                             itemTitle + "<b></div>" + ' <div class="eexcess-description-text">' + itemDescription + "</div>" +
-                            '<img src="' + previewImage + '" />' + itemLink + citeLink + '</div>';
+                            '<img src="' + previewImage + '" />' + resultLinks + '</div>';
                     }
                 }
                 items += item;
@@ -232,17 +233,19 @@ function addGridWikiResultItems(msg) {
         var itemImageUrl = val.imageinfo.url;
 
         //result link
-        var itemLink = '<a title="open" class="eexcess-result-link fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
+        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
 
         //image insertion link
-        var insertLink = '<a title="insert" class="eexcess-result-link eexcess-cite-link fa fa-link"' +
+        var insertLink = '<a title="insert image" class="fa fa-arrow-right"' +
             ' href="javascript:void(0)" data-title="' + val.title + '" ></a>';
+
+        var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "'
             + ' data-category="eexcess-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + itemLink + insertLink + '</div>';
+            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + resultLinks + '</div>';
 
         items += item;
     });
@@ -264,7 +267,6 @@ function addCitationInserting() {
 function manageInterface() {
     $(addFilterCounter);
     $(bindDescriptionHover);
-    $(bindLinkHover);
     $(addCitationInserting);
 
     $('.eexcess-title-other-with-preview-content').dotdotdot();
@@ -281,14 +283,6 @@ function bindDescriptionHover() {
         $(this).find('.eexcess-text-with-preview-hover').css({'opacity': '1'}, 100)
     }, function () {
         $(this).find('.eexcess-text-with-preview-hover').css({'opacity': '0.3'}, 100)
-    })
-}
-
-function bindLinkHover() {
-    $(".eexcess-isotope-grid-item").hover(function () {
-        $(this).find('.eexcess-result-link').css({'opacity': '1'}, 100)
-    }, function () {
-        $(this).find('.eexcess-result-link').css({'opacity': '0'}, 100)
     })
 }
 
