@@ -1,12 +1,7 @@
-/**
- * Created by lisa on 10/12/15.
- */
-
-    // Prevent form submission
+// Listens for active search input
 $("form").submit(function (event) {
     $("div").remove(".eexcess-isotope-grid-item");
     event.preventDefault();
     var input = $("#wiki-recommender-active-search").val();
-    console.log(input);
-$(getCommonsImages(input));
+    window.top.postMessage({event: 'eexcess.queryTriggered', data: input}, '*');
 });

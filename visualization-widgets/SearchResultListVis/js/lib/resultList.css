@@ -52,15 +52,15 @@ unknown, eecxess green: #1d904e*/
 .eexcess-isotope-grid-item {
     position: relative;
     float: left;
-    width: 100px;
-    height: 100px;
-    border: 4px solid white;
+    width: 60px;
+    height: 60px;
+    border: 2px solid white;
     background: #0D8;
 }
 
 .eexcess-isotope-grid-item.eexcess-text {
-    width: 300px;
-    height: 75px;
+    width: 120px;
+    height: 40px;
     background-color: #ccebc5;
 }
 
@@ -69,32 +69,32 @@ unknown, eecxess green: #1d904e*/
     max-width: 30%;
     display: block;
     float: right;
-    margin: 5px;
+    margin: 2px;
 }
 
 .eexcess-isotope-grid-item.eexcess-text-with-preview {
-    width: 300px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     background-color: #ccebc5;
 }
 
 .eexcess-isotope-grid-item.eexcess-text-without-preview-with-description {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     background-color: #ccebc5;
 }
 
-.eexcess-isotope-grid-item.eexcess-text-with-preview-with-description {
-    width: 300px;
-    height: 150px;
-    background-color: #ccebc5;
-}
+/*.eexcess-isotope-grid-item.eexcess-text-with-preview-with-description {*/
+    /*width: 300px;*/
+    /*height: 150px;*/
+    /*background-color: #ccebc5;*/
+/*}*/
 
 .eexcess-isotope-grid-item.eexcess-image {
     position: relative;
     float: left;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
 
 }
 
@@ -103,49 +103,56 @@ unknown, eecxess green: #1d904e*/
     max-width: 90%;
     display: block;
     margin: auto;
-    margin-top: 5px;
+    margin-top: 2px;
 
 }
 
 .eexcess-isotope-grid-item-noPreview img {
-    width: 75px;
-    height: 75px;
+    width: 40px;
+    height: 40px;
     display: block;
     margin: auto;
-    margin-top: 5px;
+    margin-top: 2px;
 
 }
 
 
-.eexcess-isotope-grid-item.eexcess-unknown {
-    width: 150px;
-    height: 75px;
-    background-color: rgba(0, 133, 71, 0.49);
-}
+/*.eexcess-isotope-grid-item.eexcess-unknown {*/
+    /*width: 150px;*/
+    /*height: 75px;*/
+    /*background-color: rgba(0, 133, 71, 0.49);*/
+/*}*/
 
-.eexcess-isotope-grid-item.eexcess-audio {
-    width: 150px;
-    height: 75px;
-    background-color: #b3cde3;
-}
+/*.eexcess-isotope-grid-item.eexcess-audio {*/
+    /*width: 150px;*/
+    /*height: 75px;*/
+    /*background-color: #b3cde3;*/
+/*}*/
 
-.eexcess-isotope-grid-item.eexcess-3d {
-    width: 150px;
-    height: 75px;
-    background-color: #decbe4;
-}
+/*.eexcess-isotope-grid-item.eexcess-wiki-recommender-image {*/
+    /*max-width: 350px;*/
+    /*max-height: 705px;*/
+    /*background-color: #b3cde3;*/
+/*}*/
 
-.eexcess-isotope-grid-item.eexcess-video {
-    width: 150px;
-    height: 75px;
-    background-color: #fbb4ae;
-}
+/*.eexcess-isotope-grid-item.eexcess-3d {*/
+    /*width: 150px;*/
+    /*height: 75px;*/
+    /*background-color: #decbe4;*/
+/*}*/
+
+/*.eexcess-isotope-grid-item.eexcess-video {*/
+    /*width: 150px;*/
+    /*height: 75px;*/
+    /*background-color: #fbb4ae;*/
+/*}*/
 
 .eexcess-isotope-grid-item.eexcess-other-with-preview {
     position: relative;
     float: left;
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
+
 }
 
 .eexcess-other-with-preview img {
@@ -153,15 +160,15 @@ unknown, eecxess green: #1d904e*/
     max-width: 90%;
     display: block;
     margin: auto;
-    margin-top: 5px;
+    margin-top: 2px;
 
 }
 
-.eexcess-isotope-grid-item.eexcess-image.eexcess-other-without-preview {
-    width: 150px;
-    height: 75px;
-    background-color: #fed9a6;
-}
+/*.eexcess-isotope-grid-item.eexcess-image.eexcess-other-without-preview {*/
+    /*width: 150px;*/
+    /*height: 75px;*/
+    /*background-color: #fed9a6;*/
+/*}*/
 
 /*media type icons*/
 .eexcess-text-without-preview img, .eexcess-text-without-preview-with-description img, .eexcess-other-without-preview img, .eexcess-thumbnail img {
@@ -169,8 +176,8 @@ unknown, eecxess green: #1d904e*/
     max-height: 30px;
     overflow: hidden;
     /* position: relative; */
-    margin-top: 5px;
-    margin-right: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
     float: right;
 }
 
@@ -187,14 +194,13 @@ button:focus {
 .eexcess-isotope-button {
     display: inline-block;
     padding: 0.5em 0.8em;
-    margin-bottom: 10px;
     background: #EEE;
     border: none;
     border-radius: 2px;
     /*background-image: linear-gradient(to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2));*/
     color: #222;
     font-family: sans-serif;
-    font-size: 11px;
+    font-size: 9px;
     /*text-shadow: 0 1px white;*/
     cursor: pointer;
 }
@@ -298,10 +304,10 @@ div.eexcess-title {
     height: 100%;
     width: 100%;
     position: absolute; /* absolute position (so we can position it where we want)*/
-    font-size: 12px;
+    font-size: 9px;
     color: black;
     overflow: hidden;
-    padding: 5px;
+    padding: 3px;
     display: flex;
     /*justify-content: center;*/
 }
@@ -319,11 +325,11 @@ div.eexcess-title-with-description-text {
     left: 0px;
     position: absolute; /* absolute position (so we can position it where we want)*/
     width: 100%;
-    font-size: 12px;
+    font-size: 9px;
     color: black;
     overflow: hidden;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
     margin: 0;
 }
 
@@ -334,12 +340,12 @@ div.eexcess-title-with-description-text {
     opacity: 0.3;
     position: absolute; /* absolute position (so we can position it where we want)*/
     width: 100%;
-    font-size: 12px;
+    font-size: 9px;
     color: black;
     overflow: hidden;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
     margin: 0;
     text-align: justify;
 }
@@ -351,7 +357,7 @@ div.eexcess-title-with-description-text {
 /*width: 100%;*/
 /*max-height: 28%;*/
 /*min-height: 28%;*/
-/*font-size: 12px;*/
+/*font-size: 9px;*/
 /*background-color: rgba(230, 145, 51, 0.8);*/
 /*overflow: hidden;*/
 /*padding: 2px;*/
@@ -372,7 +378,7 @@ div.eexcess-title-text-with-preview {
     position: absolute;
     max-height: 90%;
     width: 70%;
-    font-size: 12px;
+    font-size: 9px;
     color: black;
     overflow: hidden;
     padding: 10px;
@@ -385,7 +391,7 @@ div.eexcess-title-other-with-preview-area {
     bottom: 0;
     width: 100%;
     height: 40px;
-    font-size: 12px;
+    font-size: 9px;
     overflow: hidden;
     padding: 2px;
     display: flex;
@@ -429,17 +435,47 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
     color: white;
 }
 
-.eexcess-result-link {
-    color: black;
-    text-decoration: none;
+/* result links */
+ul.eexcess-result-links {
+    display: none;
+    list-style-type: none;
     position: absolute;
-    right: 2px;
-    top: 3px;
-    opacity: 0;
+    right: 0;
+    top: -8px;
+    padding: 0;
 }
 
-.eexcess-cite-link {
-    top: 20px;
+.eexcess-isotope-grid-item:hover > .eexcess-result-links {
+    display: block;
+}
+
+ul.eexcess-result-links > li {
+    cursor: pointer;
+    display: inline;
+    padding: 5px;
+    background-color: #FFFFFF;
+    border: 1px solid #000;
+    border-left: none;
+}
+
+ul.eexcess-result-links > li:first-child {
+    border-left: 1px solid #000;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+ul.eexcess-result-links > li:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.eexcess-result-links > li:hover {
+    background-color: #ddd;
+}
+
+ul.eexcess-result-links > li > a {
+    color: black;
+    text-decoration: none;
 }
 
 .eexcess-result-link-lightbox {
@@ -448,7 +484,6 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
     position: absolute;
     right: 2px;
     bottom: 3px;
-
 }
 
 /*lightbox*/
@@ -490,6 +525,6 @@ div.eexcess-title-other-with-preview-area.eexcess-unknown {
 
 /*WIKI RECOMMENDER*/
 
-.eexcess-wiki-recommender-image{
-background-color: lightgrey;
-}
+/*.eexcess-wiki-recommender-image{*/
+/*background-color: lightgrey;*/
+/*}*/
