@@ -122,10 +122,10 @@ function addGridEEXCESSResultItems(msg) {
                 ' href="' + val.documentBadge.uri + '"/>';
 
             //citation
-            var insertLink = '<a title="insert reference" class="fa fa-arrow-right"></a>' +
+            var insertLink = '<a title="insert reference" class="fa fa-arrow-right eexcess-cite-text"></a>' +
                 '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
-            var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li class="eexcess-cite-text">' + insertLink + '</li></ul>';
+            var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
             //assemble documentBadge for logging
             var documentBadge = 'itemId = "' + val.documentBadge.id + '" itemURI = "' + val.documentBadge.uri + '" provider =' +
@@ -224,9 +224,9 @@ function addGridWikiResultItems(msg) {
         var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
 
         //image insertion link
-        var insertLink = '<a title="insert image" class="fa fa-arrow-right"></a>';
+        var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite-image" data-title="' + val.title + '"></a>';
 
-        var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li class="eexcess-cite-image" data-title="' + val.title + '">' + insertLink + '</li></ul>';
+        var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "'
             + ' data-category="eexcess-image">' +
@@ -242,14 +242,14 @@ function addGridWikiResultItems(msg) {
 
 // adding cite links
 function addCitationInserting() {
-    $(".eexcess-cite-text").click(function () {
+    $(".eexcess-cite-text").unbind('click').click(function () {
         var eventData = {
             documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
         };
         window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
     });
 
-    $(".eexcess-cite-image").click(function () {
+    $(".eexcess-cite-image").unbind('click').click(function () {
         var title = $(this).attr('data-title');
 
         var eventData = {
@@ -401,7 +401,6 @@ function addFilterCounter() {
 
 //-----LOGGING-----//
 function logResultItemClicks(msg) {
-
     var origin = {
         module: 'Search Result List Visualization'
     };
