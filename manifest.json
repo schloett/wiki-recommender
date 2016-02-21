@@ -1,6 +1,6 @@
 {
   "name": "EEXCESS-Wiki-Recommender",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "background": {
     "page": "html/background.html"
   },
