@@ -12,18 +12,22 @@ require(['./common'], function (common) {
             });
         };
 
-        var selectedSources = [];
+        var selectedSources = [
+            {
+                systemId: 'Mendeley',
+                favIconURI: 'https://d3fildg3jlcvty.cloudfront.net/4f8209ead635af1611d51e4f3159812cc355e1ce/graphics/favicon.ico'
+            },
+            {
+                systemId: 'ZBW',
+                favIconURI: 'http://www.zbw.eu/favicon.ico'
+            }
+        ];
         var qcHistory = localStorage.getItem('qcHistory');
         if (typeof qcHistory !== 'undefined') {
             qcHistory = JSON.parse(qcHistory);
         }
 
-        chrome.storage.sync.get(['numResults', 'selectedSources', 'uuid'], function (result) {
-            if (result.selectedSources) {
-                result.selectedSources.forEach(function (val) {
-                    selectedSources.push({systemId: val.systemId});
-                });
-            }
+        chrome.storage.sync.get(['numResults', 'uuid'], function (result) {
             var uuid;
             if (result.uuid) {
                 uuid = result.uuid;
@@ -50,9 +54,7 @@ require(['./common'], function (common) {
                         case 'triggerQuery':
                             var profile = msg.data;
                             // selected sources
-                            if (selectedSources && selectedSources.length > 0 && !profile.partnerList) {
-                                profile.partnerList = selectedSources;
-                            }
+                            profile.partnerList = selectedSources;
                             // Adaptation of the profile according to the policies
                             profile = profileManager.adaptProfile(profile);
                             var obfuscationLevel = profileManager.getObfuscationLevel();
@@ -72,15 +74,9 @@ require(['./common'], function (common) {
                             break;
 
                         case 'optionsUpdate':
-                            chrome.storage.sync.get(['numResults', 'selectedSources'], function (result) {
+                            chrome.storage.sync.get(['numResults'], function (result) {
                                 if (result.numResults) {
                                     APIconnector.setNumResults(result.numResults);
-                                }
-                                if (result.selectedSources) {
-                                    selectedSources = [];
-                                    result.selectedSources.forEach(function (val) {
-                                        selectedSources.push({systemId: val.systemId});
-                                    });
                                 }
                             });
                             break;
@@ -104,6 +100,95 @@ require(['./common'], function (common) {
                 }
             });
         });
+
+        /*
+                chrome.storage.sync.get(['numResults', 'selectedSources', 'uuid'], function (result) {
+                    if (result.selectedSources) {
+                        result.selectedSources.forEach(function (val) {
+                            selectedSources.push({systemId: val.systemId});
+                        });
+                    }
+                    var uuid;
+                    if (result.uuid) {
+                        uuid = result.uuid;
+                    } else {
+                        uuid = util.randomUUID();
+                        chrome.storage.sync.set({uuid: uuid});
+                    }
+                    var manifest = chrome.runtime.getManifest();
+                    var settings = {
+                        origin: {
+                            userID: uuid,
+                            clientType: manifest.name + "/chrome-extension",
+                            clientVersion: manifest.version
+                        }
+                    };
+                    if (result.numResults) {
+                        settings.numResults = result.numResults;
+                    }
+                    APIconnector.init(settings);
+
+                    chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+                        if (typeof msg.method !== 'undefined') {
+                            switch (msg.method) {
+                                case 'triggerQuery':
+                                    var profile = msg.data;
+                                    // selected sources
+                                    if (selectedSources && selectedSources.length > 0 && !profile.partnerList) {
+                                        profile.partnerList = selectedSources;
+                                    }
+                                    // Adaptation of the profile according to the policies
+                                    profile = profileManager.adaptProfile(profile);
+                                    var obfuscationLevel = profileManager.getObfuscationLevel();
+                                    if (obfuscationLevel == 0) {
+                                        APIconnector.query(profile, sendResponse);
+                                    } else {
+                                        var k = obfuscationLevel * 2;
+                                        APIconnector.queryPeas(profile, k, sendResponse);
+                                    }
+
+                                    return true;
+                                    break;
+                                //search for images on wikipedia commons
+                                case 'triggerQueryCommons':
+                                    queryCommons(msg.data, sendResponse);
+                                    return true;
+                                    break;
+
+                                case 'optionsUpdate':
+                                    chrome.storage.sync.get(['numResults', 'selectedSources'], function (result) {
+                                        if (result.numResults) {
+                                            APIconnector.setNumResults(result.numResults);
+                                        }
+                                        if (result.selectedSources) {
+                                            selectedSources = [];
+                                            result.selectedSources.forEach(function (val) {
+                                                selectedSources.push({systemId: val.systemId});
+                                            });
+                                        }
+                                    });
+                                    break;
+                                case 'updateQueryCrumbs':
+                                    msgAllTabs(msg);
+                                    break;
+                                case 'qcGetHistory':
+                                    sendResponse(qcHistory);
+                                    return true;
+                                    break;
+                                case 'qcSetHistory':
+                                    qcHistory = msg.data;
+                                    localStorage.setItem('qcHistory', JSON.stringify(qcHistory));
+                                    break;
+                                default:
+                                    console.log('unknown method: ' + msg.method);
+                                    break;
+                            }
+                        } else {
+                            console.log('method not specified');
+                        }
+                    });
+                });
+        */
     });
 });
 

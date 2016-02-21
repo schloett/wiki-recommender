@@ -133,7 +133,7 @@ function addGridEEXCESSResultItems(msg) {
 
 
             // add "isotoped" items
-            if (mediaType == "IMAGE" || mediaType == "image") {
+            /*if (mediaType == "IMAGE" || mediaType == "image") {
                 if (previewImage == undefined) {
 
                     //previewImage = "http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=image";
@@ -151,7 +151,8 @@ function addGridEEXCESSResultItems(msg) {
                 }
                 items += item;
             }
-            else if (mediaType == "TEXT" || mediaType == "text") {
+            else */
+            if (mediaType.toLowerCase() == "text") {
 
                 //text results without description
                 if (itemDescription == undefined) {
