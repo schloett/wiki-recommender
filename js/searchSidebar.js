@@ -41,12 +41,15 @@ require(['c4/iframes'], function (iframes) {
 
                 $("#searchform").onPositionChanged(function () {
                     var editor = $("#mw-content-text");
+
                     var sidebarWidth = $("#searchform").width();
+                    //editor.css("width", editor.width() - sidebarWidth);
+                    var sidebarTop = editor.offset();
                     console.log("pos changed")
                     $("#eexcess_sidebar").css({
-                        "height": $(".wikiEditor-ui").height() + $("#editpage-specialchars").height() + 14,
+                        "height": editor.height(),
                         "width": sidebarWidth,
-                        "top": $("#editform").offset().top,
+                        "top": sidebarTop.top,
                         "margin-top": $("#p-search").css("margin-top"),
                         "margin-right": $("#p-search").css("margin-right")
 
@@ -107,7 +110,8 @@ require(['c4/iframes'], function (iframes) {
                 "height": $("#mw-content-text").height(),
                 "width": sidebarWidth,
                 "top": sidebarTop.top,
-                "margin-right": "8px"
+                "margin-top": $("#p-search").css("margin-top"),
+                "margin-right": $("#p-search").css("margin-right")
             });
 
             sidebar.css("top", sidebarTop.top);
