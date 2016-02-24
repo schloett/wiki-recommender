@@ -221,6 +221,8 @@ function addGridWikiResultItems(msg) {
         var pageID = val.pageid;
         var itemImageUrl = val.imageinfo.url;
 
+        var thumbnailUrl = val.imageinfo[0].thumburl;
+
         //result link
         var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
 
@@ -233,7 +235,7 @@ function addGridWikiResultItems(msg) {
             + ' data-category="eexcess-image">' +
             '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + val.imageinfo[0].url + '" />' + resultLinks + '</div>';
+            itemTitle + '</div></div></div><img src="' + thumbnailUrl + '" />' + resultLinks + '</div>';
 
         items += item;
     });

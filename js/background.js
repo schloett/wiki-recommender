@@ -241,14 +241,16 @@ function queryCommons(data, callback) {
             gsroffset: "20",
             prop: "imageinfo",
             iiprop: "url",
-            format: "json"
-            //thumbwidth: "120"
+            format: "json",
+            iiurlwidth: "120"
+
         },
 
         xhrFields: {withCredentials: true},
         success: function (response) {
             if (typeof callback !== 'undefined') {
                 callback({status: 'success', data: response});
+                console.log(response)
             }
         }
 
