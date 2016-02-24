@@ -37,14 +37,19 @@ require(['c4/iframes'], function (iframes) {
 
                     return o;
                 };
-                var sidebarWidth = "18%";
+                var sidebarWidth = $("#searchform").width();
 
-                $("#bodyContent").onPositionChanged(function () {
+                $("#searchform").onPositionChanged(function () {
+                    var editor = $("#mw-content-text");
+                    var sidebarWidth = $("#searchform").width();
+                    console.log("pos changed")
                     $("#eexcess_sidebar").css({
                         "height": $(".wikiEditor-ui").height() + $("#editpage-specialchars").height() + 14,
                         "width": sidebarWidth,
                         "top": $("#editform").offset().top,
-                        "margin-right": "8px"
+                        "margin-top": $("#p-search").css("margin-top"),
+                        "margin-right": $("#p-search").css("margin-right")
+
                     });
                 });
 
@@ -74,12 +79,45 @@ require(['c4/iframes'], function (iframes) {
 
                     //remove sidebar
                     if (request.data == false) {
-                        $("#editform").css("width", "100%");
+                        var editor = $("#mw-content-text");
+                        editor.css("width", editor.width() + sidebarWidth);
                         $("#eexcess_sidebar").remove();
                     }
                 });
             }
         });
+
+
+    function addSidebar() {
+        //check if relevant ui elements exist
+        if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
+            var editor = $("#mw-content-text");
+            var sidebarWidth = $("#searchform").width();
+
+            var sidebarTop = editor.offset();
+            editor.css("width", editor.width() - sidebarWidth);
+            var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
+
+            $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
+
+            var sidebar = $("#eexcess_sidebar");
+
+            //adjust sidebar position and size according to the wiki editor
+            sidebar.css({
+                "height": $("#mw-content-text").height(),
+                "width": sidebarWidth,
+                "top": sidebarTop.top,
+                "margin-right": "8px"
+            });
+
+            sidebar.css("top", sidebarTop.top);
+            //sidebar.show();
+            sidebar.slideToggle({direction: "left"});
+        } else {
+            setTimeout(addSidebar, 10);
+        }
+    }
+
 
     function buildWikiQuery(contextKeywords) {
         var MAX_QUERY_SIZE = 300;
@@ -141,35 +179,6 @@ require(['c4/iframes'], function (iframes) {
             query += ')';
 
         return query;
-    }
-
-    function addSidebar() {
-        if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
-            var editor = $("#editform");
-            var sidebarWidth = '18%';
-
-            var sidebarTop = editor.offset();
-            editor.css("width", "80%");
-            var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
-
-            $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
-
-            var sidebar = $("#eexcess_sidebar");
-
-            //adjust sidebar position and size according to the wiki editor
-            sidebar.css({
-                "height": $(".wikiEditor-ui").height() + $("#editpage-specialchars").height() + 14,
-                "width": sidebarWidth,
-                "top": sidebarTop.top,
-                "margin-right": "8px"
-            });
-
-            sidebar.css("top", sidebarTop.top);
-            //sidebar.show();
-            sidebar.slideToggle({direction: "left"});
-        } else {
-            setTimeout(addSidebar, 10);
-        }
     }
 
 
