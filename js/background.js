@@ -242,6 +242,7 @@ function queryCommons(data, callback) {
             prop: "imageinfo",
             iiprop: "url",
             format: "json",
+            //fetching only thumbs to ensure faster loading
             iiurlwidth: "120"
 
         },
