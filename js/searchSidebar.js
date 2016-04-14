@@ -6,56 +6,6 @@ require(['c4/iframes'], function (iframes) {
         function (request, sender, sendResponse) {
             if (request.method == "visibility") {
 
-                /*listens to position changes of the editor's content and adjusts sidebar accordingly (relevant when there's
-                 some kind of announcement at the top of the wiki page
-                 the listener is registered only when browser action is active because inly then there's a sidebar to
-                 adjust and it can be guaranteed that only the current tab's sidebar is altered*/
-                jQuery.fn.onPositionChanged = function (trigger, millis) {
-                    if (millis == null) millis = 100;
-                    var o = $(this[0]); // our jquery object
-                    if (o.length < 1) return o;
-
-                    var lastPos = null;
-                    var lastOff = null;
-                    setInterval(function () {
-                        if (o == null || o.length < 1) return o; // abort if element is non existend eny more
-                        if (lastPos == null) lastPos = o.position();
-                        if (lastOff == null) lastOff = o.offset();
-                        var newPos = o.position();
-                        var newOff = o.offset();
-                        if (lastPos.top != newPos.top || lastPos.left != newPos.left) {
-                            $(this).trigger('onPositionChanged', {lastPos: lastPos, newPos: newPos});
-                            if (typeof (trigger) == "function") trigger(lastPos, newPos);
-                            lastPos = o.position();
-                        }
-                        if (lastOff.top != newOff.top || lastOff.left != newOff.left) {
-                            $(this).trigger('onOffsetChanged', {lastOff: lastOff, newOff: newOff});
-                            if (typeof (trigger) == "function") trigger(lastOff, newOff);
-                            lastOff = o.offset();
-                        }
-                    }, millis);
-
-                    return o;
-                };
-                var sidebarWidth = $("#searchform").width();
-
-                $("#searchform").onPositionChanged(function () {
-                    var editor = $("#mw-content-text");
-
-                    var sidebarWidth = $("#searchform").width();
-                    //editor.css("width", editor.width() - sidebarWidth);
-                    var sidebarTop = editor.offset();
-                    console.log("pos changed")
-                    $("#eexcess_sidebar").css({
-                        "height": editor.height(),
-                        "width": sidebarWidth,
-                        "top": sidebarTop.top,
-                        "margin-top": $("#p-search").css("margin-top"),
-                        "margin-right": $("#p-search").css("margin-right")
-
-                    });
-                });
-
                 //adding the sidebar
                 $(document).ready(function () {
                     if (request.data == true) {
@@ -66,15 +16,12 @@ require(['c4/iframes'], function (iframes) {
                         window.onmessage = function (msg) {
                             if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
                                 var contextKeywords;
-
                                 var module = msg.data.data.module;
-
                                 if (module === 'passive-search') {
                                     contextKeywords = msg.data.data.contextKeywords;
                                 } else {
                                     contextKeywords = [{text: msg.data.data}];
                                 }
-
                                 handleSearch(contextKeywords, module);
                             }
                         }
@@ -82,45 +29,128 @@ require(['c4/iframes'], function (iframes) {
 
                     //remove sidebar
                     if (request.data == false) {
-                        var editor = $("#mw-content-text");
-                        editor.css("width", editor.width() + sidebarWidth);
+                        var sidebarWidth = $("#eexcess_sidebar").width();
+                        console.log(sidebarWidth)
+                        var wikiMwContentText = $("#mw-content-text");
+                        var wikiContent = $("#content");
+                        var wikiHeader = $("#mw-head");
+
+                        wikiMwContentText.css("width", wikiMwContentText.width() + sidebarWidth);
+                        wikiContent.css("width", wikiContent.width() + sidebarWidth);
+                        wikiHeader.css("right", 0);
+
                         $("#eexcess_sidebar").remove();
                     }
                 });
             }
+
+            //
+            //$(window).resize(function() {
+            //
+            //});
+
+            /*listens to position changes of the editor's content and adjusts sidebar accordingly (relevant when there's
+             some kind of announcement at the top of the wiki page) the listener is registered only when browser
+             action is active because only then there's a sidebar to adjust and it can be guaranteed that only the current tab's sidebar is altered*/
+            jQuery.fn.onPositionChanged = function (trigger, millis) {
+                if (millis == null) millis = 100;
+                var o = $(this[0]); // our jquery object
+                if (o.length < 1) return o;
+
+                var lastPos = null;
+                var lastOff = null;
+                setInterval(function () {
+                    if (o == null || o.length < 1) return o; // abort if element is non existent any more
+                    if (lastPos == null) lastPos = o.position();
+                    if (lastOff == null) lastOff = o.offset();
+                    var newPos = o.position();
+                    var newOff = o.offset();
+                    if (lastPos.top != newPos.top || lastPos.left != newPos.left) {
+                        $(this).trigger('onPositionChanged', {lastPos: lastPos, newPos: newPos});
+                        if (typeof (trigger) == "function") trigger(lastPos, newPos);
+                        lastPos = o.position();
+                    }
+                    if (lastOff.top != newOff.top || lastOff.left != newOff.left) {
+                        $(this).trigger('onOffsetChanged', {lastOff: lastOff, newOff: newOff});
+                        if (typeof (trigger) == "function") trigger(lastOff, newOff);
+                        lastOff = o.offset();
+                    }
+                }, millis);
+
+                return o;
+            };
+            sidebarWidth = $("#eexcess_sidebar").width();
+
+            $("#searchform").onPositionChanged(function () {
+
+                console.log("pos changed");
+
+                $("#eexcess_sidebar").css(assembleSidebarCss());
+            });
+
+
+            $(window).resize(function() {
+                $("#eexcess_sidebar").css(assembleSidebarCss());
+            });
+
         });
 
+
+    function assembleSidebarCss() {
+        var wikiMwContentText = $("#mw-content-text");
+        //var sidebarWidth = $("#searchform").width();
+        //var sidebarTop = editor.offset();
+
+        //editor.css("width", editor.width() - sidebarWidth);
+        //editor = $("#content");
+
+        var eexcess_sidebar_css = {
+            "height": $(window).height(),
+            //"width": sidebarWidth,
+            //"top": sidebarTop.top,
+            //"margin-top": $("#p-search").css("margin-top"),
+            //"margin-bottom": $("#footer").css("height") + ($("#footer").css("padding-top") + $("#footer").css("padding-bottom")).toPx(),
+            "margin-right": "2px",
+            "position": "fixed",
+            "padding": "5px"
+        };
+
+        return eexcess_sidebar_css;
+    }
 
     function addSidebar() {
         //check if relevant ui elements exist
         if ($(".wikiEditor-ui")[0] && $("#editform")[0]) {
-            var editor = $("#mw-content-text");
-            var sidebarWidth = $("#searchform").width();
 
-            var sidebarTop = editor.offset();
-            editor.css("width", editor.width() - sidebarWidth);
             var iframeUrl = chrome.extension.getURL('visualization-widgets/SearchResultListVis/index.html');
-
-            $("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").insertAfter($("#bodyContent")).hide();
+            $("#mw-content-text").append($("<div id='eexcess_sidebar'><iframe src='" + iframeUrl + "' /></div>").hide());
 
             var sidebar = $("#eexcess_sidebar");
+            //there are 3 wikipedia ui elements whose sizes have to change when the sidebar appears:
+            // mw-content-text, content and mw-head. they won't change their size when the body as a whole is
+            // selected
+            var sidebarWidth = $("#eexcess_sidebar").width();
+            var wikiMwContentText = $("#mw-content-text");
+            var wikiContent = $("#content");
+            var wikiHeader = $("#mw-head");
+
+            //reduce width of wiki elements
+            wikiMwContentText.css("width", wikiMwContentText.width() - sidebarWidth);
+            wikiContent.css("width", wikiContent.width() - sidebarWidth);
+            wikiHeader.css("right", sidebarWidth);
+
+
 
             //adjust sidebar position and size according to the wiki editor
-            sidebar.css({
-                "height": $("#mw-content-text").height(),
-                "width": sidebarWidth,
-                "top": sidebarTop.top,
-                "margin-top": $("#p-search").css("margin-top"),
-                "margin-right": $("#p-search").css("margin-right")
-            });
+            sidebar.css(assembleSidebarCss());
 
-            sidebar.css("top", sidebarTop.top);
             //sidebar.show();
             sidebar.slideToggle({direction: "left"});
+            //sidebar.animate({width: "200"});
         } else {
             setTimeout(addSidebar, 10);
         }
-    }
+    }d
 
 
     function buildWikiQuery(contextKeywords) {
