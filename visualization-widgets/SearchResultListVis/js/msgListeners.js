@@ -20,7 +20,7 @@ window.onmessage = function (msg) {
                 // data already processed, do nothing
             } else {
 
-                console.log(msg);
+                //console.log(msg);
                 var msgWiki = msg.data.dataWiki.data;
                 var msgEEXCESS = msg.data.dataEEXCESS;
                 //$(addWikiGrid(msg.data.data.data));

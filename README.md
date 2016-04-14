@@ -2,6 +2,14 @@
 
 This chrome extension is based on the EEXCESS [chrome-extension](https://github.com/EEXCESS/chrome-extension).
 
+## Description
+
+This extension provides useful information in form of images and articles while you write your Wikipedia article.
+
+To get access to this information you only have to activate the extension by pressing on its icon.
+Then you can use the search-bar for submitting a search query or you can hit enter during writing. Then suitable content for your current paragraph is searched. Additionally it is possible to select text with the mouse and search suitable results for the selection.
+These found search results can then be viewed in detail and inserted into the article at the current cursor position.
+
 ## setup
 1. Clone the repository
 2. Use `npm install` to install the required node modules (requires [node.js](https://nodejs.org/))

@@ -1,6 +1,6 @@
 {
-  "name": "EEXCESS-Wiki-Recommender",
-  "version": "1.4.2",
+  "name": "Wikipedia Reference Butler",
+  "version": "1.4.5",
   "background": {
     "page": "html/background.html"
   },
@@ -45,10 +45,11 @@
     "48": "media/icons/48.png",
     "128": "media/icons/128.png"
   },
-  "options_ui": {
-    "page": "html/options.html",
-    "chrome_style": true
-  },
+//,
+//  "options_ui": {
+//    "page": "html/options.html",
+//    "chrome_style": true
+//  },
   "browser_action": {
     "default_icon": "media/icons/19.png"
   }
