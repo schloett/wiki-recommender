@@ -1,6 +1,6 @@
 {
   "name": "Wikipedia Reference Butler",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "background": {
     "page": "html/background.html"
   },
