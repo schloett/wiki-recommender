@@ -1,5 +1,5 @@
 {
-  "name": "EEXCESS-Wiki-Recommender",
+  "name": "Wiki-Reference-Butler",
   "version": "1.4.4",
   "background": {
     "page": "html/background.html"
