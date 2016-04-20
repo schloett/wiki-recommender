@@ -19,7 +19,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "3.3.4",
     "c4": "develop",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",

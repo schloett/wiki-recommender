@@ -265,11 +265,18 @@ function addCitationInserting() {
     });
 }
 
+function initResultPreview() {
+    $('.eexcess-isotope-grid-item').unbind('click').click(function () {
+        window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).find('.fa-external-link').attr('href')}}, '*');
+    });
+}
+
 //-----Interface, shorten Titles, assemble Buttons, Filters, LoadingBar, Errors etc.-----//
 function manageInterface() {
     $(addFilterCounter);
     $(bindDescriptionHover);
     $(addCitationInserting);
+    $(initResultPreview);
 
     $('.eexcess-title-other-with-preview-content').dotdotdot();
     $('.eexcess-title-with-description-text').dotdotdot();
