@@ -138,8 +138,16 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                //debugger;
-                $.fancybox.open({padding: 0, href: msg.data.data.link, type: 'iframe'});
+                // debugger;
+                // make link https TODO replace with custom details view with same layout for every provider
+                var link = msg.data.data.link;
+                var protocol = 'http';
+
+                if (link.startsWith(protocol) && link[protocol.length] == ':') {
+                    link = link.substr(0, protocol.length) + 's' + link.substr(protocol.length);
+                }
+
+                $.fancybox.open({padding: 0, href: link, type: 'iframe'});
             }
         }
     };
