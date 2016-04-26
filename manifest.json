@@ -16,14 +16,17 @@
         "js/requireContent.js",
         "js/common.js",
         "js/content.js",
-        "js/searchSidebar.js"
+        "js/searchSidebar.js",
+        "js/fancybox/jquery-1.10.1.min.js",
+        "js/fancybox/jquery.fancybox.js"
       ],
       "css": [
         "js/lib/jquery-ui/themes/smoothness/jquery-ui.css",
         "js/lib/tag-it/css/jquery.tagit.css",
         "js/lib/c4/searchBar/searchBar.css",
         "css/content.css",
-        "css/sidebar.css"
+        "css/sidebar.css",
+        "js/fancybox/jquery.fancybox.css"
       ]
     }
   ],

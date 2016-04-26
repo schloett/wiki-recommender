@@ -34,15 +34,11 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         textarea.scrollTop = scrollTop;
     };
 
-    window.addEventListener('message', insertMarkupHandler);
-
     var detectLanguageHandler = function(msg) {
         if (msg.data.event == 'eexcess.detectLang.request') {
             iframes.sendMsgAll({event: 'eexcess.detectLang.response', language: cms.detectLang(markup)});
         }
     };
-
-    window.addEventListener('message', detectLanguageHandler);
 
     // search on enter
     var searchResultsForParagraphOnEnter = function (e) {
@@ -139,15 +135,40 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         }
     };
 
+    var showPreviewHandler = function (msg) {
+        if (msg.data.event) {
+            if (msg.data.event.startsWith('eexcess.showPreview')) {
+                // debugger;
+                // make link https TODO replace with custom details view with same layout for every provider
+                var link = msg.data.data.link;
+                var protocol = 'http';
+
+                if (link.startsWith(protocol) && link[protocol.length] == ':') {
+                    link = link.substr(0, protocol.length) + 's' + link.substr(protocol.length);
+                }
+
+                $.fancybox.open({padding: 0, href: link, type: 'iframe'});
+            }
+        }
+    };
+
     var run = function() {
         $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter)
             .bind('mouseup', queryFromSelection);
         initAugmentationComponents();
+
+        window.addEventListener('message', detectLanguageHandler);
+        window.addEventListener('message', insertMarkupHandler);
+        window.addEventListener('message', showPreviewHandler);
     };
     var kill = function () {
         $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter)
             .unbind('mouseup', queryFromSelection);
         removeAugmentationComponents();
+
+        window.removeEventListener('message', detectLanguageHandler);
+        window.addEventListener('message', insertMarkupHandler);
+        window.addEventListener('message', showPreviewHandler);
     };
 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
