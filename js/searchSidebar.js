@@ -10,48 +10,12 @@ require(['c4/iframes'], function (iframes) {
     var wikiContentW;
     var wikiHeaderW;
 
-
-//listens to messages from background.js regarding its visibility. if it is visible, it listens to events like
-// triggeredQuerys or newResults from its iFrame
+    // listens to messages from background.js regarding its visibility. if it is visible, it listens to events like triggeredQuerys or newResults from its iFrame
     chrome.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
-            if (request.method == "visibility") {
-
-                //adding the sidebar
-                $(document).ready(function () {
-                    if (request.data == true) {
-                        wikiLeftNavigationMargin = $("#left-navigation").css("margin-left");
-                        //add sidebar
-                        addSidebar();
-
-
-                        prevWindowW = $(window).width();
-                        prevWindowH = $(window).height();
-
-                        //window.addEventListener('message', newTrigger);
-                        window.onmessage = function (msg) {
-                            if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
-                                var contextKeywords;
-                                var module = msg.data.data.module;
-                                if (module === 'passive-search') {
-                                    contextKeywords = msg.data.data.contextKeywords;
-                                } else {
-                                    contextKeywords = [{text: msg.data.data}];
-                                }
-                                handleSearch(contextKeywords, module);
-                            }
-                        }
-                    }
-
-                    //remove sidebar
-                    if (request.data == false) {
-                        adaptWikiElements(true);
-
-                        $("#eexcess_sidebar").remove();
-                    }
-                });
+            if (request.method == "visibilityChange") {
+                updateSidebar();
             }
-
             //var id;
             //$(window).resize(function () {
             //    console.log("resize")
@@ -71,9 +35,42 @@ require(['c4/iframes'], function (iframes) {
             //    }
             //
             //};
-
         });
+    
+    // init sidebar
+    updateSidebar();
 
+    function updateSidebar() {
+        var visible = localStorage.getItem('extensionState') != 'hidden';
+
+        var text;
+
+        if (visible) { // add sidebar
+            wikiLeftNavigationMargin = $("#left-navigation").css("margin-left");
+            addSidebar();
+
+            prevWindowW = $(window).width();
+            prevWindowH = $(window).height();
+
+            //window.addEventListener('message', newTrigger);
+            window.onmessage = function (msg) {
+                if (msg.data.event && msg.data.event === 'eexcess.queryTriggered') {
+                    var contextKeywords;
+                    var module = msg.data.data.module;
+                    if (module === 'passive-search') {
+                        contextKeywords = msg.data.data.contextKeywords;
+                    } else {
+                        contextKeywords = [{text: msg.data.data}];
+                    }
+                    handleSearch(contextKeywords, module);
+                }
+            }
+        } else { // remove sidebar
+            adaptWikiElements(true);
+
+            $("#eexcess_sidebar").remove();
+        }
+    }
 
     function assembleSidebarCss() {
         var eexcess_sidebar_css = {

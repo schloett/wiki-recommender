@@ -171,9 +171,14 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         window.addEventListener('message', showPreviewHandler);
     };
 
+    // init content scripts
+    if (localStorage.getItem('extensionState') != 'hidden') {
+        run();
+    }
+
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        if (request && request.method === 'visibility') {
-            if (request.data) { // start sidebar
+        if (request && request.method === 'visibilityChange') {
+            if (localStorage.getItem('extensionState') != 'hidden') { // start sidebar
                 run();
             } else { // hide/deactivate sidebar
                 kill();

@@ -192,30 +192,31 @@ require(['./common'], function (common) {
     });
 });
 
-//add visibility toggle to browser action
-
-var visible = false;
+// init extension state
+if (localStorage.getItem('extensionState') != 'hidden') {
+    chrome.browserAction.setBadgeText({text: 'on'});
+}
 
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.browserAction.getBadgeText({tabId: tab.id}, function (badgeText) {
-        //if widget is off/hidden
-        if (badgeText === '') {
-            visible = true;
-            chrome.browserAction.setBadgeText({text: 'on', tabId: tab.id});
-            notifyVisibilityChange(tab.id, tab.url)
-        }
-        //if widget is visible, hide it
-        else {
-            visible = false;
-            chrome.browserAction.setBadgeText({text: '', tabId: tab.id});
-            notifyVisibilityChange(tab.id, tab.url)
-        }
-    })
+    var state = localStorage.getItem('extensionState');
+
+    if (state == 'hidden') {
+        localStorage.setItem('extensionState', 'visible');
+        chrome.browserAction.setBadgeText({text: 'on'});
+    } else if (state == 'visible') {
+        localStorage.setItem('extensionState', 'hidden');
+        chrome.browserAction.setBadgeText({text: ''});
+    }
+
+    notifyVisibilityChange();
 });
 
-//send new visibility state to content.js
-function notifyVisibilityChange(tabID, url) {
-    chrome.tabs.sendMessage(tabID, {method: "visibility", data: visible}, function (response) {
+// send new visibility state to content.js
+function notifyVisibilityChange(visible, tabID) {
+    chrome.tabs.query({}, function(tabs) {
+        for (var i = 0; i < tabs.length; i++) {
+            chrome.tabs.sendMessage(tabs[i].id, {method: "visibilityChange"});
+        }
     });
 }
 
