@@ -138,7 +138,6 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                // debugger;
                 // make link https TODO replace with custom details view with same layout for every provider
                 var link = msg.data.data.link;
                 var protocol = 'http';

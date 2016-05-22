@@ -231,11 +231,17 @@ function addGridWikiResultItems(msg) {
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
-        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "'
-            + ' data-category="eexcess-image">' +
-            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
-            '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-            itemTitle + '</div></div></div><img src="' + thumbnailUrl + '" />' + resultLinks + '</div>';
+        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
+                    '<div title="show preview">' +
+                        '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
+                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+                                '<div class="eexcess-title-content">' + itemTitle + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<img src="' + thumbnailUrl + '" />' +
+                    '</div>' +
+                    resultLinks +
+                '</div>';
 
         items += item;
     });
@@ -266,8 +272,8 @@ function addCitationInserting() {
 }
 
 function initResultPreview() {
-    $('.eexcess-isotope-grid-item').unbind('click').click(function () {
-        window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).find('.fa-external-link').attr('href')}}, '*');
+    $('.eexcess-isotope-grid-item div').click(function () {
+        window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
     });
 }
 
