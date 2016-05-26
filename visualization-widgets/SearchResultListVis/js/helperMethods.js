@@ -322,17 +322,17 @@ function showLoadingBar() {
 
 function showEmptyResult(s) {
     var emptyResult = $('.eexcess_empty_result');
-    switch (s) {
-        case "wiki" :
-            emptyResult.text("Sorry, there are no results from Wikipedia Commons.");
-            break;
-        case "eexcess":
-            $('.eexcess_empty_result').text("Sorry, there are no results from EEXCESS.");
-            break;
-        case "both":
-            $('.eexcess_empty_result').text("Sorry, there are no results.");
-            break;
-    }
+    //switch (s) {
+    //    case "wiki" :
+    //        emptyResult.text("Sorry, there are no results from Wikipedia Commons.");
+    //        break;
+    //    case "eexcess":
+    //        $('.eexcess_empty_result').text("Sorry, there are no results from EEXCESS.");
+    //        break;
+    //    case "both":
+    emptyResult.text("Sorry, there are no results matching your keywords.");
+            //break;
+    //}
     emptyResult.show();
 
 }
