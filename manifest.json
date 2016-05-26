@@ -54,6 +54,16 @@
   },
   "browser_action": {
     "default_icon": "media/icons/19.png"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Alt+Shift+W",
+        "mac": "Alt+Shift+W",
+        "chromeos": "Alt+Shift+W",
+        "linux": "Alt+Shift+W"
+      }
+    }
   }
 }
 
