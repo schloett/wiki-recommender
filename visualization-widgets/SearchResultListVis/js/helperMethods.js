@@ -417,18 +417,20 @@ function addFilterCounter() {
 
 //-----LOGGING-----//
 function logResultItemClicks(msg) {
-    var origin = {
-        module: 'Search Result List Visualization'
-    };
-    $('.eexcess-isotope-grid').on('click', '.eexcess-isotope-grid-item', function () {
-        var item = $('.eexcess-isotope-grid-item');
-        var documentBadge =
-        {
-            id: item.attr('itemid'),
-            uri: item.attr('itemuri'),
-            provider: item.attr('provider')
+    if (msg != undefined) {
+        var origin = {
+            module: 'Search Result List Visualization'
         };
-        LOGGING.itemOpened(origin, documentBadge, msg.data.dataEEXCESS.data.queryID);
-    });
+        $('.eexcess-isotope-grid').on('click', '.eexcess-isotope-grid-item', function () {
+            var item = $('.eexcess-isotope-grid-item');
+            var documentBadge =
+            {
+                id: item.attr('itemid'),
+                uri: item.attr('itemuri'),
+                provider: item.attr('provider')
+            };
+            LOGGING.itemOpened(origin, documentBadge, msg.data.dataEEXCESS.data.queryID);
+        });
+    }
 }
 
