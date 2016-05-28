@@ -20,12 +20,10 @@ window.onmessage = function (msg) {
                 // data already processed, do nothing
             } else {
 
-                //console.log(msg);
                 var msgWiki = msg.data.dataWiki.data;
                 var msgEEXCESS = msg.data.dataEEXCESS;
-                //$(addWikiGrid(msg.data.data.data));
                 $(addIsotopeGrid(msgWiki, msgEEXCESS));
-
+                
                 $(logResultItemClicks(msg));
 
                 //make sure elements exist
@@ -37,7 +35,7 @@ window.onmessage = function (msg) {
                     }
                 }, 10);
 
-                lastProcessedQueryID = msg.data.dataEEXCESS.queryID;
+                lastProcessedQueryID = msgEEXCESS.data.queryID;
             }
         }
 
