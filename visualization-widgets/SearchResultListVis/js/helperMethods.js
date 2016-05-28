@@ -132,26 +132,6 @@ function addGridEEXCESSResultItems(msg) {
                 ' "' + val.documentBadge.provider + '"';
 
 
-            // add "isotoped" items
-            /*if (mediaType == "IMAGE" || mediaType == "image") {
-             if (previewImage == undefined) {
-
-             //previewImage = "http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=image";
-             item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-without-preview"'
-             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">' +
-             ' <div class="eexcess-title eexcess-image itemTitle"><div class="eexcess-title-content">' +
-             itemTitle + '</div></div>' + resultLinks + '</div>';
-             } else {
-
-             item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview"'
-             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">'
-             + ' <div class="eexcess-title-other-with-preview-area eexcess-image itemTitle"> ' +
-             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-             itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
-             }
-             items += item;
-             }
-             else */
             if (mediaType.toLowerCase() == "text") {
 
                 //text results without description
@@ -231,17 +211,21 @@ function addGridWikiResultItems(msg) {
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
-        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
-                    '<div title="show preview">' +
-                        '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
-                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
-                                '<div class="eexcess-title-content">' + itemTitle + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<img src="' + thumbnailUrl + '" />' +
-                    '</div>' +
-                    resultLinks +
-                '</div>';
+
+        // assemble document badge for wiki results
+        var documentBadge = 'itemId = "' + pageID + '" iremtURI = "' + itemImageUrl + '" provider = Wikimedia Commons';
+
+        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "' + documentBadge + ' data-category="eexcess-image">' +
+            '<div title="show preview">' +
+            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
+            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+            '<div class="eexcess-title-content">' + itemTitle + '</div>' +
+            '</div>' +
+            '</div>' +
+            '<img src="' + thumbnailUrl + '" />' +
+            '</div>' +
+            resultLinks +
+            '</div>';
 
         items += item;
     });
@@ -273,7 +257,10 @@ function addCitationInserting() {
 
 function initResultPreview() {
     $('.eexcess-isotope-grid-item div').click(function () {
-        window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
+        window.top.postMessage({
+            event: 'eexcess.showPreview',
+            data: {link: $(this).parent().find('.fa-external-link').attr('href')}
+        }, '*');
     });
 }
 
@@ -331,7 +318,7 @@ function showEmptyResult(s) {
     //        break;
     //    case "both":
     emptyResult.text("Sorry, there are no results matching your keywords.");
-            //break;
+    //break;
     //}
     emptyResult.show();
 
@@ -435,8 +422,6 @@ function logResultItemClicks(msg) {
     };
     $('.eexcess-isotope-grid').on('click', '.eexcess-isotope-grid-item', function () {
         var item = $('.eexcess-isotope-grid-item');
-
-
         var documentBadge =
         {
             id: item.attr('itemid'),
