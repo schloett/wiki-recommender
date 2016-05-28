@@ -23,18 +23,32 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
 
     //nothing to show
     if (msgWiki.query === undefined && msgEEXCESS.data.totalResults === 0) {
-        showEmptyResult("both");
+        showEmptyResult();
+        //nothing to do here
         return;
 
         //show only the eexcess results
     } else if (msgWiki.query === undefined && msgEEXCESS.data.totalResults !== 0) {
-        showEmptyResult("wiki");
         $items = $(addGridEEXCESSResultItems(msgEEXCESS));
 
         //show only the wiki results
     } else if (msgEEXCESS.data.totalResults === 0) {
-        showEmptyResult("eecxess");
         $items = $(addGridWikiResultItems(msgWiki));
+
+
+        ////switch case expanded for individual empty messages
+        //if (msgWiki.query === undefined && msgEEXCESS.data.totalResults === 0) {
+        //    showEmptyResult("both");
+        //    return;
+        //    //show only the eexcess results
+        //} else if (msgWiki.query === undefined && msgEEXCESS.data.totalResults !== 0) {
+        //    showEmptyResult("wiki");
+        //    $items = $(addGridEEXCESSResultItems(msgEEXCESS));
+        //
+        //    //show only the wiki results
+        //} else if (msgEEXCESS.data.totalResults === 0) {
+        //    showEmptyResult("eecxess");
+        //    $items = $(addGridWikiResultItems(msgWiki));
 
     } else {
         $('.eexcess_empty_result').hide();
@@ -232,16 +246,16 @@ function addGridWikiResultItems(msg) {
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
         item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
-                    '<div title="show preview">' +
-                        '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
-                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
-                                '<div class="eexcess-title-content">' + itemTitle + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<img src="' + thumbnailUrl + '" />' +
-                    '</div>' +
-                    resultLinks +
-                '</div>';
+            '<div title="show preview">' +
+            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
+            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+            '<div class="eexcess-title-content">' + itemTitle + '</div>' +
+            '</div>' +
+            '</div>' +
+            '<img src="' + thumbnailUrl + '" />' +
+            '</div>' +
+            resultLinks +
+            '</div>';
 
         items += item;
     });
@@ -273,7 +287,10 @@ function addCitationInserting() {
 
 function initResultPreview() {
     $('.eexcess-isotope-grid-item div').click(function () {
-        window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
+        window.top.postMessage({
+            event: 'eexcess.showPreview',
+            data: {link: $(this).parent().find('.fa-external-link').attr('href')}
+        }, '*');
     });
 }
 
@@ -320,21 +337,27 @@ function showLoadingBar() {
 }
 
 
-function showEmptyResult(s) {
-    var emptyResult = $('.eexcess_empty_result');
-    //switch (s) {
-    //    case "wiki" :
-    //        emptyResult.text("Sorry, there are no results from Wikipedia Commons.");
-    //        break;
-    //    case "eexcess":
-    //        $('.eexcess_empty_result').text("Sorry, there are no results from EEXCESS.");
-    //        break;
-    //    case "both":
-    emptyResult.text("Sorry, there are no results matching your keywords.");
-            //break;
-    //}
-    emptyResult.show();
+//function showEmptyResult(s) {
+//    var emptyResult = $('.eexcess_empty_result');
+//switch (s) {
+//    case "wiki" :
+//        emptyResult.text("Sorry, there are no results from Wikipedia Commons.");
+//        break;
+//    case "eexcess":
+//        $('.eexcess_empty_result').text("Sorry, there are no results from EEXCESS.");
+//        break;
+//    case "both":
+//    emptyResult.text("Sorry, there are no results matching your keywords.");
+//            //break;
+//}
+//    emptyResult.show();
+//
+//}
 
+function showEmptyResult() {
+    var emptyResult = $('.eexcess_empty_result');
+    emptyResult.text("Sorry, there are no results matching your keywords.");
+    emptyResult.show();
 }
 
 function showError(errorData) {
