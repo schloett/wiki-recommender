@@ -75,6 +75,12 @@ Indicates that an item was cited in document as an text. The event details conta
 #### eexcess.log.itemCitedAsHyperlink
 Indicates that an item was cited in document as an hyperlink. The event details contain the origin, the queryID of the original query and the documentBadge.
 
+#### eexcess.log.itemInsertedAsImage
+Indicates that an item was inserted in a wikipedia article as an image. The event details contain the origin, the queryID of the original query and the documentBadge.
+
+#### eexcess.log.itemInsertedAsReference
+Indicates that an item was inserted in a wikipedia article as a text reference. The event details contain the origin,the queryID of the original query and the documentBadge.
+
 #### eexcess.log.itemRated
 Indicates that an item was rated. The event details contain the origin, the queryID, the documentBadge and the rating.
 

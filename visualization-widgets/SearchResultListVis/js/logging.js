@@ -136,6 +136,32 @@
                 };
                 window.top.postMessage({event: 'eexcess.log.itemCitedAsHyperlink', data: eventData}, '*');
             },
+            itemInsertedAsImage: function (origin, documentBadge, queryID) {
+                if (typeof origin != 'object') {throw new LoggingFormatException(origin, 'object')}
+                if (typeof documentBadge != 'object') {throw new LoggingFormatException(documentBadge, 'object')}
+                if (typeof queryID != 'string') {throw new LoggingFormatException(queryID, 'string')}
+                var eventData = {
+                    origin: origin,
+                    content: {
+                        documentBadge: documentBadge
+                    },
+                    queryID: queryID
+                };
+                window.top.postMessage({event: 'eexcess.log.itemInsertedAsImage', data: eventData}, '*');
+            },
+            itemInsertedAsReference: function (origin, documentBadge, queryID) {
+                if (typeof origin != 'object') {throw new LoggingFormatException(origin, 'object')}
+                if (typeof documentBadge != 'object') {throw new LoggingFormatException(documentBadge, 'object')}
+                if (typeof queryID != 'string') {throw new LoggingFormatException(queryID, 'string')}
+                var eventData = {
+                    origin: origin,
+                    content: {
+                        documentBadge: documentBadge
+                    },
+                    queryID: queryID
+                };
+                window.top.postMessage({event: 'eexcess.log.itemInsertedAsReference', data: eventData}, '*');
+            },
             /**
              *
              * @param {Object} origin A general identifier, that identifies client, module and user. See {@link https://github.com/EEXCESS/eexcess/wiki/EEXCESS---Logging#important-attributes} for details.
