@@ -32,3 +32,7 @@ function logInsertedReferences(eventData) {
     LOGGING.itemInsertedAsReference(origin, documentBadge, queryID);
 }
 
+function logInsertedImages(documentBadge) {
+    var documentBadge = documentBadge;
+    LOGGING.itemInsertedAsImage(origin, documentBadge, queryID);
+}

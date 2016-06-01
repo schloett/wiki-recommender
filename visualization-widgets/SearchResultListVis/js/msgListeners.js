@@ -16,7 +16,7 @@ window.onmessage = function (msg) {
         // listens for the arrival of two result sets, EEXCESS and Wiki
         if (msg.data.event && msg.data.event === 'eexcess.newResults') {
             // new results are available in msg.data.data
-            if (lastProcessedQueryID && lastProcessedQueryID === msg.data.data.queryID) {
+            if (lastProcessedQueryID === msg.data.dataEEXCESS.data.queryID) {
                 // data already processed, do nothing
             } else {
 

@@ -199,12 +199,13 @@ function addGridWikiResultItems(msg) {
         var itemDescription = val.description;
 
         var pageID = val.pageid;
-        var itemImageUrl = val.imageinfo.url;
+        var itemImageUrl = val.imageinfo[0].url;
 
         var thumbnailUrl = val.imageinfo[0].thumburl;
 
         //result link
-        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
+        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language +
+            '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
 
         //image insertion link
         var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite-image" data-title="' + val.title + '"></a>';
@@ -212,13 +213,11 @@ function addGridWikiResultItems(msg) {
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
 
-        // assemble document badge for wiki results
-        var documentBadge = 'itemId = "' + pageID + '" iremtURI = "' + itemImageUrl + '" provider = Wikimedia Commons';
-
-        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview "' + documentBadge + ' data-category="eexcess-image">' +
+        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
             '<div title="show preview">' +
-            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
+            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle" >' +
             '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+            '<div style="display:none" class="eexcess-documentBadge">{"documentBadge":{"id":"' + pageID + '", "itemtURI":"' + itemImageUrl + '","provider":"Wikimedia Commons"}}</div>'+
             '<div class="eexcess-title-content">' + itemTitle + '</div>' +
             '</div>' +
             '</div>' +
@@ -238,7 +237,8 @@ function addCitationInserting() {
     $(".eexcess-cite-text").unbind('click').click(function () {
         var eventData = {
             documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
-        };
+
+        }
         // send parent's html of clicked element to logging method
         logInsertedReferences(eventData);
         window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
@@ -253,6 +253,7 @@ function addCitationInserting() {
                 title: title
             }
         };
+        logInsertedImages(JSON.parse($(this).parent().parent().parent().find(".eexcess-documentBadge").text()));
         window.top.postMessage({event: 'eexcess.insertMarkup.image', data: eventData}, '*');
     });
 }
