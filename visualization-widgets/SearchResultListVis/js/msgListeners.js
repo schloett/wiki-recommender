@@ -23,8 +23,7 @@ window.onmessage = function (msg) {
                 var msgWiki = msg.data.dataWiki.data;
                 var msgEEXCESS = msg.data.dataEEXCESS;
                 $(addIsotopeGrid(msgWiki, msgEEXCESS));
-                
-                $(logResultItemClicks(msg));
+                $(initLogging(msg));
 
                 //make sure elements exist
                 var checkExist = setInterval(function () {

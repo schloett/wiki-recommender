@@ -239,6 +239,8 @@ function addCitationInserting() {
         var eventData = {
             documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
         };
+        // send parent's html of clicked element to logging method
+        logInsertedReferences(eventData);
         window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
     });
 
@@ -414,26 +416,6 @@ function addFilterCounter() {
     }
 }
 
-
-//-----LOGGING-----//
-function logResultItemClicks(msg) {
-    if (msg != undefined) {
-        var origin = {
-            module: 'Search Result List Visualization'
-        };
-        $('.eexcess-isotope-grid').on('click', '.eexcess-isotope-grid-item', function () {
-            var documentBadge = {
-                id: $(this).attr('itemid'),
-                uri: $(this).attr('itemuri'),
-                provider: $(this).attr('provider')
-            };
-            LOGGING.itemOpened(origin, documentBadge, msg.data.dataEEXCESS.data.queryID);
-
-        });
-    }
-
-
-}
 
 
 
