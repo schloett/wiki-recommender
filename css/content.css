@@ -9,3 +9,20 @@
 #eexcess-tabBar-jQueryTabsHeader > ul {
     display: none;
 }
+
+/*result preview*/
+.result-preview .preview-title {
+    color: #959595;
+}
+
+.result-preview label {
+    font-weight: 700;
+}
+
+.result-preview > div {
+    margin-bottom: 5px;
+}
+
+.result-preview .pull-right {
+    float: right;
+}

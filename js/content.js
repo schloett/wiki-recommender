@@ -1,4 +1,4 @@
-require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, iframes, paragraphDetection) {
+require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector'], function (cms, iframes, paragraphDetection, APIconnector) {
     var markup = cms.detectMarkup();
 
     var insertMarkupHandler = function (msg) {
@@ -135,18 +135,103 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection'], function (cms, 
         }
     };
 
+    // init api connector with origin
+    chrome.storage.sync.get(['uuid'], function (result) {
+        var uuid;
+
+        if (result.uuid) {
+            uuid = result.uuid;
+        } else {
+            uuid = util.randomUUID();
+            chrome.storage.sync.set({uuid: uuid});
+        }
+
+        var manifest = chrome.runtime.getManifest();
+        var settings = {
+            origin: {
+                userID: uuid,
+                clientType: manifest.name + "/chrome-extension",
+                clientVersion: manifest.version
+            }
+        };
+
+        APIconnector.init(settings);
+    });
+
+    var showPreviewPopup = function(title, provider, uri, img, description, creator, year) {
+        var preview = $('<div class="result-preview"><div><label class="preview-title">PREVIEW</label></div></div>');
+
+        if (creator)
+            preview.append('<div><label>Creator:</label> ' + creator + '</div>');
+
+        if (year)
+            preview.append('<div><label>Year:</label> ' + year + '</div>');
+
+        preview.append('<div><label>Provider:</label> ' + provider + '</div>');
+        preview.append('<div><label>Title:</label> ' + title + '</div>');
+
+        if (description)
+            preview.append('<div><label>Description:</label> ' + description + '</div>');
+
+        if (img)
+            preview.append('<img src="' + img + '" />');
+
+        preview.append('<a class="pull-right" href="' + uri + '" target="_blank">open external</a>');
+
+        $.fancybox({ content: preview });
+    };
+
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                // make link https TODO replace with custom details view with same layout for every provider
-                var link = msg.data.data.link;
-                var protocol = 'http';
+                if (msg.data.data.img) { // eexcess-image
+                    showPreviewPopup(msg.data.data.title, msg.data.data.provider, msg.data.data.uri, msg.data.data.img)
+                } else { // eexcess-text
+                    APIconnector.getDetails(msg.data.data.detailsRequest, function(result) {
+                        var creator, year, provider, title, description, uri;
 
-                if (link.startsWith(protocol) && link[protocol.length] == ':') {
-                    link = link.substr(0, protocol.length) + 's' + link.substr(protocol.length);
+                        if (result.data.documentBadge[0].detail) {
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dccreator && result.data.documentBadge[0].detail.eexcessProxy.dccreator.length > 0)
+                                creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
+
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dctermsdate && result.data.documentBadge[0].detail.eexcessProxy.dctermsdate.length > 0)
+                                year = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
+
+                            if (result.data.documentBadge[0].provider && result.data.documentBadge[0].provider.length > 0) {
+                                provider = result.data.documentBadge[0].provider;
+                            } else {
+                                provider = msg.data.data.detailsRequest.documentBadge.provider;
+                            }
+
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dctitle && result.data.documentBadge[0].detail.eexcessProxy.dctitle.length > 0) {
+                                title = result.data.documentBadge[0].detail.eexcessProxy.dctitle;
+                            } else {
+                                title = msg.data.data.title;
+                            }
+
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dcdescription && result.data.documentBadge[0].detail.eexcessProxy.dcdescription.length > 0)
+                                description = result.data.documentBadge[0].detail.eexcessProxy.dcdescription;
+                        }
+
+                        if (result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0) {
+                            uri = result.data.documentBadge[0].uri;
+                        } else {
+                            uri = msg.data.data.detailsRequest.documentBadge.uri;
+                        }
+
+                        showPreviewPopup(title, provider, uri, undefined, description, creator, year);
+                    });
                 }
 
-                $.fancybox.open({padding: 0, href: link, type: 'iframe'});
+                // make link https TODO replace with custom details view with same layout for every provider
+                // var link = msg.data.data.link;
+                // var protocol = 'http';
+
+                // if (link.startsWith(protocol) && link[protocol.length] == ':') {
+                //     link = link.substr(0, protocol.length) + 's' + link.substr(protocol.length);
+                // }
+
+                // $.fancybox.open({padding: 0, href: link, type: 'iframe'});
             }
         }
     };
