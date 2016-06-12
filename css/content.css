@@ -26,3 +26,12 @@
 .result-preview .pull-right {
     float: right;
 }
+
+.result-preview > img {
+    max-height: 600px;
+    height: auto;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+}

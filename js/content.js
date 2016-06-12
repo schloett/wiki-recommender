@@ -159,7 +159,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     });
 
     var showPreviewPopup = function(title, provider, uri, img, description, creator, year) {
-        var preview = $('<div class="result-preview"><div><label class="preview-title">PREVIEW</label></div></div>');
+        var preview = $('<div class="result-preview"><a class="pull-right" href="' + uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
 
         if (creator)
             preview.append('<div><label>Creator:</label> ' + creator + '</div>');
@@ -175,8 +175,6 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
         if (img)
             preview.append('<img src="' + img + '" />');
-
-        preview.append('<a class="pull-right" href="' + uri + '" target="_blank">open external</a>');
 
         $.fancybox({ content: preview });
     };

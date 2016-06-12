@@ -298,7 +298,8 @@ function initResultPreview() {
         var data = {
             img: $(this).attr('data-img-uri'),
             uri: $(this).find('a[title=open]').attr('href'),
-            title: $(this).find('.eexcess-title-content').text()
+            title: $(this).find('.eexcess-title-content').text(),
+            provider: 'Wikimedia Commons'
         };
 
         window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
