@@ -288,8 +288,12 @@ function addCitationInserting() {
 function initResultPreview() {
     var resultItems = $('.eexcess-isotope-grid-item div').parent();
 
+    resultItems.attr('title', 'show preview');
+
     resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-text' }).unbind('click').click(function() {
         var data = {
+            type: 'eexcess-text',
+            img: $(this).find('img').attr('src'),
             detailsRequest: {
                 origin: {
                     "module": "wikiRecommender"
@@ -301,7 +305,7 @@ function initResultPreview() {
                     provider: $(this).attr('provider')
                 }]
             },
-            title: $(this).text()
+            title: $(this).find('.eexcess-title-content').length == 0 ? $(this).find('.eexcess-title-with-description-text').text() : $(this).find('.eexcess-title-content').text()
         };
 
         // window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
@@ -311,6 +315,7 @@ function initResultPreview() {
 
     resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-image' }).unbind('click').click(function() {
         var data = {
+            type: 'eexcess-image',
             img: $(this).attr('data-img-uri'),
             uri: $(this).find('a[title=open]').attr('href'),
             title: $(this).find('.eexcess-title-content').text(),
