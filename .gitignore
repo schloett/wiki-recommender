@@ -1,3 +1,4 @@
+debug/
 node_modules/*
 js/lib/*
 .idea/

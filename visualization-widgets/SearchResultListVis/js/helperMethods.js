@@ -143,7 +143,7 @@ function addGridEEXCESSResultItems(msg) {
 
             //assemble documentBadge for logging
             var documentBadge = 'itemId = "' + val.documentBadge.id + '" itemURI = "' + val.documentBadge.uri + '" provider =' +
-                ' "' + val.documentBadge.provider + '"';
+                ' "' + val.documentBadge.provider + '" queryID = "' + msg.data.queryID + '"';
 
 
             // add "isotoped" items
@@ -233,7 +233,7 @@ function addGridWikiResultItems(msg) {
         var itemDescription = val.description;
 
         var pageID = val.pageid;
-        var itemImageUrl = val.imageinfo.url;
+        var itemImageUrl = val.imageinfo[0].url;
 
         var thumbnailUrl = val.imageinfo[0].thumburl;
 
@@ -245,17 +245,17 @@ function addGridWikiResultItems(msg) {
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
-        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
-            '<div title="show preview">' +
-            '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
-            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
-            '<div class="eexcess-title-content">' + itemTitle + '</div>' +
-            '</div>' +
-            '</div>' +
-            '<img src="' + thumbnailUrl + '" />' +
-            '</div>' +
-            resultLinks +
-            '</div>';
+        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-img-uri="' + itemImageUrl + '" data-category="eexcess-image">' +
+                    '<div title="show preview">' +
+                        '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
+                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+                                '<div class="eexcess-title-content">' + itemTitle + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<img src="' + thumbnailUrl + '" />' +
+                    '</div>' +
+                    resultLinks +
+                '</div>';
 
         items += item;
     });
@@ -286,11 +286,38 @@ function addCitationInserting() {
 }
 
 function initResultPreview() {
-    $('.eexcess-isotope-grid-item div').click(function () {
-        window.top.postMessage({
-            event: 'eexcess.showPreview',
-            data: {link: $(this).parent().find('.fa-external-link').attr('href')}
-        }, '*');
+    var resultItems = $('.eexcess-isotope-grid-item div').parent();
+
+    resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-text' }).unbind('click').click(function() {
+        var data = {
+            detailsRequest: {
+                origin: {
+                    "module": "wikiRecommender"
+                },
+                queryID: $(this).attr('queryID'),
+                documentBadge: [{
+                    id: $(this).attr('itemId'),
+                    uri: $(this).attr('itemURI'),
+                    provider: $(this).attr('provider')
+                }]
+            },
+            title: $(this).text()
+        };
+
+        // window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
+        if (data.detailsRequest.queryID != undefined)
+            window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
+    });
+
+    resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-image' }).unbind('click').click(function() {
+        var data = {
+            img: $(this).attr('data-img-uri'),
+            uri: $(this).find('a[title=open]').attr('href'),
+            title: $(this).find('.eexcess-title-content').text(),
+            provider: 'Wikimedia Commons'
+        };
+
+        window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
     });
 }
 
