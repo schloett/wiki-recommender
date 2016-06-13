@@ -255,14 +255,22 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     };
 
     var run = function() {
-        $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter)
-            .bind('mouseup', queryFromSelection);
+        var textbox = $('#wpTextbox1');
+
+        chrome.storage.local.get('autoQuery', function(result) {
+            if (typeof result.autoQuery === 'undefined' || result.autoQuery) {
+                textbox.bind('keyup', searchResultsForParagraphOnEnter);
+            }
+        });
+
+        textbox.bind('mouseup', queryFromSelection);
         initAugmentationComponents();
 
         window.addEventListener('message', detectLanguageHandler);
         window.addEventListener('message', insertMarkupHandler);
         window.addEventListener('message', showPreviewHandler);
     };
+
     var kill = function () {
         $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter)
             .unbind('mouseup', queryFromSelection);
@@ -284,6 +292,18 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
                 run();
             } else { // hide/deactivate sidebar
                 kill();
+            }
+        }
+    });
+
+    chrome.storage.onChanged.addListener(function(changes, areaName) {
+        if (areaName === 'local' && changes.autoQuery) {
+            var textbox = $('#wpTextbox1');
+            
+            if (changes.autoQuery.newValue) {
+                textbox.bind('keyup', searchResultsForParagraphOnEnter);
+            } else {
+                textbox.unbind('keyup', searchResultsForParagraphOnEnter);
             }
         }
     });
