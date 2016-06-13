@@ -5,3 +5,8 @@ $("form").submit(function (event) {
     var input = $("#wiki-recommender-active-search").val();
     window.top.postMessage({event: 'eexcess.queryTriggered', data: input}, '*');
 });
+
+// opens the settings dialog
+$('.settings-btn').click(function () {
+    window.top.postMessage({event: 'eexcess.openOptions'}, '*');
+});
