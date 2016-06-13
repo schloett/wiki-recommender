@@ -67,7 +67,8 @@ require(['c4/iframes'], function (iframes) {
                     if (chrome.runtime.openOptionsPage) {
                         chrome.runtime.openOptionsPage();
                     } else {
-                        window.open(chrome.runtime.getURL('html/options.html'));
+                        $.fancybox.open({padding: 0, href: chrome.runtime.getURL('html/options.html'), type: 'iframe'});
+                        // window.open(chrome.runtime.getURL('html/options.html'));
                     }
                 }
             };
