@@ -1,3 +1,11 @@
+.settings-btn {
+    padding: 2px;
+    float: right;
+    margin-right: 5px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+
 /*Mono Alternative*/
 /*@font-face {*/
 /*font-family: 'Cousine';*/

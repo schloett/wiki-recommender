@@ -158,6 +158,14 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         APIconnector.init(settings);
     });
 
+    var showFancyBox = function(content) {
+        $.fancybox({
+            content: content,
+            autoSize: true,
+            type: 'html'
+        });
+    };
+
     var showPreviewPopup = function(title, provider, uri, img, description, creator, year) {
         var preview = $('<div class="result-preview"><a class="pull-right" href="' + uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
 
@@ -173,26 +181,35 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         if (description)
             preview.append('<div><label>Description:</label> ' + description + '</div>');
 
-        if (img)
-            preview.append('<img src="' + img + '" />');
+        if (img) {
+            var preloadedImage = new Image();
+            $(preloadedImage).attr({
+                src: img
+            });
 
-        $.fancybox({ content: preview });
+            $(preloadedImage).load(function (response, status, xhr) {
+                preview.append(preloadedImage);
+                showFancyBox(preview);
+            });
+        } else {
+            showFancyBox(preview);
+        }
     };
 
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                if (msg.data.data.img) { // eexcess-image
+                if (msg.data.data.type == 'eexcess-image') {
                     showPreviewPopup(msg.data.data.title, msg.data.data.provider, msg.data.data.uri, msg.data.data.img)
-                } else { // eexcess-text
+                } else if (msg.data.data.type == 'eexcess-text') {
                     APIconnector.getDetails(msg.data.data.detailsRequest, function(result) {
                         var creator, year, provider, title, description, uri;
 
-                        if (result.data.documentBadge[0].detail) {
+                        if (result.status != 'error' && result.data.documentBadge[0].detail) {
                             if (result.data.documentBadge[0].detail.eexcessProxy.dccreator && result.data.documentBadge[0].detail.eexcessProxy.dccreator.length > 0)
                                 creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
 
-                            if (result.data.documentBadge[0].detail.eexcessProxy.dctermsdate && result.data.documentBadge[0].detail.eexcessProxy.dctermsdate.length > 0)
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dctermsdate && result.data.documentBadge[0].detail.eexcessProxy.dctermsdate.length != '')
                                 year = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
 
                             if (result.data.documentBadge[0].provider && result.data.documentBadge[0].provider.length > 0) {
@@ -209,15 +226,18 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
                             if (result.data.documentBadge[0].detail.eexcessProxy.dcdescription && result.data.documentBadge[0].detail.eexcessProxy.dcdescription.length > 0)
                                 description = result.data.documentBadge[0].detail.eexcessProxy.dcdescription;
+                        } else {
+                            provider = msg.data.data.detailsRequest.documentBadge[0].provider;
+                            title = msg.data.data.title;
                         }
 
-                        if (result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0) {
+                        if (result.status != 'error' && result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0) {
                             uri = result.data.documentBadge[0].uri;
                         } else {
                             uri = msg.data.data.detailsRequest.documentBadge.uri;
                         }
 
-                        showPreviewPopup(title, provider, uri, undefined, description, creator, year);
+                        showPreviewPopup(title, provider, uri, msg.data.data.img, description, creator, year);
                     });
                 }
 
@@ -235,14 +255,22 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     };
 
     var run = function() {
-        $('#wpTextbox1').bind('keyup', searchResultsForParagraphOnEnter)
-            .bind('mouseup', queryFromSelection);
+        var textbox = $('#wpTextbox1');
+
+        chrome.storage.local.get('autoQuery', function(result) {
+            if (typeof result.autoQuery === 'undefined' || result.autoQuery) {
+                textbox.bind('keyup', searchResultsForParagraphOnEnter);
+            }
+        });
+
+        textbox.bind('mouseup', queryFromSelection);
         initAugmentationComponents();
 
         window.addEventListener('message', detectLanguageHandler);
         window.addEventListener('message', insertMarkupHandler);
         window.addEventListener('message', showPreviewHandler);
     };
+
     var kill = function () {
         $('#wpTextbox1').unbind('keyup', searchResultsForParagraphOnEnter)
             .unbind('mouseup', queryFromSelection);
@@ -253,12 +281,29 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         window.addEventListener('message', showPreviewHandler);
     };
 
+    // init content scripts
+    if (localStorage.getItem('extensionState') != 'hidden') {
+        run();
+    }
+
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        if (request && request.method === 'visibility') {
-            if (request.data) { // start sidebar
+        if (request && request.method === 'visibilityChange') {
+            if (localStorage.getItem('extensionState') != 'hidden') { // start sidebar
                 run();
             } else { // hide/deactivate sidebar
                 kill();
+            }
+        }
+    });
+
+    chrome.storage.onChanged.addListener(function(changes, areaName) {
+        if (areaName === 'local' && changes.autoQuery) {
+            var textbox = $('#wpTextbox1');
+            
+            if (changes.autoQuery.newValue) {
+                textbox.bind('keyup', searchResultsForParagraphOnEnter);
+            } else {
+                textbox.unbind('keyup', searchResultsForParagraphOnEnter);
             }
         }
     });
