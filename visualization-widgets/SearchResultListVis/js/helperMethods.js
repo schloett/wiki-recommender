@@ -175,19 +175,31 @@ function addGridEEXCESSResultItems(msg) {
                     if (previewImage == undefined) {
                         //previewImage = 'http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=text';
 
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"'
-                            + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                            ' <div class="eexcess-title eexcess-text itemTitle"><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div>' + resultLinks + '</div>';
+                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                    '<div class="eexcess-title eexcess-text itemTitle" title="show preview">' +
+                                        '<div class="eexcess-title-content">' +
+                                            itemTitle +
+                                        '</div>'+
+                                    '</div>' +
+                                    resultLinks +
+                                '</div>';
 
                     }
                     //text results without description and with preview
                     else {
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-other-with-preview "'
-                            + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                            '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
-                            '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-                            itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
+                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-other-with-preview "' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                    '<div title="show preview">' +
+                                        '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
+                                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+                                                '<div class="eexcess-title-content">' +
+                                                    itemTitle +
+                                                '</div>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<img src="' + previewImage + '" />' +
+                                    '</div>' +
+                                    resultLinks +
+                                '</div>';
 
                     }
                 }
@@ -197,21 +209,33 @@ function addGridEEXCESSResultItems(msg) {
                 else {
                     //text results with description and without preview
                     if (previewImage == undefined) {
-
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview eexcess-text-without-preview-with-description eexcess-with-preview-hover"'
-                            + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                            ' <div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
-                            itemTitle + '</div>' + ' <div class=" eexcess-description-text eexcess-text-with-preview-hover ">' + itemDescription + '</div>' +
-                            resultLinks + '</div>';
+                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview eexcess-text-without-preview-with-description eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                    '<div title="show preview">' +
+                                        '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
+                                            itemTitle +
+                                        '</div>' +
+                                        '<div class=" eexcess-description-text eexcess-text-with-preview-hover ">' +
+                                            itemDescription +
+                                        '</div>' +
+                                    '</div>' +
+                                    resultLinks +
+                                '</div>';
 
                     }
                     //text results with description and with preview
                     else {
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-with-preview eexcess-with-preview-hover"'
-                            + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                            ' <div class="eexcess-title-with-description-text eexcess-text itemTitle"><b></b>' +
-                            itemTitle + "<b></div>" + ' <div class="eexcess-description-text">' + itemDescription + "</div>" +
-                            '<img src="' + previewImage + '" />' + resultLinks + '</div>';
+                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-with-preview eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                    '<div title="show preview">' +
+                                        '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
+                                            '<b>' + itemTitle + "</b>' +" +
+                                        "</div>" +
+                                        '<div class="eexcess-description-text">' +
+                                            itemDescription +
+                                        "</div>" +
+                                        '<img src="' + previewImage + '" />' +
+                                    '</div>' +
+                                    resultLinks +
+                                '</div>';
                     }
                 }
                 items += item;
@@ -286,11 +310,11 @@ function addCitationInserting() {
 }
 
 function initResultPreview() {
-    var resultItems = $('.eexcess-isotope-grid-item div').parent();
+    var resultItems = $('div').filter(function() { return $(this).attr('title') == 'show preview'});
 
-    resultItems.attr('title', 'show preview');
+    resultItems.filter(function() { return $(this).parent().attr('data-category') == 'eexcess-text' }).unbind('click').click(function() {
+        var parent = $(this).parent();
 
-    resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-text' }).unbind('click').click(function() {
         var data = {
             type: 'eexcess-text',
             img: $(this).find('img').attr('src'),
@@ -298,11 +322,11 @@ function initResultPreview() {
                 origin: {
                     "module": "wikiRecommender"
                 },
-                queryID: $(this).attr('queryID'),
+                queryID: parent.attr('queryID'),
                 documentBadge: [{
-                    id: $(this).attr('itemId'),
-                    uri: $(this).attr('itemURI'),
-                    provider: $(this).attr('provider')
+                    id: parent.attr('itemId'),
+                    uri: parent.attr('itemURI'),
+                    provider: parent.attr('provider')
                 }]
             },
             title: $(this).find('.eexcess-title-content').length == 0 ? $(this).find('.eexcess-title-with-description-text').text() : $(this).find('.eexcess-title-content').text()
@@ -313,11 +337,13 @@ function initResultPreview() {
             window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
     });
 
-    resultItems.filter(function() { return $(this).attr('data-category') == 'eexcess-image' }).unbind('click').click(function() {
+    resultItems.filter(function() { return $(this).parent().attr('data-category') == 'eexcess-image' }).unbind('click').click(function() {
+        var parent = $(this).parent();
+
         var data = {
             type: 'eexcess-image',
-            img: $(this).attr('data-img-uri'),
-            uri: $(this).find('a[title=open]').attr('href'),
+            img: parent.attr('data-img-uri'),
+            uri: parent.find('a[title=open]').attr('href'),
             title: $(this).find('.eexcess-title-content').text(),
             provider: 'Wikimedia Commons'
         };
