@@ -140,7 +140,7 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     if (state == 'hidden') {
         localStorage.setItem('extensionState', 'visible');
         chrome.browserAction.setBadgeText({text: 'on'});
-    } else if (state == 'visible') {
+    } else { // state == 'visible' or null -> also visible
         localStorage.setItem('extensionState', 'hidden');
         chrome.browserAction.setBadgeText({text: ''});
     }
