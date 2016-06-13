@@ -63,8 +63,15 @@ require(['c4/iframes'], function (iframes) {
                         contextKeywords = [{text: msg.data.data}];
                     }
                     handleSearch(contextKeywords, module);
+                } else if (msg.data.event && msg.data.event === 'eexcess.openOptions') {
+                    if (chrome.runtime.openOptionsPage) {
+                        chrome.runtime.openOptionsPage();
+                    } else {
+                        $.fancybox.open({padding: 0, href: chrome.runtime.getURL('html/options.html'), type: 'iframe'});
+                        // window.open(chrome.runtime.getURL('html/options.html'));
+                    }
                 }
-            }
+            };
         } else { // remove sidebar
             adaptWikiElements(true);
 

@@ -1,6 +1,7 @@
 require(['./common'], function(common) {
     require(['jquery', 'c4/APIconnector'], function($, api) {
         var $numResults = $('#numResults');
+        var $autoQuery = $('#autoQuery');
         var $notificationBubble = $('#notification_bubble');
         // store current values and inform background script about update
         var update = function() {
@@ -40,13 +41,21 @@ require(['./common'], function(common) {
         });
 
 
-        chrome.storage.local.get('showPopupBubble', function(result) {
+        chrome.storage.local.get(['showPopupBubble', 'autoQuery'], function(result) {
+            if (typeof result.autoQuery === 'undefined' || result.autoQuery) {
+                $autoQuery.prop('checked', 'checked');
+            }
+
             if (typeof result.showPopupBubble === 'undefined' || result.showPopupBubble) {
                 $notificationBubble.prop('checked', 'checked');
             }
         });
         
         chrome.storage.onChanged.addListener(function(changes, areaName) {
+            if (areaName === 'local' && changes.autoQuery) {
+                $autoQuery.prop('checked', changes.autoQuery.newValue);
+            }
+
             if (areaName === 'local' && changes.showPopupBubble) {
                 $notificationBubble.prop('checked', changes.showPopupBubble.newValue);
             }
@@ -54,6 +63,10 @@ require(['./common'], function(common) {
 
         $notificationBubble.change(function() {
             chrome.storage.local.set({showPopupBubble: $notificationBubble.prop('checked')});
+        });
+
+        $autoQuery.change(function() {
+            chrome.storage.local.set({autoQuery: $autoQuery.prop('checked')});
         });
 
         // partner list
