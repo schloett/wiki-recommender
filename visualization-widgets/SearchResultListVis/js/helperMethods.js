@@ -113,7 +113,7 @@ function addGridEEXCESSResultItems(msg) {
     var items = '';
 
     $.each(msg.data.result, function (idx, val) {
-
+        if (val.licence != 'restricted') { // skip restricted materials
             var mediaType = val.mediaType;
             var itemTitle = val.title;
             var itemDate = ' itemDate = "' + val.date + '" ';
@@ -242,7 +242,8 @@ function addGridEEXCESSResultItems(msg) {
                 //items.push(item);
             }
         }
-    );
+    });
+
     return items;
 }
 
