@@ -108,139 +108,138 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
     });
 }
 
-
 function addGridEEXCESSResultItems(msg) {
     var items = '';
 
     $.each(msg.data.result, function (idx, val) {
-        if (val.licence != 'restricted') { // skip restricted materials
-            var mediaType = val.mediaType;
-            var itemTitle = val.title;
-            var itemDate = ' itemDate = "' + val.date + '" ';
-            var previewImage = val.previewImage;
+        var mediaType = val.mediaType;
+        var itemTitle = val.title;
+        var itemDate = ' itemDate = "' + val.date + '" ';
+        var previewImage = val.previewImage;
 
-            var itemDescription = val.description;
-            var generatingQuery = ' generatingQuery = "' + val.generatingQuery + '"';
+        var itemDescription = val.description;
+        var generatingQuery = ' generatingQuery = "' + val.generatingQuery + '"';
 
-            var itemID = val.documentBadge.id;
+        var itemID = val.documentBadge.id;
 
-            //cleaning up ids as fancybox is using them for referencing, which doesn't handle spaces and slashes very well
-            var cleanID = itemID.replace(/\//g, '').replace(/ /g, '');
-            var itemHrefAttr = ' href="#' + cleanID + '" ';
-            var itemCleanIdAttr = ' id = "' + cleanID + '" ';
-
-
-            //links result page
-            var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
-            var itemLinkLightbox = '<a class="fa fa-external-link eexcess-result-link-lightbox" target="_blank"' +
-                ' href="' + val.documentBadge.uri + '"/>';
-
-            //citation
-            var insertLink = '<a title="insert reference" class="fa fa-arrow-right eexcess-cite-text"></a>' +
-                '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
-
-            var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
-
-            //assemble documentBadge for logging
-            var documentBadge = 'itemId = "' + val.documentBadge.id + '" itemURI = "' + val.documentBadge.uri + '" provider =' +
-                ' "' + val.documentBadge.provider + '" queryID = "' + msg.data.queryID + '"';
+        //cleaning up ids as fancybox is using them for referencing, which doesn't handle spaces and slashes very well
+        var cleanID = itemID.replace(/\//g, '').replace(/ /g, '');
+        var itemHrefAttr = ' href="#' + cleanID + '" ';
+        var itemCleanIdAttr = ' id = "' + cleanID + '" ';
 
 
-            // add "isotoped" items
-            /*if (mediaType == "IMAGE" || mediaType == "image") {
-             if (previewImage == undefined) {
+        //links result page
+        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="' + val.documentBadge.uri + '" />';
+        var itemLinkLightbox = '<a class="fa fa-external-link eexcess-result-link-lightbox" target="_blank"' +
+            ' href="' + val.documentBadge.uri + '"/>';
 
-             //previewImage = "http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=image";
-             item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-without-preview"'
-             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">' +
-             ' <div class="eexcess-title eexcess-image itemTitle"><div class="eexcess-title-content">' +
-             itemTitle + '</div></div>' + resultLinks + '</div>';
-             } else {
+        //citation
+        val.queryID = msg.data.queryID;
+        val.type = 'eexcess-text';
+        var insertLink = '<a title="insert reference" class="fa fa-arrow-right eexcess-cite-text"></a>' +
+            '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
-             item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview"'
-             + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">'
-             + ' <div class="eexcess-title-other-with-preview-area eexcess-image itemTitle"> ' +
-             '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
-             itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
-             }
-             items += item;
-             }
-             else */
-            if (mediaType.toLowerCase() == "text") {
+        var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
-                //text results without description
-                if (itemDescription == undefined) {
+        //assemble documentBadge for logging
+        var documentBadge = 'itemId = "' + val.documentBadge.id + '" itemURI = "' + val.documentBadge.uri + '" provider =' +
+            ' "' + val.documentBadge.provider + '" queryID = "' + msg.data.queryID + '"';
 
-                    //text results without description and without preview
-                    if (previewImage == undefined) {
-                        //previewImage = 'http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=text';
 
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                                    '<div class="eexcess-title eexcess-text itemTitle" title="show preview">' +
-                                        '<div class="eexcess-title-content">' +
-                                            itemTitle +
-                                        '</div>'+
-                                    '</div>' +
-                                    resultLinks +
-                                '</div>';
+        // add "isotoped" items
+        /*if (mediaType == "IMAGE" || mediaType == "image") {
+         if (previewImage == undefined) {
 
-                    }
-                    //text results without description and with preview
-                    else {
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-other-with-preview "' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                                    '<div title="show preview">' +
-                                        '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
-                                            '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
-                                                '<div class="eexcess-title-content">' +
-                                                    itemTitle +
-                                                '</div>' +
+         //previewImage = "http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=image";
+         item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-without-preview"'
+         + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">' +
+         ' <div class="eexcess-title eexcess-image itemTitle"><div class="eexcess-title-content">' +
+         itemTitle + '</div></div>' + resultLinks + '</div>';
+         } else {
+
+         item = '<div class ="eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview"'
+         + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-image">'
+         + ' <div class="eexcess-title-other-with-preview-area eexcess-image itemTitle"> ' +
+         '<div class="eexcess-title-other-with-preview-content itemTitle" ><div class="eexcess-title-content">' +
+         itemTitle + '</div></div></div><img src="' + previewImage + '" />' + resultLinks + '</div>';
+         }
+         items += item;
+         }
+         else */
+        if (mediaType.toLowerCase() == "text") {
+
+            //text results without description
+            if (itemDescription == undefined) {
+
+                //text results without description and without preview
+                if (previewImage == undefined) {
+                    //previewImage = 'http://eexcess-dev.joanneum.at/eexcess-federated-recommender-web-service-1.0-SNAPSHOT/recommender/getPreviewImage?type=text';
+
+                    item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                '<div class="eexcess-title eexcess-text itemTitle" title="show preview">' +
+                                    '<div class="eexcess-title-content">' +
+                                        itemTitle +
+                                    '</div>'+
+                                '</div>' +
+                                resultLinks +
+                            '</div>';
+
+                }
+                //text results without description and with preview
+                else {
+                    item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-other-with-preview "' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                '<div title="show preview">' +
+                                    '<div class="eexcess-title-other-with-preview-area eexcess-text itemTitle">' +
+                                        '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
+                                            '<div class="eexcess-title-content">' +
+                                                itemTitle +
                                             '</div>' +
                                         '</div>' +
-                                        '<img src="' + previewImage + '" />' +
                                     '</div>' +
-                                    resultLinks +
-                                '</div>';
+                                    '<img src="' + previewImage + '" />' +
+                                '</div>' +
+                                resultLinks +
+                            '</div>';
 
-                    }
                 }
-
-
-                //text results with description
-                else {
-                    //text results with description and without preview
-                    if (previewImage == undefined) {
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview eexcess-text-without-preview-with-description eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                                    '<div title="show preview">' +
-                                        '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
-                                            itemTitle +
-                                        '</div>' +
-                                        '<div class=" eexcess-description-text eexcess-text-with-preview-hover ">' +
-                                            itemDescription +
-                                        '</div>' +
-                                    '</div>' +
-                                    resultLinks +
-                                '</div>';
-
-                    }
-                    //text results with description and with preview
-                    else {
-                        item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-with-preview eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
-                                    '<div title="show preview">' +
-                                        '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
-                                            '<b>' + itemTitle + "</b>' +" +
-                                        "</div>" +
-                                        '<div class="eexcess-description-text">' +
-                                            itemDescription +
-                                        "</div>" +
-                                        '<img src="' + previewImage + '" />' +
-                                    '</div>' +
-                                    resultLinks +
-                                '</div>';
-                    }
-                }
-                items += item;
-                //items.push(item);
             }
+
+
+            //text results with description
+            else {
+                //text results with description and without preview
+                if (previewImage == undefined) {
+                    item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-without-preview eexcess-text-without-preview-with-description eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                '<div title="show preview">' +
+                                    '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
+                                        itemTitle +
+                                    '</div>' +
+                                    '<div class=" eexcess-description-text eexcess-text-with-preview-hover ">' +
+                                        itemDescription +
+                                    '</div>' +
+                                '</div>' +
+                                resultLinks +
+                            '</div>';
+
+                }
+                //text results with description and with preview
+                else {
+                    item = '<div class = "eexcess-isotope-grid-item eexcess-text eexcess-text-with-preview eexcess-with-preview-hover"' + documentBadge + itemDate + generatingQuery + ' data-category="eexcess-text">' +
+                                '<div title="show preview">' +
+                                    '<div class="eexcess-title-with-description-text eexcess-text itemTitle">' +
+                                        '<b>' + itemTitle + "</b>' +" +
+                                    "</div>" +
+                                    '<div class="eexcess-description-text">' +
+                                        itemDescription +
+                                    "</div>" +
+                                    '<img src="' + previewImage + '" />' +
+                                '</div>' +
+                                resultLinks +
+                            '</div>';
+                }
+            }
+            items += item;
+            //items.push(item);
         }
     });
 
@@ -252,10 +251,7 @@ function addGridWikiResultItems(msg) {
     var items = '';
 
     $.each(msg.query.pages, function (idx, val) {
-
-        var itemTitle = val.title.split(/[:.]+/)[1];
-
-        var itemDescription = val.description;
+        var itemTitle = val.imageinfo[0].extmetadata.ObjectName.value;
 
         var pageID = val.pageid;
         var itemImageUrl = val.imageinfo[0].url;
@@ -263,14 +259,27 @@ function addGridWikiResultItems(msg) {
         var thumbnailUrl = val.imageinfo[0].thumburl;
 
         //result link
-        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_") + '" />';
+        var link = 'https://' + language + '.wikipedia.org/wiki/' + val.title.replace(/ /g, "_");
+        var itemLink = '<a title="open" class="fa fa-external-link " target="_blank" href="' + link + '" />';
 
         //image insertion link
-        var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite-image" data-title="' + val.title + '"></a>';
+        var documentInformation = {
+            date: val.imageinfo[0].extmetadata.DateTime.value,
+            documentBadge: {
+                provider: 'Wikimedia Commons',
+                uri: link
+            },
+            licence: val.imageinfo[0].extmetadata.UsageTerms.value,
+            title: itemTitle,
+            type: 'eexcess-image',
+            previewImage: val.imageinfo[0].url
+        };
+        var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite-image" data-title="' + val.title + '"></a>' +
+            '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(documentInformation) + '</div>';
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
 
-        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-img-uri="' + itemImageUrl + '" data-category="eexcess-image">' +
+        item = '<div class = "eexcess-isotope-grid-item eexcess-image eexcess-other-with-preview" data-category="eexcess-image">' +
                     '<div title="show preview">' +
                         '<div class="eexcess-title-other-with-preview-area eexcess-image itemTitle">' +
                             '<div class="eexcess-title-other-with-preview-content itemTitle" >' +
@@ -311,44 +320,9 @@ function addCitationInserting() {
 }
 
 function initResultPreview() {
-    var resultItems = $('div').filter(function() { return $(this).attr('title') == 'show preview'});
-
-    resultItems.filter(function() { return $(this).parent().attr('data-category') == 'eexcess-text' }).unbind('click').click(function() {
-        var parent = $(this).parent();
-
-        var data = {
-            type: 'eexcess-text',
-            img: $(this).find('img').attr('src'),
-            detailsRequest: {
-                origin: {
-                    "module": "wikiRecommender"
-                },
-                queryID: parent.attr('queryID'),
-                documentBadge: [{
-                    id: parent.attr('itemId'),
-                    uri: parent.attr('itemURI'),
-                    provider: parent.attr('provider')
-                }]
-            },
-            title: $(this).find('.eexcess-title-content').length == 0 ? $(this).find('.eexcess-title-with-description-text').text() : $(this).find('.eexcess-title-content').text()
-        };
-
-        // window.top.postMessage({event: 'eexcess.showPreview', data: {link: $(this).parent().find('.fa-external-link').attr('href')}}, '*');
-        if (data.detailsRequest.queryID != undefined)
-            window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
-    });
-
-    resultItems.filter(function() { return $(this).parent().attr('data-category') == 'eexcess-image' }).unbind('click').click(function() {
-        var parent = $(this).parent();
-
-        var data = {
-            type: 'eexcess-image',
-            img: parent.attr('data-img-uri'),
-            uri: parent.find('a[title=open]').attr('href'),
-            title: $(this).find('.eexcess-title-content').text(),
-            provider: 'Wikimedia Commons'
-        };
-
+    var resultItems = $('div').filter(function() { return $(this).attr('title') == 'show preview'}).unbind('click').click(function() {
+        var documentInformation = $(this).parent().find('.eexcess-document-information');
+        var data = JSON.parse(documentInformation.text());
         window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
     });
 }

@@ -177,7 +177,7 @@ function queryCommons(data, callback) {
             gsrlimit: "20",
             gsroffset: "20",
             prop: "imageinfo",
-            iiprop: "url",
+            iiprop: "url|extmetadata",
             format: "json",
             //fetching only thumbs to ensure faster loading
             iiurlwidth: "120"

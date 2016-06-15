@@ -166,25 +166,49 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         });
     };
 
-    var showPreviewPopup = function(title, provider, uri, img, description, creator, year) {
-        var preview = $('<div class="result-preview"><a class="pull-right" href="' + uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
+    var showPreviewPopup = function(data) {
+        var preview = $('<div class="result-preview"><a class="fa fa-external-link pull-right" href="' + data.uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
 
-        if (creator)
-            preview.append('<div><label>Creator:</label> ' + creator + '</div>');
+        if (data.creator)
+            preview.append('<div><label>Creator:</label> ' + data.creator + '</div>');
 
-        if (year)
-            preview.append('<div><label>Year:</label> ' + year + '</div>');
+        if (data.year) {
+            data.year = ("" + data.year).substr(0, 4);
 
-        preview.append('<div><label>Provider:</label> ' + provider + '</div>');
-        preview.append('<div><label>Title:</label> ' + title + '</div>');
+            if (!isNaN(parseFloat(data.year)) && isFinite(data.year)) {
+                preview.append('<div><label>Year:</label> ' + data.year + '</div>');
+            }
+        }
 
-        if (description)
-            preview.append('<div><label>Description:</label> ' + description + '</div>');
+        preview.append('<div><label>Provider:</label> ' + data.provider + '</div>');
 
-        if (img) {
+        if (data.licence) {
+            var licenceDiv = $('<div><label>Licence:</label> ' + data.licence + ' </div>');
+            var addBtn = $('<button class="fa fa-plus"> add to whitelist-filter</button>');
+            var rmBtn = $('<button class="fa fa-remove"> remove from whitelist-filter</button>');
+            licenceDiv.append(addBtn);
+            licenceDiv.append(rmBtn);
+            preview.append(licenceDiv);
+        }
+
+        preview.append('<div><label>Title:</label> ' + data.title + '</div>');
+
+        if (data.description)
+            preview.append('<div><label>Description:</label> ' + data.description + '</div>');
+
+        var insertBtn = $('<button class="fa fa-arrow-right pull-right"> insert reference/image</button>');
+        insertBtn.click(function () {
+            var eventData = {
+                documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
+            };
+            window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
+        });
+        preview.append(insertBtn);
+
+        if (data.img) {
             var preloadedImage = new Image();
             $(preloadedImage).attr({
-                src: img
+                src: data.img
             });
 
             $(preloadedImage).load(function (response, status, xhr) {
@@ -199,57 +223,50 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                if (msg.data.data.type == 'eexcess-image') {
-                    showPreviewPopup(msg.data.data.title, msg.data.data.provider, msg.data.data.uri, msg.data.data.img)
-                } else if (msg.data.data.type == 'eexcess-text') {
-                    APIconnector.getDetails(msg.data.data.detailsRequest, function(result) {
-                        var creator, year, provider, title, description, uri;
+                var data = {
+                    year: msg.data.data.date,
+                    provider: msg.data.data.documentBadge.provider,
+                    title: msg.data.data.title,
+                    img: msg.data.data.previewImage,
+                    uri: msg.data.data.documentBadge.uri,
+                    licence: msg.data.data.licence
+                };
 
+                if (msg.data.data.type == 'eexcess-text') {
+                    var detailsRequest = {
+                        origin: {
+                            "module": "wikiRecommender"
+                        },
+                        queryID: msg.data.data.queryID,
+                        documentBadge: [msg.data.data.documentBadge]
+                    };
+
+                    APIconnector.getDetails(detailsRequest, function(result) {
                         if (result.status != 'error' && result.data.documentBadge[0].detail) {
                             if (result.data.documentBadge[0].detail.eexcessProxy.dccreator && result.data.documentBadge[0].detail.eexcessProxy.dccreator.length > 0)
-                                creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
+                                data.creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
 
                             if (result.data.documentBadge[0].detail.eexcessProxy.dctermsdate && result.data.documentBadge[0].detail.eexcessProxy.dctermsdate.length != '')
-                                year = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
+                                data.year = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
 
-                            if (result.data.documentBadge[0].provider && result.data.documentBadge[0].provider.length > 0) {
-                                provider = result.data.documentBadge[0].provider;
-                            } else {
-                                provider = msg.data.data.detailsRequest.documentBadge.provider;
-                            }
+                            if (result.data.documentBadge[0].provider && result.data.documentBadge[0].provider.length > 0)
+                                data.provider = result.data.documentBadge[0].provider;
 
-                            if (result.data.documentBadge[0].detail.eexcessProxy.dctitle && result.data.documentBadge[0].detail.eexcessProxy.dctitle.length > 0) {
-                                title = result.data.documentBadge[0].detail.eexcessProxy.dctitle;
-                            } else {
-                                title = msg.data.data.title;
-                            }
+                            if (result.data.documentBadge[0].detail.eexcessProxy.dctitle && result.data.documentBadge[0].detail.eexcessProxy.dctitle.length > 0)
+                                data.title = result.data.documentBadge[0].detail.eexcessProxy.dctitle;
 
                             if (result.data.documentBadge[0].detail.eexcessProxy.dcdescription && result.data.documentBadge[0].detail.eexcessProxy.dcdescription.length > 0)
-                                description = result.data.documentBadge[0].detail.eexcessProxy.dcdescription;
-                        } else {
-                            provider = msg.data.data.detailsRequest.documentBadge[0].provider;
-                            title = msg.data.data.title;
+                                data.description = result.data.documentBadge[0].detail.eexcessProxy.dcdescription;
                         }
 
-                        if (result.status != 'error' && result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0) {
-                            uri = result.data.documentBadge[0].uri;
-                        } else {
-                            uri = msg.data.data.detailsRequest.documentBadge.uri;
-                        }
+                        if (result.status != 'error' && result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0)
+                            data.uri = result.data.documentBadge[0].uri;
 
-                        showPreviewPopup(title, provider, uri, msg.data.data.img, description, creator, year);
+                        showPreviewPopup(data);
                     });
+                } else if (msg.data.data.type == 'eexcess-image') {
+                    showPreviewPopup(data)
                 }
-
-                // make link https TODO replace with custom details view with same layout for every provider
-                // var link = msg.data.data.link;
-                // var protocol = 'http';
-
-                // if (link.startsWith(protocol) && link[protocol.length] == ':') {
-                //     link = link.substr(0, protocol.length) + 's' + link.substr(protocol.length);
-                // }
-
-                // $.fancybox.open({padding: 0, href: link, type: 'iframe'});
             }
         }
     };
