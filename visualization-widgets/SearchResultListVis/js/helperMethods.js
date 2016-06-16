@@ -136,7 +136,7 @@ function addGridEEXCESSResultItems(msg) {
         //citation
         val.queryID = msg.data.queryID;
         val.type = 'eexcess-text';
-        var insertLink = '<a title="insert reference" class="fa fa-arrow-right eexcess-cite-text"></a>' +
+        var insertLink = '<a title="insert reference" class="fa fa-arrow-right eexcess-cite"></a>' +
             '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(val) + '</div>';
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
@@ -264,17 +264,24 @@ function addGridWikiResultItems(msg) {
 
         //image insertion link
         var documentInformation = {
-            date: val.imageinfo[0].extmetadata.DateTime.value,
             documentBadge: {
                 provider: 'Wikimedia Commons',
                 uri: link
             },
-            licence: val.imageinfo[0].extmetadata.UsageTerms.value,
             title: itemTitle,
+            filename: val.title,
             type: 'eexcess-image',
-            previewImage: val.imageinfo[0].url
+            previewImage: val.imageinfo[0].url,
+            mediaType: "image"
         };
-        var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite-image" data-title="' + val.title + '"></a>' +
+        
+        if (val.imageinfo[0].extmetadata.DateTime)
+            documentInformation.date = val.imageinfo[0].extmetadata.DateTime.value;
+        
+        if (val.imageinfo[0].extmetadata.UsageTerms)
+            documentInformation.licence = val.imageinfo[0].extmetadata.UsageTerms.value;
+        
+        var insertLink = '<a title="insert image" class="fa fa-arrow-right eexcess-cite"></a>' +
             '<div style="display:none" class="eexcess-document-information">' + JSON.stringify(documentInformation) + '</div>';
 
         var resultLinks = '<ul class="eexcess-result-links"><li>' + itemLink + '</li><li>' + insertLink + '</li></ul>';
@@ -299,23 +306,9 @@ function addGridWikiResultItems(msg) {
 
 // adding cite links
 function addCitationInserting() {
-    $(".eexcess-cite-text").unbind('click').click(function () {
-        var eventData = {
-            documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
-        };
-        window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
-    });
-
-    $(".eexcess-cite-image").unbind('click').click(function () {
-        var title = $(this).attr('data-title');
-
-        var eventData = {
-            documentInformation: {
-                mediaType: "image",
-                title: title
-            }
-        };
-        window.top.postMessage({event: 'eexcess.insertMarkup.image', data: eventData}, '*');
+    $(".eexcess-cite").unbind('click').click(function () {
+        var data = JSON.parse($(this).parent().find(".eexcess-document-information").text());
+        window.top.postMessage({event: 'eexcess.insertMarkup', data: data}, '*');
     });
 }
 

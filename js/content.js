@@ -3,22 +3,12 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
     var insertMarkupHandler = function (msg) {
         if (msg.data.event) {
-            if (msg.data.event.startsWith('eexcess.insertMarkup')) {
-                var markupText;
-                var documentInformation = msg.data.data.documentInformation;
+            if (msg.data.event == 'eexcess.insertMarkup') {
+                var documentInformation = msg.data.data;
+                var markupText = cms.createMarkup(documentInformation, markup);
 
-                switch (msg.data.event) {
-                    case 'eexcess.insertMarkup.text':
-                        markupText = cms.createMarkup(documentInformation, markup);
-                        break;
-                    case 'eexcess.insertMarkup.image':
-                        markupText = cms.createMarkup(documentInformation, markup);
-                        break;
-                }
-
-                if (markupText) {
+                if (markupText)
                     insertAtCaret($('textarea#wpTextbox1')[0], markupText);
-                }
             }
         }
     };
@@ -167,20 +157,20 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     };
 
     var showPreviewPopup = function(data) {
-        var preview = $('<div class="result-preview"><a class="fa fa-external-link pull-right" href="' + data.uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
+        var preview = $('<div class="result-preview"><a class="fa fa-external-link pull-right" href="' + data.documentBadge.uri + '" target="_blank">open external</a><div><label class="preview-title">PREVIEW</label></div></div>');
 
         if (data.creator)
             preview.append('<div><label>Creator:</label> ' + data.creator + '</div>');
 
-        if (data.year) {
-            data.year = ("" + data.year).substr(0, 4);
+        if (data.date) {
+            data.date = ("" + data.date).substr(0, 4);
 
-            if (!isNaN(parseFloat(data.year)) && isFinite(data.year)) {
-                preview.append('<div><label>Year:</label> ' + data.year + '</div>');
+            if (!isNaN(parseFloat(data.date)) && isFinite(data.date)) {
+                preview.append('<div><label>Year:</label> ' + data.date + '</div>');
             }
         }
 
-        preview.append('<div><label>Provider:</label> ' + data.provider + '</div>');
+        preview.append('<div><label>Provider:</label> ' + data.documentBadge.provider + '</div>');
 
         if (data.licence) {
             var licenceDiv = $('<div><label>Licence:</label> ' + data.licence + ' </div>');
@@ -196,19 +186,17 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         if (data.description)
             preview.append('<div><label>Description:</label> ' + data.description + '</div>');
 
-        var insertBtn = $('<button class="fa fa-arrow-right pull-right"> insert reference/image</button>');
+        var insertBtn = $('<button class="fa fa-arrow-right pull-right"> insert ' + (data.type == 'eexcess-text' ? 'reference' : 'image') + '</button>');
         insertBtn.click(function () {
-            var eventData = {
-                documentInformation: JSON.parse($(this).parent().find(".eexcess-document-information").text())
-            };
-            window.top.postMessage({event: 'eexcess.insertMarkup.text', data: eventData}, '*');
+            window.top.postMessage({event: 'eexcess.insertMarkup', data: data}, '*');
+            $.fancybox.close();
         });
         preview.append(insertBtn);
 
-        if (data.img) {
+        if (data.previewImage) {
             var preloadedImage = new Image();
             $(preloadedImage).attr({
-                src: data.img
+                src: data.previewImage
             });
 
             $(preloadedImage).load(function (response, status, xhr) {
@@ -223,22 +211,15 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     var showPreviewHandler = function (msg) {
         if (msg.data.event) {
             if (msg.data.event.startsWith('eexcess.showPreview')) {
-                var data = {
-                    year: msg.data.data.date,
-                    provider: msg.data.data.documentBadge.provider,
-                    title: msg.data.data.title,
-                    img: msg.data.data.previewImage,
-                    uri: msg.data.data.documentBadge.uri,
-                    licence: msg.data.data.licence
-                };
+                var data = msg.data.data;
 
-                if (msg.data.data.type == 'eexcess-text') {
+                if (data.type == 'eexcess-text') {
                     var detailsRequest = {
                         origin: {
                             "module": "wikiRecommender"
                         },
-                        queryID: msg.data.data.queryID,
-                        documentBadge: [msg.data.data.documentBadge]
+                        queryID: data.queryID,
+                        documentBadge: [data.documentBadge]
                     };
 
                     APIconnector.getDetails(detailsRequest, function(result) {
@@ -247,10 +228,10 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
                                 data.creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
 
                             if (result.data.documentBadge[0].detail.eexcessProxy.dctermsdate && result.data.documentBadge[0].detail.eexcessProxy.dctermsdate.length != '')
-                                data.year = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
+                                data.date = result.data.documentBadge[0].detail.eexcessProxy.dctermsdate;
 
                             if (result.data.documentBadge[0].provider && result.data.documentBadge[0].provider.length > 0)
-                                data.provider = result.data.documentBadge[0].provider;
+                                data.documentBadge.provider = result.data.documentBadge[0].provider;
 
                             if (result.data.documentBadge[0].detail.eexcessProxy.dctitle && result.data.documentBadge[0].detail.eexcessProxy.dctitle.length > 0)
                                 data.title = result.data.documentBadge[0].detail.eexcessProxy.dctitle;
@@ -260,11 +241,11 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
                         }
 
                         if (result.status != 'error' && result.data.documentBadge[0].uri && result.data.documentBadge[0].uri.length > 0)
-                            data.uri = result.data.documentBadge[0].uri;
+                            data.documentBadge.uri = result.data.documentBadge[0].uri;
 
                         showPreviewPopup(data);
                     });
-                } else if (msg.data.data.type == 'eexcess-image') {
+                } else if (data.type == 'eexcess-image') {
                     showPreviewPopup(data)
                 }
             }
