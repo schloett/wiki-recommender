@@ -6,6 +6,10 @@
     margin-bottom: 5px;
 }
 
+.licence-filter-btn.is-checked {
+    background-color: red;
+}
+
 /*Mono Alternative*/
 /*@font-face {*/
 /*font-family: 'Cousine';*/

@@ -174,8 +174,47 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
         if (data.licence) {
             var licenceDiv = $('<div><label>Licence:</label> ' + data.licence + ' </div>');
-            var addBtn = $('<button class="fa fa-plus"> add to whitelist-filter</button>');
-            var rmBtn = $('<button class="fa fa-remove"> remove from whitelist-filter</button>');
+
+            var addBtn = $('<button class="fa fa-plus" style="display: none;"> add to whitelist-filter</button>');
+            addBtn.click(function () {
+                chrome.storage.local.get('licenceWhitelist', function (result) {
+                    var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
+
+                    if (whitelist) {
+                        whitelist[data.licence] = true;
+                    } else {
+                        whitelist = {};
+                        whitelist[data.licence] = true;
+                    }
+
+                    chrome.storage.local.set({licenceWhitelist: JSON.stringify(whitelist)});
+                    addBtn.hide();
+                    rmBtn.show();
+                });
+            });
+
+            var rmBtn = $('<button class="fa fa-remove" style="display: none;"> remove from whitelist-filter</button>');
+            rmBtn.click(function () {
+                chrome.storage.local.get('licenceWhitelist', function (result) {
+                    var whitelist = JSON.parse(result.licenceWhitelist);
+                    whitelist[data.licence] = false;
+
+                    chrome.storage.local.set({licenceWhitelist: JSON.stringify(whitelist)});
+                    rmBtn.hide();
+                    addBtn.show();
+                });
+            });
+
+            chrome.storage.local.get('licenceWhitelist', function (result) {
+                var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
+
+                if (whitelist && whitelist[data.licence]) {
+                    rmBtn.show();
+                } else {
+                    addBtn.show();
+                }
+            });
+
             licenceDiv.append(addBtn);
             licenceDiv.append(rmBtn);
             preview.append(licenceDiv);
