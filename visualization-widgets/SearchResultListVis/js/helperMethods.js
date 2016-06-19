@@ -2,6 +2,7 @@ var language;
 var executed = false;
 var isotopeFilters;
 var licenceWhitelist;
+var loadingSpinners = [];
 
 window.addEventListener('message', function (msg) {
     if (msg.data.event == 'eexcess.detectLang.response') {
@@ -9,6 +10,15 @@ window.addEventListener('message', function (msg) {
     }
 
     window.removeEventListener('message', this);
+});
+
+window.addEventListener('message', function (msg) {
+    if (msg.data.event == 'eexcess.hideResultItemLoadingSpinner') {
+        while(loadingSpinners.length > 0) {
+            loadingSpinners[0].remove();
+            loadingSpinners.splice(0, 1);
+        }
+    }
 });
 
 window.top.postMessage({event: 'eexcess.detectLang.request'}, '*');
@@ -363,7 +373,11 @@ function addCitationInserting() {
 
 function initResultPreview() {
     var resultItems = $('div').filter(function() { return $(this).attr('title') == 'show preview'}).unbind('click').click(function() {
-        var documentInformation = $(this).parent().find('.eexcess-document-information');
+        var parent = $(this).parent();
+        loadingSpinner = $('<div class="result-item-loading-spinner"><span class="fa fa-spinner fa-spin fa-3x fa-fw" /></div>');
+        loadingSpinners.push(loadingSpinner);
+        parent.append(loadingSpinner);
+        var documentInformation = parent.find('.eexcess-document-information');
         var data = JSON.parse(documentInformation.text());
         window.top.postMessage({event: 'eexcess.showPreview', data: data}, '*');
     });

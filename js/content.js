@@ -245,6 +245,8 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
         } else {
             showFancyBox(preview);
         }
+
+        iframes.sendMsgAll({event: 'eexcess.hideResultItemLoadingSpinner'});
     };
 
     var showPreviewHandler = function (msg) {
@@ -262,7 +264,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
                     };
 
                     APIconnector.getDetails(detailsRequest, function(result) {
-                        if (result.status != 'error' && result.data.documentBadge[0].detail) {
+                        if (result.status != 'error' && result.data.documentBadge[0] && result.data.documentBadge[0].detail) {
                             if (result.data.documentBadge[0].detail.eexcessProxy.dccreator && result.data.documentBadge[0].detail.eexcessProxy.dccreator.length > 0)
                                 data.creator = result.data.documentBadge[0].detail.eexcessProxy.dccreator;
 
