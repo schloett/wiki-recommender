@@ -193,8 +193,10 @@ require(['c4/iframes'], function (iframes) {
         var query = "";
 
         for (var i = 0; i < mainTopics.length; i++) {
-            if (i > 0)
-                query += ' AND ';
+            if (i > 0) {
+                // query += ' AND '; // -> replaced with or, because otherwise no results were found if the paragraph title was added as main topic -> TODO improve wiki query
+                query += ' OR ';
+            }
 
             if (mainTopics.length > 1 || sideTopics.length > 1) {
                 query += '"' + mainTopics[i] + '"';
@@ -209,7 +211,8 @@ require(['c4/iframes'], function (iframes) {
 
             if (i === 0) {
                 if (mainTopics.length > 0) {
-                    topic += ' AND ';
+                    // topic += ' AND '; // -> replaced with or, because otherwise no results were found if the paragraph title was added as main topic -> TODO improve wiki query
+                    topic += ' OR ';
 
                     if (sideTopics.length > 1)
                         topic += '(';

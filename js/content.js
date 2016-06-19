@@ -45,23 +45,53 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
             var start = 0;
             var pos = this.value.indexOf(delimiter);
 
+            // last 2 delimiter positions
+            var lastDelimiters = [-1, -1];
+            var lastDelimitersIndex = 0;
+
             while (pos != -1 && pos < cursorPosition) {
                 start = pos + delimiter.length;
+                lastDelimiters[lastDelimitersIndex++] = pos;
+
+                if (lastDelimitersIndex > 1)
+                    lastDelimitersIndex = 0;
+
                 pos = this.value.indexOf(delimiter, start);
             }
 
             // find paragraph end
-            var end = this.value.indexOf(delimiter, cursorPosition) - 1;
+            /*var end = this.value.indexOf(delimiter, cursorPosition) - 1;
 
             if (end < 0) {
                 end = text.length;
-            }
+            }*/
 
-            var paragraph = text.substring(start, end);
+            // var paragraph = text.substring(start, end);
+            var paragraph = text;
 
             // extract keywords & generate query
             paragraphDetection.paragraphToQuery(paragraph, function (res) {
                 if (typeof res.query !== 'undefined') { // submit query
+                    var contextKeywords = res.query.contextKeywords;
+
+                    // set all keywords detected by paragraph detection as non main topic
+                    $.each(contextKeywords, function (idx, val) {
+                        val.isMainTopic = false;
+                    });
+
+                    // add the document title as maintopic
+                    var documentTitle = window.location.href;
+                    var titleKey = 'title=';
+                    var titleStart = documentTitle.indexOf(titleKey) + titleKey.length;
+                    var titleEnd = documentTitle.indexOf('&', titleStart);
+                    documentTitle = documentTitle.substring(titleStart, titleEnd).replace('_', ' ');
+                    contextKeywords.push({text: documentTitle, isMainTopic: true});
+
+                    // add the paragraph title as maintopic
+                    if (lastDelimiters[0] != -1 && lastDelimiters[1] != -1) {
+                        var paragraphTitle = text.substring(lastDelimiters[0] + delimiter.length, lastDelimiters[1]).trim();
+                        contextKeywords.push({text: paragraphTitle, isMainTopic: true});
+                    }
                     window.postMessage({event: 'eexcess.queryTriggered',
                         data: {
                             contextKeywords: res.query.contextKeywords,
