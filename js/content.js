@@ -177,7 +177,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
             var addBtn = $('<button class="fa fa-plus" style="display: none;"> add to whitelist-filter</button>');
             addBtn.click(function () {
-                chrome.storage.local.get('licenceWhitelist', function (result) {
+                chrome.storage.sync.get('licenceWhitelist', function (result) {
                     var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
 
                     if (whitelist) {
@@ -187,7 +187,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
                         whitelist[data.licence] = true;
                     }
 
-                    chrome.storage.local.set({licenceWhitelist: JSON.stringify(whitelist)});
+                    chrome.storage.sync.set({licenceWhitelist: JSON.stringify(whitelist)});
                     addBtn.hide();
                     rmBtn.show();
                 });
@@ -195,17 +195,17 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
 
             var rmBtn = $('<button class="fa fa-remove" style="display: none;"> remove from whitelist-filter</button>');
             rmBtn.click(function () {
-                chrome.storage.local.get('licenceWhitelist', function (result) {
+                chrome.storage.sync.get('licenceWhitelist', function (result) {
                     var whitelist = JSON.parse(result.licenceWhitelist);
                     whitelist[data.licence] = false;
 
-                    chrome.storage.local.set({licenceWhitelist: JSON.stringify(whitelist)});
+                    chrome.storage.sync.set({licenceWhitelist: JSON.stringify(whitelist)});
                     rmBtn.hide();
                     addBtn.show();
                 });
             });
 
-            chrome.storage.local.get('licenceWhitelist', function (result) {
+            chrome.storage.sync.get('licenceWhitelist', function (result) {
                 var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
 
                 if (whitelist && whitelist[data.licence]) {
@@ -294,7 +294,7 @@ require(['c4/cmsMarkup', 'c4/iframes', 'c4/paragraphDetection', 'c4/APIconnector
     var run = function() {
         var textbox = $('#wpTextbox1');
 
-        chrome.storage.local.get('autoQuery', function(result) {
+        chrome.storage.sync.get('autoQuery', function(result) {
             if (typeof result.autoQuery === 'undefined' || result.autoQuery) {
                 textbox.bind('keyup', searchResultsForParagraphOnEnter);
             }

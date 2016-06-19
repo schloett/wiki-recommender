@@ -13,8 +13,7 @@ $('.settings-btn').click(function () {
 
 // licence filter functionality
 /*function whitelistFilter() {
-    debugger;
-    chrome.storage.local.get('licenceWhitelist', function (result) {
+    chrome.storage.sync.get('licenceWhitelist', function (result) {
         var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
 
         if (whitelist) {
@@ -27,8 +26,7 @@ $('.settings-btn').click(function () {
 
 var licenceFilterBtn = $('.licence-filter-btn');
 
-chrome.storage.local.get('isotopeFilters', function (result) {
-    debugger;
+chrome.storage.sync.get('isotopeFilters', function (result) {
     var isotopeFilters = result.isotopeFilters ? JSON.parse(result.isotopeFilters) : undefined;
     var filterGroup = licenceFilterBtn.parent().attr('data-filter-group');
 
@@ -40,8 +38,7 @@ chrome.storage.local.get('isotopeFilters', function (result) {
 licenceFilterBtn.click(function () {
     $this = $(this);
 
-    chrome.storage.local.get('isotopeFilters', function (result) {
-        debugger;
+    chrome.storage.sync.get('isotopeFilters', function (result) {
         var isotopeFilters = result.isotopeFilters ? JSON.parse(result.isotopeFilters) : {};
         var filterGroup = licenceFilterBtn.parent().attr('data-filter-group');
 
@@ -53,6 +50,6 @@ licenceFilterBtn.click(function () {
             isotopeFilters[filterGroup] = $this.attr('data-filter');
         }
 
-        chrome.storage.local.set({isotopeFilters: JSON.stringify(isotopeFilters)});
+        chrome.storage.sync.set({isotopeFilters: JSON.stringify(isotopeFilters)});
     });
 });
