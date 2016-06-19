@@ -6,7 +6,7 @@
     margin-bottom: 5px;
 }
 
-.licence-filter-btn.is-checked {
+#licence-filter-btn.is-checked {
     background-color: red;
 }
 

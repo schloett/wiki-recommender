@@ -70,6 +70,33 @@ require(['c4/iframes'], function (iframes) {
                         $.fancybox.open({padding: 0, href: chrome.runtime.getURL('html/options.html'), type: 'iframe'});
                         // window.open(chrome.runtime.getURL('html/options.html'));
                     }
+                } else if (msg.data.event && msg.data.event === 'eexcess.openLicenceFilterOptions') {
+                    chrome.storage.sync.get(['licenceWhitelist'], function (result) {
+                        var content = $('<div class="box"><h1>Whitelisted Licences</h1></div>');
+                        var allowedLicences = $('<div id="allowed-licences"></div>');
+                        var licenceWhitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : {};
+
+                        for (var licence in licenceWhitelist) {
+                            var li = $('<li><span>' + licence + '</span> </li>');
+                            var rmBtn = $('<button class="fa fa-remove remove-licence-button">remove</button>');
+                            rmBtn.click(function () {
+                                var licence = $(this).parent().find('span').text();
+                                licenceWhitelist[licence] = undefined;
+                                chrome.storage.sync.set({licenceWhitelist: JSON.stringify(licenceWhitelist)});
+                                $(this).parent().remove();
+                            });
+                            li.append(rmBtn);
+                            allowedLicences.append(li);
+                        }
+
+                        content.append(allowedLicences);
+
+                        $.fancybox({
+                            content: content,
+                            autoSize: true,
+                            type: 'html'
+                        });
+                    });
                 }
             };
         } else { // remove sidebar

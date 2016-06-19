@@ -35,3 +35,7 @@
     display: block;
     max-width: 100%;
 }
+
+#allowed-licences:empty:after {
+    content: "No whitelisted licences. Licences can be whitelisted in a result-item's preview dialog. This dialog can be opened by clicking on the result-items available in the sidebar.";
+}

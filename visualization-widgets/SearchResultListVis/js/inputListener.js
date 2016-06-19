@@ -7,24 +7,12 @@ $("form").submit(function (event) {
 });
 
 // opens the settings dialog
-$('.settings-btn').click(function () {
+$('#settings-btn').click(function () {
     window.top.postMessage({event: 'eexcess.openOptions'}, '*');
 });
 
-// licence filter functionality
-/*function whitelistFilter() {
-    chrome.storage.sync.get('licenceWhitelist', function (result) {
-        var whitelist = result.licenceWhitelist ? JSON.parse(result.licenceWhitelist) : undefined;
-
-        if (whitelist) {
-            return whitelist[licence];
-        } else {
-            return true;
-        }
-    });
-}*/
-
-var licenceFilterBtn = $('.licence-filter-btn');
+// licence filter
+var licenceFilterBtn = $('#licence-filter-btn');
 
 chrome.storage.sync.get('isotopeFilters', function (result) {
     var isotopeFilters = result.isotopeFilters ? JSON.parse(result.isotopeFilters) : undefined;
@@ -52,4 +40,8 @@ licenceFilterBtn.click(function () {
 
         chrome.storage.sync.set({isotopeFilters: JSON.stringify(isotopeFilters)});
     });
+});
+
+$('#licence-settings-btn').click(function () {
+    window.top.postMessage({event: 'eexcess.openLicenceFilterOptions'}, '*');
 });
