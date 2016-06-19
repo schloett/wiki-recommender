@@ -1,13 +1,53 @@
+.filter-btn-group > button {
+    height: 24px;
+    width: 24px;
+    padding: 0;
+}
+
+#licence-filter-btn {
+    position: absolute;
+    padding: 0;
+}
+
+#licence-settings-btn {
+    position: absolute;
+    left: 25px;
+}
+
+.filter-btn-group {
+    position: absolute;
+    right: 5px;
+    top: 30px;
+
+    border: 1px solid #C1C1C1;
+    height: 26px;
+    background-color: #C1C1C1;
+    width: 50px;
+}
+
+.left-div {
+    position: absolute;
+    right: 55px;
+}
+
+.right-div {
+    position: absolute;
+    right: 0;
+}
+
+#settings-btn {
+    position: absolute;
+    right: 5px;
+}
+
 .settings-btn {
-    padding: 2px;
-    float: right;
-    margin-right: 5px;
-    padding-bottom: 0;
-    margin-bottom: 5px;
+    padding: 0;
 }
 
 #licence-filter-btn.is-checked {
-    background-color: red;
+    background-color: #1D904E;
+    color: white;
+    border: 0;
 }
 
 /*Mono Alternative*/
