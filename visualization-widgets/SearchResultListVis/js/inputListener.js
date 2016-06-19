@@ -7,6 +7,41 @@ $("form").submit(function (event) {
 });
 
 // opens the settings dialog
-$('.settings-btn').click(function () {
+$('#settings-btn').click(function () {
     window.top.postMessage({event: 'eexcess.openOptions'}, '*');
+});
+
+// licence filter
+var licenceFilterBtn = $('#licence-filter-btn');
+
+chrome.storage.sync.get('isotopeFilters', function (result) {
+    var isotopeFilters = result.isotopeFilters ? JSON.parse(result.isotopeFilters) : undefined;
+    var filterGroup = licenceFilterBtn.parent().attr('data-filter-group');
+
+    if (isotopeFilters && isotopeFilters[filterGroup]) {
+        licenceFilterBtn.addClass('is-checked');
+    }
+});
+
+licenceFilterBtn.click(function () {
+    $this = $(this);
+
+    chrome.storage.sync.get('isotopeFilters', function (result) {
+        var isotopeFilters = result.isotopeFilters ? JSON.parse(result.isotopeFilters) : {};
+        var filterGroup = licenceFilterBtn.parent().attr('data-filter-group');
+
+        if (isotopeFilters && isotopeFilters[filterGroup]) {
+            licenceFilterBtn.removeClass('is-checked');
+            isotopeFilters[filterGroup] = undefined;
+        } else {
+            licenceFilterBtn.addClass('is-checked');
+            isotopeFilters[filterGroup] = $this.attr('data-filter');
+        }
+
+        chrome.storage.sync.set({isotopeFilters: JSON.stringify(isotopeFilters)});
+    });
+});
+
+$('#licence-settings-btn').click(function () {
+    window.top.postMessage({event: 'eexcess.openLicenceFilterOptions'}, '*');
 });
