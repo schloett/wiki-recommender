@@ -307,6 +307,7 @@ function showLoadingBar() {
 
 
 function showEmptyResult(s) {
+    console.log(s);
     var emptyResult = $('.eexcess_empty_result');
     switch (s) {
         case "wiki" :
