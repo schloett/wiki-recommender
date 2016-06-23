@@ -295,7 +295,6 @@ function showLoadingBar() {
     $('#eexcess-isotope-filters').each(function (i, buttonGroup) {
         var $buttonGroup = $(buttonGroup);
         var currentFilter = $buttonGroup.find('.is-checked').attr("class");
-        localStorage.setItem('currentFilter', JSON.stringify(currentFilter));
     });
 
     executed = false;
@@ -362,10 +361,6 @@ function addFilterCounter() {
         var buttonGroup = $("#eexcess-isotope-filters");
         buttonGroup.empty();
         var current;
-        current = localStorage.getItem('currentFilter');
-        if (typeof current !== 'undefined') {
-            current = JSON.parse(current);
-        }
 
         //if no filter was selected "show all" will be selected
         if (current == undefined || current.indexOf("show-all") > -1) {
