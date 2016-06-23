@@ -33,7 +33,7 @@ function addIsotopeGrid(msgWiki, msgEEXCESS) {
 
         //show only the wiki results
     } else if (msgEEXCESS.data.totalResults === 0) {
-        showEmptyResult("eecxess");
+        showEmptyResult("eexcess");
         $items = $(addGridWikiResultItems(msgWiki));
 
     } else {
