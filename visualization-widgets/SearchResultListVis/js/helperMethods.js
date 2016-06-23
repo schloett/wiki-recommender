@@ -1,4 +1,4 @@
-var language;
+var language = 'en';
 var executed = false;
 
 window.addEventListener('message', function (msg) {
